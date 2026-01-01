@@ -1,0 +1,227 @@
+{
+  "materia": "diritto-ue",
+  "nome": "Diritto dell'Unione Europea",
+  "descrizione": "Istituzioni UE, fonti del diritto europeo, principi fondamentali",
+  "quiz": [
+    {
+      "id": "ue001",
+      "domanda": "Il Trattato di Lisbona è entrato in vigore nel:",
+      "risposte": [
+        {"id": "a", "testo": "2007", "corretta": false},
+        {"id": "b", "testo": "2009", "corretta": true},
+        {"id": "c", "testo": "2012", "corretta": false},
+        {"id": "d", "testo": "2015", "corretta": false}
+      ],
+      "spiegazione": "Il Trattato di Lisbona, firmato nel 2007, è entrato in vigore il 1° dicembre 2009, modificando i trattati UE e CE."
+    },
+    {
+      "id": "ue002",
+      "domanda": "Il Parlamento Europeo è composto da:",
+      "risposte": [
+        {"id": "a", "testo": "Rappresentanti dei governi nazionali", "corretta": false},
+        {"id": "b", "testo": "Membri eletti direttamente dai cittadini europei", "corretta": true},
+        {"id": "c", "testo": "Membri nominati dalla Commissione", "corretta": false},
+        {"id": "d", "testo": "Giudici della Corte di Giustizia", "corretta": false}
+      ],
+      "spiegazione": "Art. 14 TUE: il Parlamento Europeo è composto da rappresentanti dei cittadini dell'Unione eletti a suffragio universale diretto."
+    },
+    {
+      "id": "ue003",
+      "domanda": "La Commissione Europea ha funzioni principalmente:",
+      "risposte": [
+        {"id": "a", "testo": "Legislative", "corretta": false},
+        {"id": "b", "testo": "Esecutive e di iniziativa legislativa", "corretta": true},
+        {"id": "c", "testo": "Giudiziarie", "corretta": false},
+        {"id": "d", "testo": "Solo consultive", "corretta": false}
+      ],
+      "spiegazione": "Art. 17 TUE: la Commissione promuove l'interesse generale dell'UE, vigila sull'applicazione dei trattati, esegue il bilancio e ha il monopolio dell'iniziativa legislativa."
+    },
+    {
+      "id": "ue004",
+      "domanda": "Il Consiglio dell'Unione Europea è composto da:",
+      "risposte": [
+        {"id": "a", "testo": "I capi di Stato e di governo", "corretta": false},
+        {"id": "b", "testo": "Un rappresentante di ciascuno Stato membro a livello ministeriale", "corretta": true},
+        {"id": "c", "testo": "I parlamentari europei", "corretta": false},
+        {"id": "d", "testo": "I commissari europei", "corretta": false}
+      ],
+      "spiegazione": "Art. 16 TUE: il Consiglio è composto da un rappresentante di ciascun Stato membro a livello ministeriale, abilitato a impegnare il governo."
+    },
+    {
+      "id": "ue005",
+      "domanda": "Il Consiglio Europeo è composto da:",
+      "risposte": [
+        {"id": "a", "testo": "I ministri degli Stati membri", "corretta": false},
+        {"id": "b", "testo": "I capi di Stato o di governo degli Stati membri, il suo Presidente e il Presidente della Commissione", "corretta": true},
+        {"id": "c", "testo": "I parlamentari europei", "corretta": false},
+        {"id": "d", "testo": "I giudici della Corte di Giustizia", "corretta": false}
+      ],
+      "spiegazione": "Art. 15 TUE: il Consiglio Europeo dà all'Unione gli impulsi necessari al suo sviluppo e ne definisce gli orientamenti politici generali."
+    },
+    {
+      "id": "ue006",
+      "domanda": "Il Regolamento UE è:",
+      "risposte": [
+        {"id": "a", "testo": "Vincolante solo per alcuni Stati", "corretta": false},
+        {"id": "b", "testo": "Obbligatorio in tutti i suoi elementi e direttamente applicabile in tutti gli Stati membri", "corretta": true},
+        {"id": "c", "testo": "Una raccomandazione non vincolante", "corretta": false},
+        {"id": "d", "testo": "Vincolante solo dopo recepimento nazionale", "corretta": false}
+      ],
+      "spiegazione": "Art. 288 TFUE: il regolamento ha portata generale, è obbligatorio in tutti i suoi elementi e direttamente applicabile in ciascuno degli Stati membri."
+    },
+    {
+      "id": "ue007",
+      "domanda": "La Direttiva UE:",
+      "risposte": [
+        {"id": "a", "testo": "È direttamente applicabile", "corretta": false},
+        {"id": "b", "testo": "Vincola lo Stato membro al risultato, lasciando libertà sui mezzi", "corretta": true},
+        {"id": "c", "testo": "Non è mai vincolante", "corretta": false},
+        {"id": "d", "testo": "Riguarda solo i privati", "corretta": false}
+      ],
+      "spiegazione": "Art. 288 TFUE: la direttiva vincola lo Stato membro cui è rivolta per quanto riguarda il risultato, ma lascia libera scelta sulla forma e i mezzi."
+    },
+    {
+      "id": "ue008",
+      "domanda": "La Corte di Giustizia dell'UE ha sede a:",
+      "risposte": [
+        {"id": "a", "testo": "Bruxelles", "corretta": false},
+        {"id": "b", "testo": "Lussemburgo", "corretta": true},
+        {"id": "c", "testo": "Strasburgo", "corretta": false},
+        {"id": "d", "testo": "L'Aia", "corretta": false}
+      ],
+      "spiegazione": "La Corte di Giustizia dell'Unione Europea ha sede a Lussemburgo e assicura l'interpretazione uniforme del diritto UE."
+    },
+    {
+      "id": "ue009",
+      "domanda": "Il principio del primato del diritto UE significa che:",
+      "risposte": [
+        {"id": "a", "testo": "Le leggi nazionali prevalgono sempre", "corretta": false},
+        {"id": "b", "testo": "Il diritto UE prevale sul diritto nazionale in caso di conflitto", "corretta": true},
+        {"id": "c", "testo": "Solo i regolamenti prevalgono", "corretta": false},
+        {"id": "d", "testo": "Il primato vale solo in materia economica", "corretta": false}
+      ],
+      "spiegazione": "Il principio del primato (sentenza Costa c. ENEL, 1964) stabilisce che il diritto UE prevale su quello nazionale contrastante."
+    },
+    {
+      "id": "ue010",
+      "domanda": "L'effetto diretto del diritto UE significa che:",
+      "risposte": [
+        {"id": "a", "testo": "Le norme UE si applicano solo tramite leggi nazionali", "corretta": false},
+        {"id": "b", "testo": "I singoli possono invocare le norme UE dinanzi ai giudici nazionali", "corretta": true},
+        {"id": "c", "testo": "Solo gli Stati possono invocare il diritto UE", "corretta": false},
+        {"id": "d", "testo": "L'effetto è solo indiretto", "corretta": false}
+      ],
+      "spiegazione": "L'effetto diretto (sentenza Van Gend en Loos, 1963) permette ai singoli di invocare norme UE chiare, precise e incondizionate davanti ai giudici nazionali."
+    },
+    {
+      "id": "ue011",
+      "domanda": "La BCE (Banca Centrale Europea) ha sede a:",
+      "risposte": [
+        {"id": "a", "testo": "Bruxelles", "corretta": false},
+        {"id": "b", "testo": "Francoforte", "corretta": true},
+        {"id": "c", "testo": "Lussemburgo", "corretta": false},
+        {"id": "d", "testo": "Parigi", "corretta": false}
+      ],
+      "spiegazione": "La Banca Centrale Europea ha sede a Francoforte sul Meno (Germania) e gestisce la politica monetaria dell'eurozona."
+    },
+    {
+      "id": "ue012",
+      "domanda": "Il Mediatore Europeo:",
+      "risposte": [
+        {"id": "a", "testo": "Decide le controversie commerciali", "corretta": false},
+        {"id": "b", "testo": "Riceve denunce sulla cattiva amministrazione delle istituzioni UE", "corretta": true},
+        {"id": "c", "testo": "Nomina i commissari europei", "corretta": false},
+        {"id": "d", "testo": "Presiede il Parlamento Europeo", "corretta": false}
+      ],
+      "spiegazione": "Art. 228 TFUE: il Mediatore europeo riceve denunce relative a casi di cattiva amministrazione nell'azione delle istituzioni UE."
+    },
+    {
+      "id": "ue013",
+      "domanda": "La procedura di infrazione è avviata dalla:",
+      "risposte": [
+        {"id": "a", "testo": "Corte di Giustizia", "corretta": false},
+        {"id": "b", "testo": "Commissione Europea", "corretta": true},
+        {"id": "c", "testo": "Parlamento Europeo", "corretta": false},
+        {"id": "d", "testo": "Consiglio dell'UE", "corretta": false}
+      ],
+      "spiegazione": "Art. 258 TFUE: la Commissione può avviare la procedura di infrazione se ritiene che uno Stato membro abbia violato un obbligo derivante dai trattati."
+    },
+    {
+      "id": "ue014",
+      "domanda": "Il rinvio pregiudiziale alla Corte di Giustizia può essere chiesto da:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dal Parlamento Europeo", "corretta": false},
+        {"id": "b", "testo": "Un giudice nazionale", "corretta": true},
+        {"id": "c", "testo": "Solo dai privati cittadini", "corretta": false},
+        {"id": "d", "testo": "Solo dalla Commissione", "corretta": false}
+      ],
+      "spiegazione": "Art. 267 TFUE: quando un giudice nazionale ha dubbi sull'interpretazione del diritto UE, può (o deve se di ultima istanza) sottoporre la questione alla Corte."
+    },
+    {
+      "id": "ue015",
+      "domanda": "Quanti Stati membri ha attualmente l'Unione Europea?",
+      "risposte": [
+        {"id": "a", "testo": "25", "corretta": false},
+        {"id": "b", "testo": "27", "corretta": true},
+        {"id": "c", "testo": "28", "corretta": false},
+        {"id": "d", "testo": "30", "corretta": false}
+      ],
+      "spiegazione": "Dopo la Brexit (31 gennaio 2020), l'UE è composta da 27 Stati membri."
+    },
+    {
+      "id": "ue016",
+      "domanda": "Il principio di sussidiarietà prevede che l'UE agisca:",
+      "risposte": [
+        {"id": "a", "testo": "Sempre in tutti i settori", "corretta": false},
+        {"id": "b", "testo": "Solo se gli obiettivi non sono raggiungibili a livello nazionale", "corretta": true},
+        {"id": "c", "testo": "Solo in materia economica", "corretta": false},
+        {"id": "d", "testo": "Mai senza l'unanimità", "corretta": false}
+      ],
+      "spiegazione": "Art. 5 TUE: nei settori di competenza non esclusiva, l'UE interviene solo se gli obiettivi non possono essere conseguiti dagli Stati membri."
+    },
+    {
+      "id": "ue017",
+      "domanda": "La Carta dei Diritti Fondamentali dell'UE è diventata vincolante con:",
+      "risposte": [
+        {"id": "a", "testo": "Il Trattato di Maastricht", "corretta": false},
+        {"id": "b", "testo": "Il Trattato di Lisbona", "corretta": true},
+        {"id": "c", "testo": "Il Trattato di Amsterdam", "corretta": false},
+        {"id": "d", "testo": "Il Trattato di Roma", "corretta": false}
+      ],
+      "spiegazione": "La Carta dei Diritti Fondamentali, proclamata nel 2000, ha acquisito valore giuridico vincolante con l'entrata in vigore del Trattato di Lisbona nel 2009."
+    },
+    {
+      "id": "ue018",
+      "domanda": "Il RGPD (Regolamento Generale Protezione Dati) è:",
+      "risposte": [
+        {"id": "a", "testo": "Una direttiva UE", "corretta": false},
+        {"id": "b", "testo": "Un regolamento UE direttamente applicabile", "corretta": true},
+        {"id": "c", "testo": "Una legge italiana", "corretta": false},
+        {"id": "d", "testo": "Una raccomandazione", "corretta": false}
+      ],
+      "spiegazione": "Il GDPR (Reg. UE 2016/679) è un regolamento europeo direttamente applicabile in tutti gli Stati membri dal 25 maggio 2018."
+    },
+    {
+      "id": "ue019",
+      "domanda": "La libera circolazione delle persone nell'UE comprende:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il diritto di viaggiare per turismo", "corretta": false},
+        {"id": "b", "testo": "Il diritto di circolare, soggiornare, lavorare in qualsiasi Stato membro", "corretta": true},
+        {"id": "c", "testo": "Solo i lavoratori dipendenti", "corretta": false},
+        {"id": "d", "testo": "Solo gli studenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 21 TFUE e Direttiva 2004/38: ogni cittadino UE ha il diritto di circolare e soggiornare liberamente nel territorio degli Stati membri."
+    },
+    {
+      "id": "ue020",
+      "domanda": "L'accordo di Schengen riguarda:",
+      "risposte": [
+        {"id": "a", "testo": "La politica agricola", "corretta": false},
+        {"id": "b", "testo": "L'abolizione dei controlli alle frontiere interne", "corretta": true},
+        {"id": "c", "testo": "La politica monetaria", "corretta": false},
+        {"id": "d", "testo": "La difesa comune", "corretta": false}
+      ],
+      "spiegazione": "L'accordo di Schengen (1985) ha abolito i controlli alle frontiere interne tra gli Stati aderenti, creando uno spazio di libera circolazione."
+    }
+  ]
+}

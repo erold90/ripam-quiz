@@ -1,0 +1,227 @@
+{
+  "materia": "cad",
+  "nome": "Codice Amministrazione Digitale",
+  "descrizione": "D.Lgs. 82/2005 - CAD e amministrazione digitale",
+  "quiz": [
+    {
+      "id": "cad001",
+      "domanda": "Il Codice dell'Amministrazione Digitale (CAD) è disciplinato dal:",
+      "risposte": [
+        {"id": "a", "testo": "D.Lgs. 82/2005", "corretta": true},
+        {"id": "b", "testo": "D.Lgs. 165/2001", "corretta": false},
+        {"id": "c", "testo": "L. 241/1990", "corretta": false},
+        {"id": "d", "testo": "D.Lgs. 33/2013", "corretta": false}
+      ],
+      "spiegazione": "Il Codice dell'Amministrazione Digitale è contenuto nel Decreto Legislativo 7 marzo 2005, n. 82."
+    },
+    {
+      "id": "cad002",
+      "domanda": "Lo SPID (Sistema Pubblico di Identità Digitale) permette di:",
+      "risposte": [
+        {"id": "a", "testo": "Firmare digitalmente i documenti", "corretta": false},
+        {"id": "b", "testo": "Accedere ai servizi online della PA con un'unica identità digitale", "corretta": true},
+        {"id": "c", "testo": "Inviare PEC", "corretta": false},
+        {"id": "d", "testo": "Conservare documenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 64 CAD: SPID è il sistema di identificazione che consente di accedere ai servizi online della pubblica amministrazione e dei privati aderenti con un'unica identità digitale."
+    },
+    {
+      "id": "cad003",
+      "domanda": "Il domicilio digitale è:",
+      "risposte": [
+        {"id": "a", "testo": "L'indirizzo di residenza", "corretta": false},
+        {"id": "b", "testo": "Un indirizzo elettronico eletto presso un servizio di posta elettronica certificata o servizio elettronico di recapito certificato qualificato", "corretta": true},
+        {"id": "c", "testo": "Il codice fiscale", "corretta": false},
+        {"id": "d", "testo": "Il numero di telefono", "corretta": false}
+      ],
+      "spiegazione": "Art. 1, comma 1, lett. n-ter) CAD: il domicilio digitale è l'indirizzo elettronico eletto presso un servizio di posta elettronica certificata o un servizio elettronico di recapito certificato qualificato."
+    },
+    {
+      "id": "cad004",
+      "domanda": "La PEC (Posta Elettronica Certificata) ha valore legale equivalente a:",
+      "risposte": [
+        {"id": "a", "testo": "Una email ordinaria", "corretta": false},
+        {"id": "b", "testo": "Una raccomandata con avviso di ricevimento", "corretta": true},
+        {"id": "c", "testo": "Un telegramma", "corretta": false},
+        {"id": "d", "testo": "Un fax", "corretta": false}
+      ],
+      "spiegazione": "Art. 48 CAD: la trasmissione telematica di comunicazioni che necessitano di una ricevuta di invio e di una ricevuta di consegna avviene mediante PEC con effetti equivalenti alla notificazione per mezzo della posta."
+    },
+    {
+      "id": "cad005",
+      "domanda": "La firma digitale garantisce:",
+      "risposte": [
+        {"id": "a", "testo": "Solo l'autenticità del mittente", "corretta": false},
+        {"id": "b", "testo": "Autenticità, integrità e non ripudio del documento", "corretta": true},
+        {"id": "c", "testo": "Solo la riservatezza", "corretta": false},
+        {"id": "d", "testo": "Solo la data certa", "corretta": false}
+      ],
+      "spiegazione": "Art. 24 CAD: la firma digitale deve riferirsi in maniera univoca a un solo soggetto e al documento cui è apposta, consentendo di verificare l'identità del firmatario e l'integrità del documento."
+    },
+    {
+      "id": "cad006",
+      "domanda": "Il documento informatico sottoscritto con firma digitale ha:",
+      "risposte": [
+        {"id": "a", "testo": "Nessun valore legale", "corretta": false},
+        {"id": "b", "testo": "L'efficacia prevista dall'art. 2702 del Codice civile (scrittura privata)", "corretta": true},
+        {"id": "c", "testo": "Valore solo amministrativo", "corretta": false},
+        {"id": "d", "testo": "Valore solo tra privati", "corretta": false}
+      ],
+      "spiegazione": "Art. 21 CAD: il documento informatico sottoscritto con firma elettronica qualificata o digitale ha l'efficacia prevista dall'art. 2702 c.c. e fa piena prova fino a querela di falso."
+    },
+    {
+      "id": "cad007",
+      "domanda": "L'AgID (Agenzia per l'Italia Digitale) è:",
+      "risposte": [
+        {"id": "a", "testo": "Un'agenzia europea", "corretta": false},
+        {"id": "b", "testo": "L'agenzia tecnica della Presidenza del Consiglio per l'attuazione dell'Agenda Digitale", "corretta": true},
+        {"id": "c", "testo": "Un ministero", "corretta": false},
+        {"id": "d", "testo": "Un'autorità indipendente", "corretta": false}
+      ],
+      "spiegazione": "Art. 14-bis CAD: l'AgID è l'agenzia tecnica della Presidenza del Consiglio dei Ministri con il compito di garantire la realizzazione degli obiettivi dell'Agenda digitale italiana."
+    },
+    {
+      "id": "cad008",
+      "domanda": "La conservazione digitale dei documenti deve garantire:",
+      "risposte": [
+        {"id": "a", "testo": "Solo la leggibilità", "corretta": false},
+        {"id": "b", "testo": "Autenticità, integrità, affidabilità, leggibilità e reperibilità", "corretta": true},
+        {"id": "c", "testo": "Solo l'integrità", "corretta": false},
+        {"id": "d", "testo": "Solo la sicurezza", "corretta": false}
+      ],
+      "spiegazione": "Art. 44 CAD: il sistema di conservazione dei documenti informatici garantisce autenticità, integrità, affidabilità, leggibilità e reperibilità dei documenti."
+    },
+    {
+      "id": "cad009",
+      "domanda": "I cittadini hanno diritto di accedere ai servizi online della PA tramite:",
+      "risposte": [
+        {"id": "a", "testo": "Solo carta d'identità cartacea", "corretta": false},
+        {"id": "b", "testo": "SPID, CIE o CNS", "corretta": true},
+        {"id": "c", "testo": "Solo username e password", "corretta": false},
+        {"id": "d", "testo": "Solo di persona", "corretta": false}
+      ],
+      "spiegazione": "Art. 64 CAD: l'accesso ai servizi in rete erogati dalle PA avviene tramite SPID (Sistema Pubblico di Identità Digitale), CIE (Carta d'Identità Elettronica) o CNS (Carta Nazionale dei Servizi)."
+    },
+    {
+      "id": "cad010",
+      "domanda": "Il principio 'digital first' significa che la PA deve:",
+      "risposte": [
+        {"id": "a", "testo": "Eliminare completamente la carta", "corretta": false},
+        {"id": "b", "testo": "Progettare i servizi pubblici privilegiando l'utilizzo di tecnologie digitali", "corretta": true},
+        {"id": "c", "testo": "Usare solo email", "corretta": false},
+        {"id": "d", "testo": "Assumere solo informatici", "corretta": false}
+      ],
+      "spiegazione": "Art. 3 CAD: le pubbliche amministrazioni progettano e erogano i propri servizi pubblici in modalità digitale come canale principale."
+    },
+    {
+      "id": "cad011",
+      "domanda": "Il Responsabile per la Transizione Digitale (RTD) deve essere nominato:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dalle amministrazioni centrali", "corretta": false},
+        {"id": "b", "testo": "Da tutte le pubbliche amministrazioni", "corretta": true},
+        {"id": "c", "testo": "Solo dai Comuni", "corretta": false},
+        {"id": "d", "testo": "Solo dalle Regioni", "corretta": false}
+      ],
+      "spiegazione": "Art. 17 CAD: le pubbliche amministrazioni garantiscono l'attuazione delle linee strategiche per la trasformazione digitale individuando un unico ufficio dirigenziale con funzioni di RTD."
+    },
+    {
+      "id": "cad012",
+      "domanda": "La CIE (Carta d'Identità Elettronica) può essere utilizzata per:",
+      "risposte": [
+        {"id": "a", "testo": "Solo l'identificazione fisica", "corretta": false},
+        {"id": "b", "testo": "Identificazione fisica e accesso ai servizi online della PA", "corretta": true},
+        {"id": "c", "testo": "Solo firmare documenti", "corretta": false},
+        {"id": "d", "testo": "Solo viaggiare all'estero", "corretta": false}
+      ],
+      "spiegazione": "Art. 66 CAD: la carta d'identità elettronica è il documento d'identità munito di elementi per l'identificazione fisica del titolare e di strumenti per l'identificazione digitale."
+    },
+    {
+      "id": "cad013",
+      "domanda": "L'ANPR (Anagrafe Nazionale della Popolazione Residente) è:",
+      "risposte": [
+        {"id": "a", "testo": "L'archivio di tutti i veicoli", "corretta": false},
+        {"id": "b", "testo": "La banca dati nazionale che contiene i dati anagrafici di tutti i cittadini", "corretta": true},
+        {"id": "c", "testo": "L'archivio delle imprese", "corretta": false},
+        {"id": "d", "testo": "L'archivio dei contribuenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 62 CAD: l'ANPR è la banca dati nazionale nella quale confluiscono le anagrafi della popolazione residente tenute dai comuni."
+    },
+    {
+      "id": "cad014",
+      "domanda": "Il principio di 'once only' prevede che:",
+      "risposte": [
+        {"id": "a", "testo": "I servizi si possono usare una sola volta", "corretta": false},
+        {"id": "b", "testo": "Il cittadino fornisce i propri dati una sola volta alla PA", "corretta": true},
+        {"id": "c", "testo": "Si può accedere ai servizi solo una volta al giorno", "corretta": false},
+        {"id": "d", "testo": "La PA può chiedere i dati una sola volta", "corretta": false}
+      ],
+      "spiegazione": "Art. 50-ter CAD: il principio once only prevede che le PA non devono chiedere ai cittadini informazioni già in possesso di altre PA, garantendo l'interoperabilità delle banche dati."
+    },
+    {
+      "id": "cad015",
+      "domanda": "La marcatura temporale serve a:",
+      "risposte": [
+        {"id": "a", "testo": "Criptare il documento", "corretta": false},
+        {"id": "b", "testo": "Attribuire data e ora certe a un documento informatico", "corretta": true},
+        {"id": "c", "testo": "Firmare il documento", "corretta": false},
+        {"id": "d", "testo": "Conservare il documento", "corretta": false}
+      ],
+      "spiegazione": "Art. 41 CAD: la validazione temporale è il risultato della procedura informatica con cui si attribuiscono a uno o più documenti informatici una data e un orario opponibili ai terzi."
+    },
+    {
+      "id": "cad016",
+      "domanda": "Il protocollo informatico delle PA deve garantire:",
+      "risposte": [
+        {"id": "a", "testo": "Solo la numerazione dei documenti", "corretta": false},
+        {"id": "b", "testo": "La registrazione, l'assegnazione e il tracciamento dei documenti", "corretta": true},
+        {"id": "c", "testo": "Solo l'archiviazione", "corretta": false},
+        {"id": "d", "testo": "Solo la stampa", "corretta": false}
+      ],
+      "spiegazione": "Art. 40-bis e 53 CAD: le PA formano gli originali dei propri documenti con mezzi informatici e il sistema di protocollo garantisce la registrazione e la segnatura dei documenti."
+    },
+    {
+      "id": "cad017",
+      "domanda": "L'accessibilità dei siti web della PA significa che:",
+      "risposte": [
+        {"id": "a", "testo": "I siti sono sempre online", "corretta": false},
+        {"id": "b", "testo": "I servizi sono fruibili anche da persone con disabilità", "corretta": true},
+        {"id": "c", "testo": "I siti sono gratuiti", "corretta": false},
+        {"id": "d", "testo": "I siti sono in più lingue", "corretta": false}
+      ],
+      "spiegazione": "Art. 53 CAD: i siti e i servizi digitali della PA devono essere accessibili a tutti, incluse le persone con disabilità, nel rispetto della normativa sull'accessibilità (L. 4/2004)."
+    },
+    {
+      "id": "cad018",
+      "domanda": "L'app IO è:",
+      "risposte": [
+        {"id": "a", "testo": "Un social network della PA", "corretta": false},
+        {"id": "b", "testo": "L'app ufficiale per accedere ai servizi pubblici digitali", "corretta": true},
+        {"id": "c", "testo": "Un'app per pagare le tasse", "corretta": false},
+        {"id": "d", "testo": "Un'app per prenotare viaggi", "corretta": false}
+      ],
+      "spiegazione": "Art. 64-bis CAD: l'app IO è il punto di accesso telematico attivato presso la Presidenza del Consiglio dei Ministri per l'accesso ai servizi della PA tramite dispositivi mobili."
+    },
+    {
+      "id": "cad019",
+      "domanda": "PagoPA è:",
+      "risposte": [
+        {"id": "a", "testo": "Un'app per messaggi", "corretta": false},
+        {"id": "b", "testo": "Il sistema nazionale per i pagamenti elettronici verso la PA", "corretta": true},
+        {"id": "c", "testo": "Un sistema di firma digitale", "corretta": false},
+        {"id": "d", "testo": "Un sistema di archiviazione", "corretta": false}
+      ],
+      "spiegazione": "Art. 5 CAD: i soggetti tenuti per legge ad accettare pagamenti devono avvalersi della piattaforma tecnologica per l'interconnessione e l'interoperabilità (pagoPA)."
+    },
+    {
+      "id": "cad020",
+      "domanda": "Le linee guida AgID sono:",
+      "risposte": [
+        {"id": "a", "testo": "Raccomandazioni non vincolanti", "corretta": false},
+        {"id": "b", "testo": "Regole tecniche vincolanti per le PA", "corretta": true},
+        {"id": "c", "testo": "Suggerimenti per i cittadini", "corretta": false},
+        {"id": "d", "testo": "Leggi europee", "corretta": false}
+      ],
+      "spiegazione": "Art. 71 CAD: le regole tecniche sono adottate con le Linee guida AgID, che hanno carattere vincolante e assumono valenza erga omnes."
+    }
+  ]
+}

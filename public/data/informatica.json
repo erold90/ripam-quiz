@@ -1,0 +1,227 @@
+{
+  "materia": "informatica",
+  "nome": "Informatica e Competenze Digitali",
+  "descrizione": "Conoscenze informatiche di base, strumenti office, sicurezza informatica",
+  "quiz": [
+    {
+      "id": "inf001",
+      "domanda": "Cosa significa l'acronimo CPU?",
+      "risposte": [
+        {"id": "a", "testo": "Computer Personal Unit", "corretta": false},
+        {"id": "b", "testo": "Central Processing Unit", "corretta": true},
+        {"id": "c", "testo": "Central Program Utility", "corretta": false},
+        {"id": "d", "testo": "Computer Processing Utility", "corretta": false}
+      ],
+      "spiegazione": "CPU = Central Processing Unit (Unità Centrale di Elaborazione), il 'cervello' del computer che esegue le istruzioni."
+    },
+    {
+      "id": "inf002",
+      "domanda": "Quale estensione identifica un file di Microsoft Word?",
+      "risposte": [
+        {"id": "a", "testo": ".xls", "corretta": false},
+        {"id": "b", "testo": ".docx", "corretta": true},
+        {"id": "c", "testo": ".pptx", "corretta": false},
+        {"id": "d", "testo": ".pdf", "corretta": false}
+      ],
+      "spiegazione": ".docx è l'estensione dei documenti Word. .xls è Excel, .pptx è PowerPoint, .pdf è Adobe PDF."
+    },
+    {
+      "id": "inf003",
+      "domanda": "La RAM (Random Access Memory) è una memoria:",
+      "risposte": [
+        {"id": "a", "testo": "Permanente e non modificabile", "corretta": false},
+        {"id": "b", "testo": "Volatile che perde i dati allo spegnimento", "corretta": true},
+        {"id": "c", "testo": "Di sola lettura", "corretta": false},
+        {"id": "d", "testo": "Utilizzata solo per l'archiviazione", "corretta": false}
+      ],
+      "spiegazione": "La RAM è memoria volatile: i dati vengono persi quando si spegne il computer. È usata per l'elaborazione temporanea."
+    },
+    {
+      "id": "inf004",
+      "domanda": "In Excel, quale formula calcola la somma delle celle da A1 a A10?",
+      "risposte": [
+        {"id": "a", "testo": "=ADD(A1:A10)", "corretta": false},
+        {"id": "b", "testo": "=SUM(A1:A10)", "corretta": true},
+        {"id": "c", "testo": "=TOTAL(A1:A10)", "corretta": false},
+        {"id": "d", "testo": "=SOMMA(A1+A10)", "corretta": false}
+      ],
+      "spiegazione": "=SUM(A1:A10) o =SOMMA(A1:A10) in italiano. Il simbolo : indica un intervallo di celle."
+    },
+    {
+      "id": "inf005",
+      "domanda": "Il phishing è:",
+      "risposte": [
+        {"id": "a", "testo": "Un software antivirus", "corretta": false},
+        {"id": "b", "testo": "Una truffa online che cerca di rubare dati sensibili attraverso messaggi ingannevoli", "corretta": true},
+        {"id": "c", "testo": "Un tipo di connessione internet", "corretta": false},
+        {"id": "d", "testo": "Un programma di posta elettronica", "corretta": false}
+      ],
+      "spiegazione": "Il phishing è una frode informatica che usa email o siti falsi per rubare credenziali, dati bancari o informazioni personali."
+    },
+    {
+      "id": "inf006",
+      "domanda": "Quale combinazione di tasti permette di copiare un elemento selezionato?",
+      "risposte": [
+        {"id": "a", "testo": "Ctrl + V", "corretta": false},
+        {"id": "b", "testo": "Ctrl + C", "corretta": true},
+        {"id": "c", "testo": "Ctrl + X", "corretta": false},
+        {"id": "d", "testo": "Ctrl + Z", "corretta": false}
+      ],
+      "spiegazione": "Ctrl+C = Copia, Ctrl+V = Incolla, Ctrl+X = Taglia, Ctrl+Z = Annulla."
+    },
+    {
+      "id": "inf007",
+      "domanda": "Il cloud computing permette di:",
+      "risposte": [
+        {"id": "a", "testo": "Prevedere il meteo", "corretta": false},
+        {"id": "b", "testo": "Accedere a risorse informatiche remote via internet", "corretta": true},
+        {"id": "c", "testo": "Velocizzare la connessione internet", "corretta": false},
+        {"id": "d", "testo": "Proteggere dai virus", "corretta": false}
+      ],
+      "spiegazione": "Il cloud computing fornisce accesso a risorse IT (storage, server, software) via internet, senza infrastruttura locale."
+    },
+    {
+      "id": "inf008",
+      "domanda": "Cosa si intende per backup?",
+      "risposte": [
+        {"id": "a", "testo": "L'eliminazione dei file non necessari", "corretta": false},
+        {"id": "b", "testo": "La copia di sicurezza dei dati", "corretta": true},
+        {"id": "c", "testo": "L'aggiornamento del sistema operativo", "corretta": false},
+        {"id": "d", "testo": "La compressione dei file", "corretta": false}
+      ],
+      "spiegazione": "Il backup è una copia di sicurezza dei dati che permette il ripristino in caso di perdita, danneggiamento o attacco informatico."
+    },
+    {
+      "id": "inf009",
+      "domanda": "Un firewall serve a:",
+      "risposte": [
+        {"id": "a", "testo": "Velocizzare la connessione internet", "corretta": false},
+        {"id": "b", "testo": "Proteggere la rete controllando il traffico in entrata e uscita", "corretta": true},
+        {"id": "c", "testo": "Creare pagine web", "corretta": false},
+        {"id": "d", "testo": "Gestire la posta elettronica", "corretta": false}
+      ],
+      "spiegazione": "Il firewall è un sistema di sicurezza che monitora e filtra il traffico di rete secondo regole predefinite."
+    },
+    {
+      "id": "inf010",
+      "domanda": "Il formato PDF (Portable Document Format) è stato creato da:",
+      "risposte": [
+        {"id": "a", "testo": "Microsoft", "corretta": false},
+        {"id": "b", "testo": "Adobe", "corretta": true},
+        {"id": "c", "testo": "Apple", "corretta": false},
+        {"id": "d", "testo": "Google", "corretta": false}
+      ],
+      "spiegazione": "Il PDF è stato sviluppato da Adobe negli anni '90 per rappresentare documenti in modo indipendente dal software e hardware."
+    },
+    {
+      "id": "inf011",
+      "domanda": "In una tabella Excel, le colonne sono identificate da:",
+      "risposte": [
+        {"id": "a", "testo": "Numeri", "corretta": false},
+        {"id": "b", "testo": "Lettere", "corretta": true},
+        {"id": "c", "testo": "Simboli", "corretta": false},
+        {"id": "d", "testo": "Colori", "corretta": false}
+      ],
+      "spiegazione": "In Excel le colonne sono identificate da lettere (A, B, C...) e le righe da numeri (1, 2, 3...)."
+    },
+    {
+      "id": "inf012",
+      "domanda": "HTTPS rispetto a HTTP garantisce:",
+      "risposte": [
+        {"id": "a", "testo": "Una connessione più veloce", "corretta": false},
+        {"id": "b", "testo": "Una connessione crittografata e sicura", "corretta": true},
+        {"id": "c", "testo": "Nessuna differenza", "corretta": false},
+        {"id": "d", "testo": "Solo l'accesso a siti governativi", "corretta": false}
+      ],
+      "spiegazione": "HTTPS (S = Secure) usa crittografia SSL/TLS per proteggere i dati trasmessi tra browser e server."
+    },
+    {
+      "id": "inf013",
+      "domanda": "Un virus informatico è:",
+      "risposte": [
+        {"id": "a", "testo": "Un errore di programmazione", "corretta": false},
+        {"id": "b", "testo": "Un software malevolo che si replica e danneggia il sistema", "corretta": true},
+        {"id": "c", "testo": "Un tipo di hardware", "corretta": false},
+        {"id": "d", "testo": "Un programma di utilità", "corretta": false}
+      ],
+      "spiegazione": "Un virus è un malware che si replica inserendosi in altri programmi e può causare danni al sistema o rubare dati."
+    },
+    {
+      "id": "inf014",
+      "domanda": "La funzione CERCA.VERT (VLOOKUP) in Excel serve a:",
+      "risposte": [
+        {"id": "a", "testo": "Creare grafici", "corretta": false},
+        {"id": "b", "testo": "Cercare un valore in una colonna e restituire un valore corrispondente", "corretta": true},
+        {"id": "c", "testo": "Ordinare i dati", "corretta": false},
+        {"id": "d", "testo": "Formattare le celle", "corretta": false}
+      ],
+      "spiegazione": "CERCA.VERT cerca un valore nella prima colonna di un intervallo e restituisce un valore dalla stessa riga in un'altra colonna."
+    },
+    {
+      "id": "inf015",
+      "domanda": "Un indirizzo IP serve a:",
+      "risposte": [
+        {"id": "a", "testo": "Identificare un utente di posta elettronica", "corretta": false},
+        {"id": "b", "testo": "Identificare univocamente un dispositivo in una rete", "corretta": true},
+        {"id": "c", "testo": "Proteggere dai virus", "corretta": false},
+        {"id": "d", "testo": "Velocizzare la connessione", "corretta": false}
+      ],
+      "spiegazione": "L'indirizzo IP (Internet Protocol) identifica univocamente ogni dispositivo connesso a una rete."
+    },
+    {
+      "id": "inf016",
+      "domanda": "In Word, per creare un elenco puntato si usa:",
+      "risposte": [
+        {"id": "a", "testo": "Il menu File", "corretta": false},
+        {"id": "b", "testo": "Il pulsante elenco puntato nella barra Home", "corretta": true},
+        {"id": "c", "testo": "Il menu Visualizza", "corretta": false},
+        {"id": "d", "testo": "Il tasto Canc", "corretta": false}
+      ],
+      "spiegazione": "Gli elenchi puntati e numerati si trovano nella scheda Home, gruppo Paragrafo."
+    },
+    {
+      "id": "inf017",
+      "domanda": "Un cookie è:",
+      "risposte": [
+        {"id": "a", "testo": "Un virus informatico", "corretta": false},
+        {"id": "b", "testo": "Un piccolo file che i siti web salvano sul dispositivo per ricordare preferenze", "corretta": true},
+        {"id": "c", "testo": "Un tipo di connessione", "corretta": false},
+        {"id": "d", "testo": "Un programma di navigazione", "corretta": false}
+      ],
+      "spiegazione": "I cookie sono piccoli file di testo usati dai siti per memorizzare informazioni sull'utente (preferenze, login, carrello)."
+    },
+    {
+      "id": "inf018",
+      "domanda": "Lo SSD (Solid State Drive) rispetto all'HDD tradizionale è:",
+      "risposte": [
+        {"id": "a", "testo": "Più lento ma più capiente", "corretta": false},
+        {"id": "b", "testo": "Più veloce e resistente agli urti", "corretta": true},
+        {"id": "c", "testo": "Uguale in prestazioni", "corretta": false},
+        {"id": "d", "testo": "Solo per server", "corretta": false}
+      ],
+      "spiegazione": "Gli SSD usano memoria flash senza parti meccaniche, risultando più veloci, silenziosi e resistenti degli HDD tradizionali."
+    },
+    {
+      "id": "inf019",
+      "domanda": "Per stampare solo la pagina corrente in Word si deve:",
+      "risposte": [
+        {"id": "a", "testo": "Premere Ctrl+P e stampare tutto", "corretta": false},
+        {"id": "b", "testo": "Selezionare 'Pagina corrente' nelle opzioni di stampa", "corretta": true},
+        {"id": "c", "testo": "Copiare la pagina in un nuovo documento", "corretta": false},
+        {"id": "d", "testo": "Non è possibile", "corretta": false}
+      ],
+      "spiegazione": "Nella finestra di stampa (Ctrl+P) si può scegliere di stampare tutte le pagine, la pagina corrente, o un intervallo specifico."
+    },
+    {
+      "id": "inf020",
+      "domanda": "Il ransomware è un tipo di malware che:",
+      "risposte": [
+        {"id": "a", "testo": "Rallenta il computer", "corretta": false},
+        {"id": "b", "testo": "Cripta i file e chiede un riscatto per sbloccarli", "corretta": true},
+        {"id": "c", "testo": "Mostra pubblicità indesiderata", "corretta": false},
+        {"id": "d", "testo": "Copia le password", "corretta": false}
+      ],
+      "spiegazione": "Il ransomware cripta i file della vittima e richiede un pagamento (ransom = riscatto) per fornire la chiave di decrittazione."
+    }
+  ]
+}

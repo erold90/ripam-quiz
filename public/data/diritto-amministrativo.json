@@ -1,0 +1,337 @@
+{
+  "materia": "diritto-amministrativo",
+  "nome": "Diritto Amministrativo",
+  "descrizione": "Procedimento amministrativo, contratti pubblici, lavoro pubblico, protezione dati",
+  "quiz": [
+    {
+      "id": "da001",
+      "domanda": "Ai sensi della L. 241/1990, qual è il termine generale per la conclusione del procedimento amministrativo?",
+      "risposte": [
+        {"id": "a", "testo": "30 giorni", "corretta": true},
+        {"id": "b", "testo": "60 giorni", "corretta": false},
+        {"id": "c", "testo": "90 giorni", "corretta": false},
+        {"id": "d", "testo": "120 giorni", "corretta": false}
+      ],
+      "spiegazione": "Art. 2, comma 2, L. 241/1990: il termine è di 30 giorni salvo diversa disposizione di legge o regolamento."
+    },
+    {
+      "id": "da002",
+      "domanda": "Il responsabile del procedimento amministrativo è individuato:",
+      "risposte": [
+        {"id": "a", "testo": "Dal Presidente della Repubblica", "corretta": false},
+        {"id": "b", "testo": "Dal dirigente dell'unità organizzativa competente", "corretta": true},
+        {"id": "c", "testo": "Dal Prefetto", "corretta": false},
+        {"id": "d", "testo": "Dal Ministro competente", "corretta": false}
+      ],
+      "spiegazione": "Art. 5 L. 241/1990: il dirigente di ciascuna unità organizzativa provvede ad assegnare a sé o ad altro dipendente la responsabilità del procedimento."
+    },
+    {
+      "id": "da003",
+      "domanda": "La comunicazione di avvio del procedimento deve contenere:",
+      "risposte": [
+        {"id": "a", "testo": "Solo l'oggetto del procedimento", "corretta": false},
+        {"id": "b", "testo": "L'amministrazione competente, l'oggetto, l'ufficio e il responsabile del procedimento", "corretta": true},
+        {"id": "c", "testo": "Solo il termine di conclusione", "corretta": false},
+        {"id": "d", "testo": "Solo il nome del responsabile", "corretta": false}
+      ],
+      "spiegazione": "Art. 8 L. 241/1990: la comunicazione deve contenere l'amministrazione competente, l'oggetto del procedimento, l'ufficio, la persona responsabile, la data di conclusione e i rimedi esperibili."
+    },
+    {
+      "id": "da004",
+      "domanda": "Il diritto di accesso ai documenti amministrativi può essere esercitato:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dai cittadini italiani", "corretta": false},
+        {"id": "b", "testo": "Da chiunque abbia un interesse diretto, concreto e attuale", "corretta": true},
+        {"id": "c", "testo": "Solo dagli avvocati", "corretta": false},
+        {"id": "d", "testo": "Solo dai dipendenti pubblici", "corretta": false}
+      ],
+      "spiegazione": "Art. 22 L. 241/1990: il diritto di accesso spetta a tutti i soggetti privati che abbiano un interesse diretto, concreto e attuale, corrispondente a una situazione giuridicamente tutelata."
+    },
+    {
+      "id": "da005",
+      "domanda": "Il silenzio-assenso si forma decorsi:",
+      "risposte": [
+        {"id": "a", "testo": "15 giorni dalla presentazione dell'istanza", "corretta": false},
+        {"id": "b", "testo": "30 giorni dalla presentazione dell'istanza, salvo diversa previsione", "corretta": true},
+        {"id": "c", "testo": "60 giorni dalla presentazione dell'istanza", "corretta": false},
+        {"id": "d", "testo": "90 giorni dalla presentazione dell'istanza", "corretta": false}
+      ],
+      "spiegazione": "Art. 20 L. 241/1990: il silenzio dell'amministrazione equivale ad accoglimento della domanda decorso il termine per la conclusione del procedimento."
+    },
+    {
+      "id": "da006",
+      "domanda": "La SCIA (Segnalazione Certificata di Inizio Attività) consente di iniziare l'attività:",
+      "risposte": [
+        {"id": "a", "testo": "Dopo 30 giorni dalla presentazione", "corretta": false},
+        {"id": "b", "testo": "Dalla data di presentazione della segnalazione", "corretta": true},
+        {"id": "c", "testo": "Dopo l'autorizzazione dell'amministrazione", "corretta": false},
+        {"id": "d", "testo": "Dopo 60 giorni dalla presentazione", "corretta": false}
+      ],
+      "spiegazione": "Art. 19 L. 241/1990: l'attività può essere iniziata dalla data della presentazione della segnalazione all'amministrazione competente."
+    },
+    {
+      "id": "da007",
+      "domanda": "L'annullamento d'ufficio di un provvedimento illegittimo può avvenire:",
+      "risposte": [
+        {"id": "a", "testo": "In qualsiasi momento senza limiti", "corretta": false},
+        {"id": "b", "testo": "Entro un termine ragionevole, comunque non superiore a 12 mesi", "corretta": true},
+        {"id": "c", "testo": "Solo entro 30 giorni", "corretta": false},
+        {"id": "d", "testo": "Solo su richiesta del privato", "corretta": false}
+      ],
+      "spiegazione": "Art. 21-nonies L. 241/1990: l'annullamento d'ufficio deve avvenire entro un termine ragionevole, comunque non superiore a 12 mesi dal momento dell'adozione dei provvedimenti di autorizzazione o di attribuzione di vantaggi economici."
+    },
+    {
+      "id": "da008",
+      "domanda": "Secondo il D.Lgs. 36/2023 (Codice dei contratti pubblici), la soglia per gli appalti di lavori di rilevanza comunitaria è:",
+      "risposte": [
+        {"id": "a", "testo": "150.000 euro", "corretta": false},
+        {"id": "b", "testo": "5.382.000 euro", "corretta": true},
+        {"id": "c", "testo": "1.000.000 euro", "corretta": false},
+        {"id": "d", "testo": "215.000 euro", "corretta": false}
+      ],
+      "spiegazione": "Art. 14 D.Lgs. 36/2023: la soglia di rilevanza comunitaria per gli appalti di lavori è di 5.382.000 euro (aggiornata periodicamente)."
+    },
+    {
+      "id": "da009",
+      "domanda": "L'affidamento diretto di lavori, servizi e forniture è consentito per importi:",
+      "risposte": [
+        {"id": "a", "testo": "Inferiori a 150.000 euro per lavori e 140.000 euro per servizi e forniture", "corretta": true},
+        {"id": "b", "testo": "Inferiori a 40.000 euro", "corretta": false},
+        {"id": "c", "testo": "Inferiori a 500.000 euro", "corretta": false},
+        {"id": "d", "testo": "Non è mai consentito l'affidamento diretto", "corretta": false}
+      ],
+      "spiegazione": "Art. 50 D.Lgs. 36/2023: l'affidamento diretto è consentito per lavori di importo inferiore a 150.000 euro e per servizi e forniture di importo inferiore a 140.000 euro."
+    },
+    {
+      "id": "da010",
+      "domanda": "Il principio del risultato nel Codice dei contratti pubblici significa che:",
+      "risposte": [
+        {"id": "a", "testo": "L'appalto deve essere aggiudicato al prezzo più basso", "corretta": false},
+        {"id": "b", "testo": "L'affidamento e l'esecuzione devono essere orientati al conseguimento del risultato", "corretta": true},
+        {"id": "c", "testo": "Il risultato economico è l'unico criterio", "corretta": false},
+        {"id": "d", "testo": "Il risultato deve essere raggiunto entro 30 giorni", "corretta": false}
+      ],
+      "spiegazione": "Art. 1 D.Lgs. 36/2023: il principio del risultato costituisce criterio prioritario per l'esercizio del potere discrezionale e per l'individuazione della regola del caso concreto."
+    },
+    {
+      "id": "da011",
+      "domanda": "Ai sensi del D.Lgs. 165/2001, i dirigenti delle pubbliche amministrazioni sono responsabili:",
+      "risposte": [
+        {"id": "a", "testo": "Solo degli atti di gestione", "corretta": false},
+        {"id": "b", "testo": "Della gestione e dei risultati", "corretta": true},
+        {"id": "c", "testo": "Solo degli atti politici", "corretta": false},
+        {"id": "d", "testo": "Solo della firma degli atti", "corretta": false}
+      ],
+      "spiegazione": "Art. 4 D.Lgs. 165/2001: i dirigenti sono responsabili in via esclusiva dell'attività amministrativa, della gestione e dei relativi risultati."
+    },
+    {
+      "id": "da012",
+      "domanda": "Il GDPR (Regolamento UE 2016/679) si applica:",
+      "risposte": [
+        {"id": "a", "testo": "Solo alle aziende private", "corretta": false},
+        {"id": "b", "testo": "A qualsiasi trattamento di dati personali effettuato nell'UE", "corretta": true},
+        {"id": "c", "testo": "Solo agli enti pubblici", "corretta": false},
+        {"id": "d", "testo": "Solo ai dati informatici", "corretta": false}
+      ],
+      "spiegazione": "Art. 2 GDPR: il regolamento si applica al trattamento interamente o parzialmente automatizzato di dati personali e al trattamento non automatizzato di dati personali contenuti in un archivio."
+    },
+    {
+      "id": "da013",
+      "domanda": "Il consenso al trattamento dei dati personali secondo il GDPR deve essere:",
+      "risposte": [
+        {"id": "a", "testo": "Implicito", "corretta": false},
+        {"id": "b", "testo": "Libero, specifico, informato e inequivocabile", "corretta": true},
+        {"id": "c", "testo": "Solo scritto", "corretta": false},
+        {"id": "d", "testo": "Valido per sempre", "corretta": false}
+      ],
+      "spiegazione": "Art. 4 e 7 GDPR: il consenso deve essere un'indicazione libera, specifica, informata e inequivocabile della volontà dell'interessato."
+    },
+    {
+      "id": "da014",
+      "domanda": "Il DPO (Data Protection Officer) deve essere designato obbligatoriamente:",
+      "risposte": [
+        {"id": "a", "testo": "Da tutte le imprese", "corretta": false},
+        {"id": "b", "testo": "Da autorità pubbliche e organismi pubblici", "corretta": true},
+        {"id": "c", "testo": "Solo dalle banche", "corretta": false},
+        {"id": "d", "testo": "Mai obbligatoriamente", "corretta": false}
+      ],
+      "spiegazione": "Art. 37 GDPR: il DPO deve essere designato quando il trattamento è effettuato da un'autorità pubblica o da un organismo pubblico."
+    },
+    {
+      "id": "da015",
+      "domanda": "La conferenza di servizi decisoria è indetta:",
+      "risposte": [
+        {"id": "a", "testo": "Facoltativamente dall'amministrazione procedente", "corretta": false},
+        {"id": "b", "testo": "Obbligatoriamente quando sono necessari atti di assenso di più amministrazioni", "corretta": true},
+        {"id": "c", "testo": "Solo su richiesta del privato", "corretta": false},
+        {"id": "d", "testo": "Solo per i procedimenti urbanistici", "corretta": false}
+      ],
+      "spiegazione": "Art. 14, comma 2, L. 241/1990: la conferenza di servizi decisoria è sempre indetta quando la conclusione positiva del procedimento è subordinata all'acquisizione di più pareri, intese, concerti, nulla osta o altri atti di assenso."
+    },
+    {
+      "id": "da016",
+      "domanda": "Il preavviso di rigetto (art. 10-bis L. 241/1990) deve essere comunicato:",
+      "risposte": [
+        {"id": "a", "testo": "Dopo l'adozione del provvedimento negativo", "corretta": false},
+        {"id": "b", "testo": "Prima della formale adozione di un provvedimento negativo", "corretta": true},
+        {"id": "c", "testo": "Solo nei procedimenti ad istanza di parte con esito positivo", "corretta": false},
+        {"id": "d", "testo": "Mai", "corretta": false}
+      ],
+      "spiegazione": "Art. 10-bis L. 241/1990: nei procedimenti ad istanza di parte, prima della formale adozione di un provvedimento negativo, l'amministrazione comunica i motivi ostativi all'accoglimento della domanda."
+    },
+    {
+      "id": "da017",
+      "domanda": "L'atto amministrativo è nullo quando:",
+      "risposte": [
+        {"id": "a", "testo": "È solo inopportuno", "corretta": false},
+        {"id": "b", "testo": "Manca degli elementi essenziali o è viziato da difetto assoluto di attribuzione", "corretta": true},
+        {"id": "c", "testo": "È solo illegittimo", "corretta": false},
+        {"id": "d", "testo": "È stato adottato in ritardo", "corretta": false}
+      ],
+      "spiegazione": "Art. 21-septies L. 241/1990: è nullo il provvedimento che manca degli elementi essenziali, che è viziato da difetto assoluto di attribuzione, che è stato adottato in violazione o elusione del giudicato, nonché negli altri casi previsti dalla legge."
+    },
+    {
+      "id": "da018",
+      "domanda": "L'autocertificazione può sostituire:",
+      "risposte": [
+        {"id": "a", "testo": "Solo i certificati anagrafici", "corretta": false},
+        {"id": "b", "testo": "Certificati e atti di notorietà nei rapporti con la PA", "corretta": true},
+        {"id": "c", "testo": "Solo i certificati medici", "corretta": false},
+        {"id": "d", "testo": "Nessun documento", "corretta": false}
+      ],
+      "spiegazione": "Art. 46-47 DPR 445/2000: le dichiarazioni sostitutive di certificazioni e le dichiarazioni sostitutive dell'atto di notorietà possono sostituire i relativi certificati e atti nei rapporti con la pubblica amministrazione."
+    },
+    {
+      "id": "da019",
+      "domanda": "Il termine per l'impugnazione di un provvedimento amministrativo al TAR è di:",
+      "risposte": [
+        {"id": "a", "testo": "30 giorni", "corretta": false},
+        {"id": "b", "testo": "60 giorni", "corretta": true},
+        {"id": "c", "testo": "90 giorni", "corretta": false},
+        {"id": "d", "testo": "120 giorni", "corretta": false}
+      ],
+      "spiegazione": "Art. 29 D.Lgs. 104/2010 (Codice del processo amministrativo): il ricorso al TAR deve essere proposto nel termine di decadenza di 60 giorni."
+    },
+    {
+      "id": "da020",
+      "domanda": "Il principio di imparzialità della pubblica amministrazione è sancito:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dalla L. 241/1990", "corretta": false},
+        {"id": "b", "testo": "Dall'art. 97 della Costituzione", "corretta": true},
+        {"id": "c", "testo": "Solo dal Codice civile", "corretta": false},
+        {"id": "d", "testo": "Da nessuna norma", "corretta": false}
+      ],
+      "spiegazione": "Art. 97 Cost.: i pubblici uffici sono organizzati secondo disposizioni di legge, in modo che siano assicurati il buon andamento e l'imparzialità dell'amministrazione."
+    },
+    {
+      "id": "da021",
+      "domanda": "Il parere obbligatorio non vincolante deve essere reso entro:",
+      "risposte": [
+        {"id": "a", "testo": "10 giorni dalla richiesta", "corretta": false},
+        {"id": "b", "testo": "20 giorni dalla richiesta", "corretta": true},
+        {"id": "c", "testo": "30 giorni dalla richiesta", "corretta": false},
+        {"id": "d", "testo": "60 giorni dalla richiesta", "corretta": false}
+      ],
+      "spiegazione": "Art. 16 L. 241/1990: gli organi consultivi delle pubbliche amministrazioni sono tenuti a rendere i pareri ad essi obbligatoriamente richiesti entro 20 giorni dal ricevimento della richiesta."
+    },
+    {
+      "id": "da022",
+      "domanda": "La valutazione tecnica obbligatoria deve essere resa entro:",
+      "risposte": [
+        {"id": "a", "testo": "20 giorni", "corretta": false},
+        {"id": "b", "testo": "90 giorni", "corretta": true},
+        {"id": "c", "testo": "30 giorni", "corretta": false},
+        {"id": "d", "testo": "10 giorni", "corretta": false}
+      ],
+      "spiegazione": "Art. 17 L. 241/1990: le valutazioni tecniche devono essere rese entro 90 giorni dal ricevimento della richiesta o dalla indizione della conferenza di servizi."
+    },
+    {
+      "id": "da023",
+      "domanda": "Il principio di motivazione dell'atto amministrativo richiede:",
+      "risposte": [
+        {"id": "a", "testo": "Solo l'indicazione della norma applicata", "corretta": false},
+        {"id": "b", "testo": "L'indicazione dei presupposti di fatto e delle ragioni giuridiche", "corretta": true},
+        {"id": "c", "testo": "Solo la firma del responsabile", "corretta": false},
+        {"id": "d", "testo": "Solo la data di adozione", "corretta": false}
+      ],
+      "spiegazione": "Art. 3 L. 241/1990: ogni provvedimento amministrativo deve essere motivato, indicando i presupposti di fatto e le ragioni giuridiche che hanno determinato la decisione dell'amministrazione."
+    },
+    {
+      "id": "da024",
+      "domanda": "L'accesso civico generalizzato (FOIA italiano) consente di accedere:",
+      "risposte": [
+        {"id": "a", "testo": "Solo ai documenti per cui si ha interesse diretto", "corretta": false},
+        {"id": "b", "testo": "A dati e documenti detenuti dalle PA, senza necessità di motivazione", "corretta": true},
+        {"id": "c", "testo": "Solo ai documenti pubblicati", "corretta": false},
+        {"id": "d", "testo": "Solo ai propri dati personali", "corretta": false}
+      ],
+      "spiegazione": "Art. 5, comma 2, D.Lgs. 33/2013: chiunque ha diritto di accedere ai dati e ai documenti detenuti dalle pubbliche amministrazioni, ulteriori rispetto a quelli oggetto di pubblicazione obbligatoria."
+    },
+    {
+      "id": "da025",
+      "domanda": "La revoca del provvedimento amministrativo è possibile:",
+      "risposte": [
+        {"id": "a", "testo": "Solo per illegittimità originaria", "corretta": false},
+        {"id": "b", "testo": "Per sopravvenuti motivi di pubblico interesse o mutamento della situazione di fatto", "corretta": true},
+        {"id": "c", "testo": "Solo su richiesta del privato", "corretta": false},
+        {"id": "d", "testo": "Mai", "corretta": false}
+      ],
+      "spiegazione": "Art. 21-quinquies L. 241/1990: la revoca è possibile per sopravvenuti motivi di pubblico interesse, per mutamento della situazione di fatto non prevedibile, o per nuova valutazione dell'interesse pubblico originario."
+    },
+    {
+      "id": "da026",
+      "domanda": "Il RUP (Responsabile Unico del Procedimento) nei contratti pubblici:",
+      "risposte": [
+        {"id": "a", "testo": "È sempre esterno all'amministrazione", "corretta": false},
+        {"id": "b", "testo": "È nominato per ogni singola procedura di affidamento", "corretta": true},
+        {"id": "c", "testo": "È nominato dal Ministro", "corretta": false},
+        {"id": "d", "testo": "Non è obbligatorio", "corretta": false}
+      ],
+      "spiegazione": "Art. 15 D.Lgs. 36/2023: le stazioni appaltanti nominano un responsabile unico del procedimento per ogni singola procedura di affidamento di un appalto o di una concessione."
+    },
+    {
+      "id": "da027",
+      "domanda": "La violazione del termine di conclusione del procedimento:",
+      "risposte": [
+        {"id": "a", "testo": "Rende nullo il provvedimento", "corretta": false},
+        {"id": "b", "testo": "Costituisce elemento di valutazione della performance e può dare diritto a indennizzo", "corretta": true},
+        {"id": "c", "testo": "Non ha conseguenze", "corretta": false},
+        {"id": "d", "testo": "Comporta l'archiviazione automatica", "corretta": false}
+      ],
+      "spiegazione": "Art. 2, comma 9, L. 241/1990: la mancata o tardiva emanazione del provvedimento costituisce elemento di valutazione della performance individuale e può dare diritto a indennizzo per mero ritardo."
+    },
+    {
+      "id": "da028",
+      "domanda": "Il principio di economicità dell'azione amministrativa significa:",
+      "risposte": [
+        {"id": "a", "testo": "Spendere il meno possibile", "corretta": false},
+        {"id": "b", "testo": "Raggiungere gli obiettivi con il minor dispendio di mezzi", "corretta": true},
+        {"id": "c", "testo": "Non sostenere alcun costo", "corretta": false},
+        {"id": "d", "testo": "Fare sempre gare al massimo ribasso", "corretta": false}
+      ],
+      "spiegazione": "Art. 1 L. 241/1990: l'attività amministrativa è retta dal criterio di economicità, inteso come raggiungimento degli obiettivi con il minor dispendio possibile di mezzi personali, finanziari e procedimentali."
+    },
+    {
+      "id": "da029",
+      "domanda": "Il termine per l'esercizio del potere sostitutivo in caso di inerzia è di:",
+      "risposte": [
+        {"id": "a", "testo": "10 giorni dalla scadenza del termine ordinario", "corretta": false},
+        {"id": "b", "testo": "La metà di quello originariamente previsto", "corretta": true},
+        {"id": "c", "testo": "90 giorni dalla scadenza", "corretta": false},
+        {"id": "d", "testo": "Non c'è termine", "corretta": false}
+      ],
+      "spiegazione": "Art. 2, comma 9-ter, L. 241/1990: il titolare del potere sostitutivo conclude il procedimento in un termine pari alla metà di quello originariamente previsto."
+    },
+    {
+      "id": "da030",
+      "domanda": "L'interesse legittimo è:",
+      "risposte": [
+        {"id": "a", "testo": "Un diritto soggettivo", "corretta": false},
+        {"id": "b", "testo": "Una posizione giuridica soggettiva tutelata nei confronti della PA", "corretta": true},
+        {"id": "c", "testo": "Un interesse di fatto non tutelato", "corretta": false},
+        {"id": "d", "testo": "Un interesse collettivo", "corretta": false}
+      ],
+      "spiegazione": "L'interesse legittimo è la posizione giuridica soggettiva di vantaggio che l'ordinamento riconosce al privato in relazione a beni della vita coinvolti dall'esercizio del potere amministrativo."
+    }
+  ]
+}

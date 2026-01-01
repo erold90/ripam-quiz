@@ -1,0 +1,227 @@
+{
+  "materia": "diritto-penale",
+  "nome": "Diritto Penale",
+  "descrizione": "Reati contro la Pubblica Amministrazione",
+  "quiz": [
+    {
+      "id": "dp001",
+      "domanda": "Il peculato (art. 314 c.p.) è commesso dal pubblico ufficiale o incaricato di pubblico servizio che:",
+      "risposte": [
+        {"id": "a", "testo": "Accetta denaro per compiere un atto del suo ufficio", "corretta": false},
+        {"id": "b", "testo": "Si appropria di denaro o altra cosa mobile altrui di cui ha il possesso per ragione del suo ufficio", "corretta": true},
+        {"id": "c", "testo": "Falsifica un documento pubblico", "corretta": false},
+        {"id": "d", "testo": "Rivela un segreto d'ufficio", "corretta": false}
+      ],
+      "spiegazione": "Art. 314 c.p.: il pubblico ufficiale o l'incaricato di pubblico servizio che si appropria di denaro o di altra cosa mobile altrui, di cui abbia il possesso o comunque la disponibilità per ragione del suo ufficio o servizio."
+    },
+    {
+      "id": "dp002",
+      "domanda": "La corruzione propria (art. 319 c.p.) si configura quando il pubblico ufficiale:",
+      "risposte": [
+        {"id": "a", "testo": "Riceve denaro per compiere un atto conforme ai doveri d'ufficio", "corretta": false},
+        {"id": "b", "testo": "Riceve denaro per omettere o ritardare un atto d'ufficio o per compiere un atto contrario ai doveri d'ufficio", "corretta": true},
+        {"id": "c", "testo": "Si appropria di beni pubblici", "corretta": false},
+        {"id": "d", "testo": "Abusa dei poteri inerenti alle sue funzioni", "corretta": false}
+      ],
+      "spiegazione": "Art. 319 c.p.: corruzione per un atto contrario ai doveri d'ufficio - il pubblico ufficiale che riceve denaro o altra utilità per omettere o ritardare un atto dell'ufficio ovvero per compiere un atto contrario ai doveri d'ufficio."
+    },
+    {
+      "id": "dp003",
+      "domanda": "L'abuso d'ufficio (art. 323 c.p.) richiede:",
+      "risposte": [
+        {"id": "a", "testo": "Solo la violazione di norme di legge", "corretta": false},
+        {"id": "b", "testo": "Violazione di specifiche regole di condotta previste dalla legge o da atti aventi forza di legge, con intenzionale procurarsi un vantaggio ingiusto", "corretta": true},
+        {"id": "c", "testo": "Qualsiasi comportamento scorretto", "corretta": false},
+        {"id": "d", "testo": "Solo il dolo eventuale", "corretta": false}
+      ],
+      "spiegazione": "Art. 323 c.p. (come modificato): richiede la violazione di specifiche regole di condotta espressamente previste dalla legge o da atti aventi forza di legge e dalle quali non residuino margini di discrezionalità."
+    },
+    {
+      "id": "dp004",
+      "domanda": "Il reato di concussione (art. 317 c.p.) è commesso:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dal privato che corrompe", "corretta": false},
+        {"id": "b", "testo": "Dal pubblico ufficiale che costringe taluno a dare o promettere denaro o altra utilità", "corretta": true},
+        {"id": "c", "testo": "Solo dall'incaricato di pubblico servizio", "corretta": false},
+        {"id": "d", "testo": "Da chiunque", "corretta": false}
+      ],
+      "spiegazione": "Art. 317 c.p.: il pubblico ufficiale o l'incaricato di un pubblico servizio che, abusando della sua qualità o dei suoi poteri, costringe taluno a dare o a promettere indebitamente denaro o altra utilità."
+    },
+    {
+      "id": "dp005",
+      "domanda": "La pena per il peculato (art. 314 c.p.) è:",
+      "risposte": [
+        {"id": "a", "testo": "Multa fino a 5.000 euro", "corretta": false},
+        {"id": "b", "testo": "Reclusione da 4 a 10 anni e 6 mesi", "corretta": true},
+        {"id": "c", "testo": "Reclusione fino a 2 anni", "corretta": false},
+        {"id": "d", "testo": "Arresto fino a 6 mesi", "corretta": false}
+      ],
+      "spiegazione": "Art. 314 c.p.: il peculato è punito con la reclusione da quattro a dieci anni e sei mesi."
+    },
+    {
+      "id": "dp006",
+      "domanda": "Il traffico di influenze illecite (art. 346-bis c.p.) punisce:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il pubblico ufficiale corrotto", "corretta": false},
+        {"id": "b", "testo": "Chi sfrutta relazioni esistenti con un pubblico ufficiale per farsi dare denaro in cambio della mediazione illecita", "corretta": true},
+        {"id": "c", "testo": "Solo chi falsifica documenti", "corretta": false},
+        {"id": "d", "testo": "Solo il privato corruttore", "corretta": false}
+      ],
+      "spiegazione": "Art. 346-bis c.p.: punisce chiunque sfruttando o vantando relazioni esistenti o asserite con un pubblico ufficiale o incaricato di pubblico servizio, indebitamente fa dare o promettere denaro o altra utilità."
+    },
+    {
+      "id": "dp007",
+      "domanda": "La corruzione impropria (art. 318 c.p.) si ha quando il pubblico ufficiale:",
+      "risposte": [
+        {"id": "a", "testo": "Compie un atto contrario ai doveri d'ufficio", "corretta": false},
+        {"id": "b", "testo": "Riceve denaro o altra utilità per l'esercizio delle sue funzioni o dei suoi poteri", "corretta": true},
+        {"id": "c", "testo": "Si appropria di beni pubblici", "corretta": false},
+        {"id": "d", "testo": "Costringe il privato a pagare", "corretta": false}
+      ],
+      "spiegazione": "Art. 318 c.p.: corruzione per l'esercizio della funzione - il pubblico ufficiale che riceve indebitamente denaro o altra utilità per l'esercizio delle sue funzioni o dei suoi poteri."
+    },
+    {
+      "id": "dp008",
+      "domanda": "L'omissione di atti d'ufficio (art. 328 c.p.) richiede:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il ritardo nell'adozione dell'atto", "corretta": false},
+        {"id": "b", "testo": "Il rifiuto indebito o il mancato compimento dell'atto entro 30 giorni dalla richiesta", "corretta": true},
+        {"id": "c", "testo": "Solo il dolo specifico di lucro", "corretta": false},
+        {"id": "d", "testo": "La richiesta di denaro", "corretta": false}
+      ],
+      "spiegazione": "Art. 328 c.p.: il pubblico ufficiale o l'incaricato di pubblico servizio che indebitamente rifiuta un atto del suo ufficio che deve essere compiuto senza ritardo, ovvero non risponde entro 30 giorni dalla richiesta."
+    },
+    {
+      "id": "dp009",
+      "domanda": "La rivelazione di segreti d'ufficio (art. 326 c.p.) è punita:",
+      "risposte": [
+        {"id": "a", "testo": "Solo se il segreto riguarda la sicurezza dello Stato", "corretta": false},
+        {"id": "b", "testo": "Quando il pubblico ufficiale rivela notizie d'ufficio che devono rimanere segrete", "corretta": true},
+        {"id": "c", "testo": "Solo in caso di spionaggio", "corretta": false},
+        {"id": "d", "testo": "Mai", "corretta": false}
+      ],
+      "spiegazione": "Art. 326 c.p.: il pubblico ufficiale o la persona incaricata di pubblico servizio che rivela notizie di ufficio, le quali debbano rimanere segrete, o ne agevola la conoscenza."
+    },
+    {
+      "id": "dp010",
+      "domanda": "Il pubblico ufficiale secondo il codice penale è:",
+      "risposte": [
+        {"id": "a", "testo": "Solo chi lavora in un ministero", "corretta": false},
+        {"id": "b", "testo": "Chi esercita una pubblica funzione legislativa, giudiziaria o amministrativa", "corretta": true},
+        {"id": "c", "testo": "Solo i magistrati", "corretta": false},
+        {"id": "d", "testo": "Solo i dipendenti comunali", "corretta": false}
+      ],
+      "spiegazione": "Art. 357 c.p.: agli effetti della legge penale, sono pubblici ufficiali coloro i quali esercitano una pubblica funzione legislativa, giudiziaria o amministrativa."
+    },
+    {
+      "id": "dp011",
+      "domanda": "L'incaricato di pubblico servizio è:",
+      "risposte": [
+        {"id": "a", "testo": "Chi esercita funzioni legislative", "corretta": false},
+        {"id": "b", "testo": "Chi presta un pubblico servizio senza poteri autoritativi o certificativi", "corretta": true},
+        {"id": "c", "testo": "Solo il notaio", "corretta": false},
+        {"id": "d", "testo": "Solo il medico ospedaliero", "corretta": false}
+      ],
+      "spiegazione": "Art. 358 c.p.: sono incaricati di pubblico servizio coloro i quali prestano un pubblico servizio, escludendo le funzioni meramente materiali."
+    },
+    {
+      "id": "dp012",
+      "domanda": "La corruzione in atti giudiziari (art. 319-ter c.p.) aggrava la pena quando:",
+      "risposte": [
+        {"id": "a", "testo": "Il corrotto è un qualsiasi pubblico ufficiale", "corretta": false},
+        {"id": "b", "testo": "Il fatto è commesso per favorire o danneggiare una parte in un processo civile, penale o amministrativo", "corretta": true},
+        {"id": "c", "testo": "L'importo supera 1.000 euro", "corretta": false},
+        {"id": "d", "testo": "Il fatto avviene di notte", "corretta": false}
+      ],
+      "spiegazione": "Art. 319-ter c.p.: se i fatti indicati negli articoli 318 e 319 sono commessi per favorire o danneggiare una parte in un processo civile, penale o amministrativo, la pena è aumentata."
+    },
+    {
+      "id": "dp013",
+      "domanda": "L'induzione indebita (art. 319-quater c.p.) si distingue dalla concussione perché:",
+      "risposte": [
+        {"id": "a", "testo": "È commessa solo dal privato", "corretta": false},
+        {"id": "b", "testo": "Il privato non è costretto ma indotto e quindi è punibile", "corretta": true},
+        {"id": "c", "testo": "Non c'è dazione di denaro", "corretta": false},
+        {"id": "d", "testo": "È sempre meno grave", "corretta": false}
+      ],
+      "spiegazione": "Art. 319-quater c.p.: nell'induzione indebita il privato non è costretto ma indotto a dare o promettere, pertanto è anch'egli punibile."
+    },
+    {
+      "id": "dp014",
+      "domanda": "Il millantato credito è stato assorbito dal reato di:",
+      "risposte": [
+        {"id": "a", "testo": "Corruzione", "corretta": false},
+        {"id": "b", "testo": "Traffico di influenze illecite", "corretta": true},
+        {"id": "c", "testo": "Peculato", "corretta": false},
+        {"id": "d", "testo": "Concussione", "corretta": false}
+      ],
+      "spiegazione": "Con la L. 3/2019 (legge 'spazzacorrotti') il reato di millantato credito è stato abrogato e le condotte sono confluite nel reato di traffico di influenze illecite (art. 346-bis c.p.)."
+    },
+    {
+      "id": "dp015",
+      "domanda": "La pena accessoria dell'interdizione dai pubblici uffici per i reati contro la PA:",
+      "risposte": [
+        {"id": "a", "testo": "Non è mai applicata", "corretta": false},
+        {"id": "b", "testo": "È perpetua per condanne superiori a 3 anni e temporanea negli altri casi", "corretta": true},
+        {"id": "c", "testo": "Dura sempre 5 anni", "corretta": false},
+        {"id": "d", "testo": "È sempre temporanea", "corretta": false}
+      ],
+      "spiegazione": "Art. 317-bis c.p.: la condanna per i reati di cui agli artt. 314-320 importa l'interdizione perpetua dai pubblici uffici se la pena è superiore a tre anni, temporanea negli altri casi."
+    },
+    {
+      "id": "dp016",
+      "domanda": "Il peculato d'uso (art. 314, comma 2, c.p.) prevede:",
+      "risposte": [
+        {"id": "a", "testo": "La stessa pena del peculato", "corretta": false},
+        {"id": "b", "testo": "Una pena ridotta per l'uso momentaneo della cosa con restituzione immediata", "corretta": true},
+        {"id": "c", "testo": "L'assoluzione", "corretta": false},
+        {"id": "d", "testo": "Solo una sanzione amministrativa", "corretta": false}
+      ],
+      "spiegazione": "Art. 314, comma 2, c.p.: se il colpevole ha agito al solo scopo di fare uso momentaneo della cosa, e questa è stata immediatamente restituita, si applica la reclusione da 6 mesi a 3 anni."
+    },
+    {
+      "id": "dp017",
+      "domanda": "La falsità ideologica commessa dal pubblico ufficiale in atti pubblici (art. 479 c.p.) si ha quando:",
+      "risposte": [
+        {"id": "a", "testo": "Il documento è materialmente contraffatto", "corretta": false},
+        {"id": "b", "testo": "Il pubblico ufficiale attesta falsamente fatti dei quali l'atto è destinato a provare la verità", "corretta": true},
+        {"id": "c", "testo": "Il documento è rubato", "corretta": false},
+        {"id": "d", "testo": "Il documento è smarrito", "corretta": false}
+      ],
+      "spiegazione": "Art. 479 c.p.: il pubblico ufficiale che, ricevendo o formando un atto nell'esercizio delle sue funzioni, attesta falsamente che un fatto è stato da lui compiuto o è avvenuto alla sua presenza."
+    },
+    {
+      "id": "dp018",
+      "domanda": "La confisca per equivalente nei reati contro la PA:",
+      "risposte": [
+        {"id": "a", "testo": "Non è mai applicabile", "corretta": false},
+        {"id": "b", "testo": "Consente di confiscare beni di valore equivalente al profitto del reato", "corretta": true},
+        {"id": "c", "testo": "Si applica solo ai beni immobili", "corretta": false},
+        {"id": "d", "testo": "È facoltativa", "corretta": false}
+      ],
+      "spiegazione": "Art. 322-ter c.p.: nel caso di condanna per reati contro la PA è sempre ordinata la confisca dei beni che ne costituiscono il profitto o il prezzo, o, in mancanza, di beni di valore equivalente."
+    },
+    {
+      "id": "dp019",
+      "domanda": "Il reato di istigazione alla corruzione (art. 322 c.p.) punisce:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il pubblico ufficiale", "corretta": false},
+        {"id": "b", "testo": "Sia chi offre denaro a un pubblico ufficiale sia il pubblico ufficiale che sollecita denaro", "corretta": true},
+        {"id": "c", "testo": "Solo il privato", "corretta": false},
+        {"id": "d", "testo": "Nessuno se la corruzione non si realizza", "corretta": false}
+      ],
+      "spiegazione": "Art. 322 c.p.: punisce sia chiunque offre o promette denaro al pubblico ufficiale (istigazione attiva) sia il pubblico ufficiale che sollecita una promessa o dazione (istigazione passiva)."
+    },
+    {
+      "id": "dp020",
+      "domanda": "La turbata libertà degli incanti (art. 353 c.p.) punisce:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il pubblico ufficiale", "corretta": false},
+        {"id": "b", "testo": "Chi impedisce o turba gare nei pubblici incanti o nelle licitazioni private per conto della PA", "corretta": true},
+        {"id": "c", "testo": "Solo le gare private", "corretta": false},
+        {"id": "d", "testo": "Solo l'uso della violenza", "corretta": false}
+      ],
+      "spiegazione": "Art. 353 c.p.: punisce chiunque con violenza, minaccia, doni, promesse, collusioni o altri mezzi fraudolenti, impedisce o turba la gara nei pubblici incanti o nelle licitazioni private per conto di pubbliche amministrazioni."
+    }
+  ]
+}

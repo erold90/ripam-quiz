@@ -1,0 +1,227 @@
+{
+  "materia": "contabilita-stato",
+  "nome": "Contabilità di Stato",
+  "descrizione": "Contabilità pubblica, bilancio dello Stato, enti pubblici",
+  "quiz": [
+    {
+      "id": "cs001",
+      "domanda": "Il bilancio dello Stato è approvato con:",
+      "risposte": [
+        {"id": "a", "testo": "Decreto del Presidente della Repubblica", "corretta": false},
+        {"id": "b", "testo": "Legge", "corretta": true},
+        {"id": "c", "testo": "Decreto ministeriale", "corretta": false},
+        {"id": "d", "testo": "Delibera del Consiglio dei Ministri", "corretta": false}
+      ],
+      "spiegazione": "Art. 81 Cost.: il bilancio e il rendiconto consuntivo sono approvati ogni anno con legge."
+    },
+    {
+      "id": "cs002",
+      "domanda": "Il DEF (Documento di Economia e Finanza) deve essere presentato al Parlamento entro:",
+      "risposte": [
+        {"id": "a", "testo": "Il 31 dicembre", "corretta": false},
+        {"id": "b", "testo": "Il 10 aprile", "corretta": true},
+        {"id": "c", "testo": "Il 30 giugno", "corretta": false},
+        {"id": "d", "testo": "Il 15 ottobre", "corretta": false}
+      ],
+      "spiegazione": "L. 196/2009: il DEF è presentato alle Camere entro il 10 aprile di ogni anno."
+    },
+    {
+      "id": "cs003",
+      "domanda": "La NADEF (Nota di Aggiornamento al DEF) viene presentata:",
+      "risposte": [
+        {"id": "a", "testo": "Entro aprile", "corretta": false},
+        {"id": "b", "testo": "Entro il 27 settembre", "corretta": true},
+        {"id": "c", "testo": "Entro dicembre", "corretta": false},
+        {"id": "d", "testo": "Entro gennaio", "corretta": false}
+      ],
+      "spiegazione": "L. 196/2009: la NADEF è presentata alle Camere entro il 27 settembre per aggiornare le previsioni economiche."
+    },
+    {
+      "id": "cs004",
+      "domanda": "Il principio di universalità del bilancio prevede che:",
+      "risposte": [
+        {"id": "a", "testo": "Il bilancio sia redatto in euro", "corretta": false},
+        {"id": "b", "testo": "Tutte le entrate e le spese siano iscritte in bilancio al lordo", "corretta": true},
+        {"id": "c", "testo": "Il bilancio sia pubblicato online", "corretta": false},
+        {"id": "d", "testo": "Il bilancio sia uguale per tutti gli enti", "corretta": false}
+      ],
+      "spiegazione": "Il principio di universalità vieta le gestioni fuori bilancio: tutte le entrate e spese devono essere iscritte senza compensazioni."
+    },
+    {
+      "id": "cs005",
+      "domanda": "L'esercizio finanziario dello Stato coincide con:",
+      "risposte": [
+        {"id": "a", "testo": "L'anno accademico", "corretta": false},
+        {"id": "b", "testo": "L'anno solare (1 gennaio - 31 dicembre)", "corretta": true},
+        {"id": "c", "testo": "L'anno fiscale (1 luglio - 30 giugno)", "corretta": false},
+        {"id": "d", "testo": "La legislatura", "corretta": false}
+      ],
+      "spiegazione": "Art. 3 L. 196/2009: l'esercizio finanziario inizia il 1° gennaio e termina il 31 dicembre dello stesso anno."
+    },
+    {
+      "id": "cs006",
+      "domanda": "Il disegno di legge di bilancio deve essere presentato al Parlamento entro:",
+      "risposte": [
+        {"id": "a", "testo": "Il 30 settembre", "corretta": false},
+        {"id": "b", "testo": "Il 20 ottobre", "corretta": true},
+        {"id": "c", "testo": "Il 15 novembre", "corretta": false},
+        {"id": "d", "testo": "Il 31 dicembre", "corretta": false}
+      ],
+      "spiegazione": "L. 196/2009: il ddl di bilancio è presentato alle Camere entro il 20 ottobre di ogni anno."
+    },
+    {
+      "id": "cs007",
+      "domanda": "Il residuo attivo è:",
+      "risposte": [
+        {"id": "a", "testo": "Una spesa non effettuata", "corretta": false},
+        {"id": "b", "testo": "Un'entrata accertata ma non riscossa", "corretta": true},
+        {"id": "c", "testo": "Un avanzo di bilancio", "corretta": false},
+        {"id": "d", "testo": "Un debito dello Stato", "corretta": false}
+      ],
+      "spiegazione": "I residui attivi sono entrate accertate nell'esercizio ma non ancora riscosse alla chiusura dell'esercizio."
+    },
+    {
+      "id": "cs008",
+      "domanda": "Il residuo passivo è:",
+      "risposte": [
+        {"id": "a", "testo": "Un'entrata non riscossa", "corretta": false},
+        {"id": "b", "testo": "Una spesa impegnata ma non pagata", "corretta": true},
+        {"id": "c", "testo": "Un disavanzo", "corretta": false},
+        {"id": "d", "testo": "Un credito verso terzi", "corretta": false}
+      ],
+      "spiegazione": "I residui passivi sono spese impegnate nell'esercizio ma non ancora pagate alla chiusura dell'esercizio."
+    },
+    {
+      "id": "cs009",
+      "domanda": "Le fasi dell'entrata nella contabilità pubblica sono:",
+      "risposte": [
+        {"id": "a", "testo": "Previsione, impegno, pagamento", "corretta": false},
+        {"id": "b", "testo": "Accertamento, riscossione, versamento", "corretta": true},
+        {"id": "c", "testo": "Stanziamento, liquidazione, ordinazione", "corretta": false},
+        {"id": "d", "testo": "Programmazione, esecuzione, rendicontazione", "corretta": false}
+      ],
+      "spiegazione": "Le fasi dell'entrata sono: accertamento (il diritto a riscuotere), riscossione (incasso), versamento (in tesoreria)."
+    },
+    {
+      "id": "cs010",
+      "domanda": "Le fasi della spesa nella contabilità pubblica sono:",
+      "risposte": [
+        {"id": "a", "testo": "Accertamento, riscossione, versamento", "corretta": false},
+        {"id": "b", "testo": "Impegno, liquidazione, ordinazione, pagamento", "corretta": true},
+        {"id": "c", "testo": "Previsione, stanziamento, erogazione", "corretta": false},
+        {"id": "d", "testo": "Programmazione, approvazione, esecuzione", "corretta": false}
+      ],
+      "spiegazione": "Le fasi della spesa sono: impegno, liquidazione (determinazione importo), ordinazione (mandato), pagamento."
+    },
+    {
+      "id": "cs011",
+      "domanda": "L'impegno di spesa è:",
+      "risposte": [
+        {"id": "a", "testo": "Il pagamento effettivo della spesa", "corretta": false},
+        {"id": "b", "testo": "L'atto con cui viene riservata una quota di bilancio per un'obbligazione giuridica", "corretta": true},
+        {"id": "c", "testo": "La previsione della spesa", "corretta": false},
+        {"id": "d", "testo": "La richiesta di fondi", "corretta": false}
+      ],
+      "spiegazione": "L'impegno vincola una quota dello stanziamento di bilancio a fronte di un'obbligazione giuridicamente perfezionata."
+    },
+    {
+      "id": "cs012",
+      "domanda": "Il rendiconto generale dello Stato si compone di:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il conto del bilancio", "corretta": false},
+        {"id": "b", "testo": "Conto del bilancio e conto del patrimonio", "corretta": true},
+        {"id": "c", "testo": "Solo il conto economico", "corretta": false},
+        {"id": "d", "testo": "Bilancio preventivo e consuntivo", "corretta": false}
+      ],
+      "spiegazione": "Art. 35 L. 196/2009: il rendiconto generale comprende il conto del bilancio e il conto generale del patrimonio."
+    },
+    {
+      "id": "cs013",
+      "domanda": "Il tesoriere dello Stato è:",
+      "risposte": [
+        {"id": "a", "testo": "Il Ministro dell'Economia", "corretta": false},
+        {"id": "b", "testo": "La Banca d'Italia", "corretta": true},
+        {"id": "c", "testo": "La Corte dei Conti", "corretta": false},
+        {"id": "d", "testo": "L'Agenzia delle Entrate", "corretta": false}
+      ],
+      "spiegazione": "La Banca d'Italia svolge il servizio di tesoreria dello Stato, gestendo incassi e pagamenti."
+    },
+    {
+      "id": "cs014",
+      "domanda": "La Corte dei Conti esercita il controllo:",
+      "risposte": [
+        {"id": "a", "testo": "Solo sulle entrate", "corretta": false},
+        {"id": "b", "testo": "Preventivo di legittimità e successivo sulla gestione del bilancio", "corretta": true},
+        {"id": "c", "testo": "Solo sulle spese militari", "corretta": false},
+        {"id": "d", "testo": "Solo sugli enti locali", "corretta": false}
+      ],
+      "spiegazione": "Art. 100 Cost.: la Corte dei Conti esercita il controllo preventivo di legittimità sugli atti del Governo e il controllo successivo sulla gestione del bilancio."
+    },
+    {
+      "id": "cs015",
+      "domanda": "Il principio di equilibrio di bilancio è previsto:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dalle leggi ordinarie", "corretta": false},
+        {"id": "b", "testo": "Dall'art. 81 della Costituzione", "corretta": true},
+        {"id": "c", "testo": "Solo dai regolamenti UE", "corretta": false},
+        {"id": "d", "testo": "Dal codice civile", "corretta": false}
+      ],
+      "spiegazione": "Art. 81 Cost. (modificato nel 2012): lo Stato assicura l'equilibrio tra entrate e spese tenendo conto delle fasi del ciclo economico."
+    },
+    {
+      "id": "cs016",
+      "domanda": "Il MES (Meccanismo Europeo di Stabilità) è:",
+      "risposte": [
+        {"id": "a", "testo": "Un ministero italiano", "corretta": false},
+        {"id": "b", "testo": "Un'organizzazione intergovernativa per la stabilità finanziaria dell'eurozona", "corretta": true},
+        {"id": "c", "testo": "Un indice di borsa", "corretta": false},
+        {"id": "d", "testo": "Una banca privata", "corretta": false}
+      ],
+      "spiegazione": "Il MES è un'organizzazione intergovernativa che fornisce assistenza finanziaria ai paesi dell'eurozona in difficoltà."
+    },
+    {
+      "id": "cs017",
+      "domanda": "I titoli di Stato italiani includono:",
+      "risposte": [
+        {"id": "a", "testo": "Solo i BTP", "corretta": false},
+        {"id": "b", "testo": "BOT, BTP, CCT, CTZ", "corretta": true},
+        {"id": "c", "testo": "Solo le azioni", "corretta": false},
+        {"id": "d", "testo": "Solo i buoni postali", "corretta": false}
+      ],
+      "spiegazione": "I principali titoli di Stato italiani sono: BOT (Buoni Ordinari del Tesoro), BTP (Buoni del Tesoro Poliennali), CCT (Certificati di Credito del Tesoro), CTZ (Certificati del Tesoro Zero coupon)."
+    },
+    {
+      "id": "cs018",
+      "domanda": "Il SIOPE (Sistema Informativo Operazioni Enti Pubblici) serve a:",
+      "risposte": [
+        {"id": "a", "testo": "Gestire le assunzioni", "corretta": false},
+        {"id": "b", "testo": "Rilevare telematicamente gli incassi e i pagamenti delle PA", "corretta": true},
+        {"id": "c", "testo": "Controllare i dipendenti pubblici", "corretta": false},
+        {"id": "d", "testo": "Gestire i concorsi", "corretta": false}
+      ],
+      "spiegazione": "SIOPE è il sistema di rilevazione telematica degli incassi e dei pagamenti delle amministrazioni pubbliche."
+    },
+    {
+      "id": "cs019",
+      "domanda": "L'esercizio provvisorio del bilancio può durare al massimo:",
+      "risposte": [
+        {"id": "a", "testo": "3 mesi", "corretta": false},
+        {"id": "b", "testo": "4 mesi", "corretta": true},
+        {"id": "c", "testo": "6 mesi", "corretta": false},
+        {"id": "d", "testo": "12 mesi", "corretta": false}
+      ],
+      "spiegazione": "Art. 81 Cost.: l'esercizio provvisorio del bilancio non può essere concesso se non per legge e per periodi non superiori complessivamente a quattro mesi."
+    },
+    {
+      "id": "cs020",
+      "domanda": "La classificazione delle spese per missioni e programmi è prevista dalla:",
+      "risposte": [
+        {"id": "a", "testo": "Costituzione", "corretta": false},
+        {"id": "b", "testo": "L. 196/2009 (Legge di contabilità)", "corretta": true},
+        {"id": "c", "testo": "Codice civile", "corretta": false},
+        {"id": "d", "testo": "Regolamento UE", "corretta": false}
+      ],
+      "spiegazione": "La L. 196/2009 ha introdotto la classificazione del bilancio per missioni (finalità della spesa) e programmi (unità di voto)."
+    }
+  ]
+}

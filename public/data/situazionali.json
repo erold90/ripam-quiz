@@ -1,0 +1,227 @@
+{
+  "materia": "situazionali",
+  "nome": "Quiz Situazionali",
+  "descrizione": "Valutazione delle competenze comportamentali e capacità di problem solving in contesti lavorativi",
+  "quiz": [
+    {
+      "id": "sit001",
+      "domanda": "Un collega ti chiede di coprire un suo errore di fronte al dirigente. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Accetti per non rovinare il rapporto con il collega", "corretta": false},
+        {"id": "b", "testo": "Rifiuti con fermezza, spiegando che non puoi compromettere la tua integrità professionale", "corretta": true},
+        {"id": "c", "testo": "Accetti ma poi riferisci tutto al dirigente", "corretta": false},
+        {"id": "d", "testo": "Ignori la richiesta senza dare spiegazioni", "corretta": false}
+      ],
+      "spiegazione": "Il dipendente pubblico deve agire con lealtà e trasparenza. Coprire errori altrui viola il dovere di fedeltà e può configurare responsabilità disciplinare."
+    },
+    {
+      "id": "sit002",
+      "domanda": "Un cittadino si presenta allo sportello molto agitato e alza la voce perché la sua pratica è in ritardo. Come reagisci?",
+      "risposte": [
+        {"id": "a", "testo": "Alzi la voce a tua volta per farti rispettare", "corretta": false},
+        {"id": "b", "testo": "Mantieni la calma, ascolti le sue ragioni e cerchi di risolvere il problema spiegando i tempi tecnici", "corretta": true},
+        {"id": "c", "testo": "Chiami immediatamente la sicurezza", "corretta": false},
+        {"id": "d", "testo": "Gli dici di tornare quando sarà più calmo", "corretta": false}
+      ],
+      "spiegazione": "Il dipendente deve mantenere un comportamento professionale e orientato alla soluzione. L'ascolto attivo e la comunicazione efficace sono fondamentali nel rapporto con l'utenza."
+    },
+    {
+      "id": "sit003",
+      "domanda": "Scopri che un collega utilizza la stampante dell'ufficio per documenti personali in grande quantità. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Non fai nulla perché non ti riguarda", "corretta": false},
+        {"id": "b", "testo": "Ne parli prima con il collega, poi se persiste segnali al responsabile", "corretta": true},
+        {"id": "c", "testo": "Lo denunci immediatamente al dirigente", "corretta": false},
+        {"id": "d", "testo": "Inizi anche tu a usare la stampante per fini personali", "corretta": false}
+      ],
+      "spiegazione": "L'approccio graduale (prima il confronto diretto, poi la segnalazione) è preferibile. L'uso improprio di risorse pubbliche va comunque segnalato se persiste."
+    },
+    {
+      "id": "sit004",
+      "domanda": "Il tuo dirigente ti assegna un compito che ritieni non rientri nelle tue mansioni. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Rifiuti categoricamente di svolgerlo", "corretta": false},
+        {"id": "b", "testo": "Esegui il compito ma chiedi chiarimenti sulle competenze in un momento successivo", "corretta": true},
+        {"id": "c", "testo": "Ti lamenti con i colleghi del comportamento del dirigente", "corretta": false},
+        {"id": "d", "testo": "Scrivi immediatamente un esposto ai sindacati", "corretta": false}
+      ],
+      "spiegazione": "Il dovere di obbedienza prevede l'esecuzione degli ordini legittimi. Eventuali perplessità vanno discusse nelle sedi appropriate, non rifiutando il lavoro."
+    },
+    {
+      "id": "sit005",
+      "domanda": "Durante una riunione di lavoro, un collega presenta come propria un'idea che avevi condiviso con lui in precedenza. Come reagisci?",
+      "risposte": [
+        {"id": "a", "testo": "Lo interrompi accusandolo pubblicamente di plagio", "corretta": false},
+        {"id": "b", "testo": "Attendi la fine della riunione e ne parli privatamente con lui", "corretta": true},
+        {"id": "c", "testo": "Non dici nulla e ti tieni il rancore", "corretta": false},
+        {"id": "d", "testo": "Invii una mail a tutti i partecipanti rivendicando la paternità dell'idea", "corretta": false}
+      ],
+      "spiegazione": "Gestire i conflitti in modo costruttivo significa affrontarli privatamente senza creare tensioni nel gruppo di lavoro."
+    },
+    {
+      "id": "sit006",
+      "domanda": "Un utente ti offre un piccolo regalo (una scatola di cioccolatini) per ringraziarti dell'aiuto ricevuto. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Accetti volentieri, è solo un gesto di cortesia", "corretta": false},
+        {"id": "b", "testo": "Rifiuti cortesemente spiegando che non puoi accettare regali", "corretta": true},
+        {"id": "c", "testo": "Accetti ma condividi con i colleghi", "corretta": false},
+        {"id": "d", "testo": "Accetti e chiedi se può fare di più la prossima volta", "corretta": false}
+      ],
+      "spiegazione": "Il Codice di comportamento vieta l'accettazione di regali, salvo quelli di modico valore in occasioni di particolare rilevanza. In caso di dubbio, meglio rifiutare."
+    },
+    {
+      "id": "sit007",
+      "domanda": "Ti accorgi di aver commesso un errore in una pratica già inoltrata. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Speri che nessuno se ne accorga", "corretta": false},
+        {"id": "b", "testo": "Segnali immediatamente l'errore al responsabile e proponi una soluzione", "corretta": true},
+        {"id": "c", "testo": "Cerchi di modificare la pratica senza dire nulla", "corretta": false},
+        {"id": "d", "testo": "Attribuisci l'errore a un collega", "corretta": false}
+      ],
+      "spiegazione": "La trasparenza e l'assunzione di responsabilità sono valori fondamentali. Segnalare tempestivamente gli errori permette di correggerli minimizzando i danni."
+    },
+    {
+      "id": "sit008",
+      "domanda": "Un collega viene spesso in ritardo e questo crea disagio all'ufficio. Sei suo amico. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Lo copri timbrando per lui", "corretta": false},
+        {"id": "b", "testo": "Gli parli privatamente per capire se ha problemi e suggerirgli di risolverli", "corretta": true},
+        {"id": "c", "testo": "Lo denunci subito al dirigente", "corretta": false},
+        {"id": "d", "testo": "Inizi anche tu ad arrivare in ritardo", "corretta": false}
+      ],
+      "spiegazione": "L'approccio empatico ma responsabile prevede prima il dialogo diretto. Timbrare per altri è un reato penale."
+    },
+    {
+      "id": "sit009",
+      "domanda": "Ti viene chiesto di gestire una pratica che riguarda un tuo parente stretto. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Gestisci la pratica normalmente senza dire nulla", "corretta": false},
+        {"id": "b", "testo": "Dichiari immediatamente il conflitto di interessi e chiedi di essere sostituito", "corretta": true},
+        {"id": "c", "testo": "Favorisci il parente visto che nessuno lo saprà", "corretta": false},
+        {"id": "d", "testo": "Rallenti la pratica per non sembrare che lo favorisci", "corretta": false}
+      ],
+      "spiegazione": "L'obbligo di astensione in caso di conflitto di interessi è previsto dall'art. 6-bis della L. 241/1990 e dal Codice di comportamento."
+    },
+    {
+      "id": "sit010",
+      "domanda": "Durante l'orario di lavoro, un collega naviga frequentemente su siti non lavorativi. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Lo segnali immediatamente al dirigente", "corretta": false},
+        {"id": "b", "testo": "Gli fai notare che il suo comportamento potrebbe creargli problemi", "corretta": true},
+        {"id": "c", "testo": "Fai anche tu lo stesso visto che lo fanno tutti", "corretta": false},
+        {"id": "d", "testo": "Ignori completamente la situazione", "corretta": false}
+      ],
+      "spiegazione": "Un richiamo informale tra colleghi può risolvere situazioni senza escalation. L'uso improprio degli strumenti informatici è comunque una violazione disciplinare."
+    },
+    {
+      "id": "sit011",
+      "domanda": "Ricevi una richiesta urgente da un superiore mentre stai già gestendo un'altra urgenza. Come ti organizzi?",
+      "risposte": [
+        {"id": "a", "testo": "Abbandoni il primo lavoro per dedicarti al secondo", "corretta": false},
+        {"id": "b", "testo": "Comunichi la situazione al superiore chiedendo di stabilire le priorità", "corretta": true},
+        {"id": "c", "testo": "Fai entrambe le cose male pur di accontentare tutti", "corretta": false},
+        {"id": "d", "testo": "Ignori la nuova richiesta", "corretta": false}
+      ],
+      "spiegazione": "La comunicazione efficace con i superiori permette di gestire le priorità in modo condiviso e responsabile."
+    },
+    {
+      "id": "sit012",
+      "domanda": "Un cittadino straniero non parla italiano e ha difficoltà a compilare un modulo. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Gli dici di tornare con qualcuno che parli italiano", "corretta": false},
+        {"id": "b", "testo": "Cerchi di aiutarlo usando anche gesti, disegni o cercando un collega che parli la sua lingua", "corretta": true},
+        {"id": "c", "testo": "Compili tu il modulo senza spiegargli nulla", "corretta": false},
+        {"id": "d", "testo": "Lo ignori e passi al prossimo utente", "corretta": false}
+      ],
+      "spiegazione": "Il principio di imparzialità impone di garantire a tutti i cittadini pari accesso ai servizi, adottando soluzioni inclusive."
+    },
+    {
+      "id": "sit013",
+      "domanda": "Vieni a conoscenza che un collega ha commesso un illecito grave. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Non fai nulla per non essere considerato una spia", "corretta": false},
+        {"id": "b", "testo": "Segnali il fatto attraverso i canali previsti per il whistleblowing", "corretta": true},
+        {"id": "c", "testo": "Ne parli in giro con altri colleghi", "corretta": false},
+        {"id": "d", "testo": "Usi l'informazione come leva per ottenere favori", "corretta": false}
+      ],
+      "spiegazione": "Il whistleblowing è tutelato dalla legge (D.Lgs. 24/2023) e rappresenta un dovere civico per contrastare illeciti nella PA."
+    },
+    {
+      "id": "sit014",
+      "domanda": "Ti viene proposto di partecipare a un progetto innovativo che richiede impegno extra non retribuito. Come reagisci?",
+      "risposte": [
+        {"id": "a", "testo": "Rifiuti perché non sei pagato per fare straordinari", "corretta": false},
+        {"id": "b", "testo": "Valuti l'opportunità di crescita professionale e decidi in base alle tue possibilità", "corretta": true},
+        {"id": "c", "testo": "Accetti solo se ti garantiscono una promozione", "corretta": false},
+        {"id": "d", "testo": "Accetti ma poi non fai nulla", "corretta": false}
+      ],
+      "spiegazione": "La disponibilità alla formazione e alla crescita professionale è un valore, bilanciato con una valutazione realistica delle proprie risorse."
+    },
+    {
+      "id": "sit015",
+      "domanda": "Un utente ti chiede informazioni che non sei autorizzato a fornire per motivi di privacy. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Gliele dai lo stesso per essere gentile", "corretta": false},
+        {"id": "b", "testo": "Spieghi cortesemente i motivi del rifiuto e indichi l'ufficio competente", "corretta": true},
+        {"id": "c", "testo": "Lo mandi via senza spiegazioni", "corretta": false},
+        {"id": "d", "testo": "Gli dici che le informazioni non esistono", "corretta": false}
+      ],
+      "spiegazione": "Il rispetto della normativa privacy è fondamentale. Rifiutare deve essere accompagnato da una spiegazione e dall'indicazione di alternative."
+    },
+    {
+      "id": "sit016",
+      "domanda": "Noti che le procedure dell'ufficio sono inefficienti e potrebbero essere migliorate. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Ti adegui senza dire nulla perché si è sempre fatto così", "corretta": false},
+        {"id": "b", "testo": "Proponi le tue idee di miglioramento al responsabile in modo costruttivo", "corretta": true},
+        {"id": "c", "testo": "Ti lamenti con i colleghi dell'inefficienza", "corretta": false},
+        {"id": "d", "testo": "Modifichi le procedure di tua iniziativa", "corretta": false}
+      ],
+      "spiegazione": "La proattività nel proporre miglioramenti è valorizzata, purché avvenga nei canali appropriati rispettando le gerarchie."
+    },
+    {
+      "id": "sit017",
+      "domanda": "Un collega più anziano ti tratta con sufficienza e non condivide informazioni utili al lavoro. Come gestisci la situazione?",
+      "risposte": [
+        {"id": "a", "testo": "Rispondi con lo stesso atteggiamento", "corretta": false},
+        {"id": "b", "testo": "Cerchi il dialogo e, se non funziona, chiedi supporto al responsabile", "corretta": true},
+        {"id": "c", "testo": "Ti lamenti con tutti i colleghi", "corretta": false},
+        {"id": "d", "testo": "Ti isoli e lavori da solo", "corretta": false}
+      ],
+      "spiegazione": "La gestione costruttiva dei conflitti prevede prima il tentativo di dialogo diretto, poi il coinvolgimento del responsabile se necessario."
+    },
+    {
+      "id": "sit018",
+      "domanda": "Ti chiedono di lavorare in smart working ma noti che a casa hai molte distrazioni. Come ti organizzi?",
+      "risposte": [
+        {"id": "a", "testo": "Lavori meno tanto nessuno ti controlla", "corretta": false},
+        {"id": "b", "testo": "Organizzi uno spazio dedicato e mantieni gli stessi standard di produttività", "corretta": true},
+        {"id": "c", "testo": "Rinunci allo smart working perché non riesci a gestirti", "corretta": false},
+        {"id": "d", "testo": "Fai finta di lavorare restando sempre connesso", "corretta": false}
+      ],
+      "spiegazione": "Lo smart working richiede autodisciplina e responsabilità. Il lavoratore deve garantire le stesse prestazioni indipendentemente dal luogo."
+    },
+    {
+      "id": "sit019",
+      "domanda": "Devi prendere una decisione importante ma il tuo responsabile è irreperibile. Cosa fai?",
+      "risposte": [
+        {"id": "a", "testo": "Aspetti indefinitamente il suo ritorno", "corretta": false},
+        {"id": "b", "testo": "Valuti l'urgenza, cerchi riferimenti normativi e, se necessario, decidi assumendoti la responsabilità documentando tutto", "corretta": true},
+        {"id": "c", "testo": "Prendi una decisione casuale", "corretta": false},
+        {"id": "d", "testo": "Chiedi a un collega di decidere per te", "corretta": false}
+      ],
+      "spiegazione": "L'autonomia decisionale, quando necessaria, deve essere supportata da documentazione e basata su criteri oggettivi."
+    },
+    {
+      "id": "sit020",
+      "domanda": "Un politico locale ti telefona chiedendo di accelerare una pratica di un suo conoscente. Come ti comporti?",
+      "risposte": [
+        {"id": "a", "testo": "Esegui per non avere problemi", "corretta": false},
+        {"id": "b", "testo": "Spieghi che le pratiche seguono l'ordine cronologico e non puoi fare eccezioni", "corretta": true},
+        {"id": "c", "testo": "Chiedi cosa puoi ottenere in cambio", "corretta": false},
+        {"id": "d", "testo": "Passi la telefonata a un collega", "corretta": false}
+      ],
+      "spiegazione": "Il principio di imparzialità vieta favoritismi. Le pressioni esterne devono essere respinte con fermezza e professionalità."
+    }
+  ]
+}

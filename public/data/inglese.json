@@ -1,0 +1,227 @@
+{
+  "materia": "inglese",
+  "nome": "Lingua Inglese",
+  "descrizione": "Comprensione della lingua inglese livello B1",
+  "quiz": [
+    {
+      "id": "eng001",
+      "domanda": "Choose the correct option: 'If I ___ more time, I would study harder.'",
+      "risposte": [
+        {"id": "a", "testo": "have", "corretta": false},
+        {"id": "b", "testo": "had", "corretta": true},
+        {"id": "c", "testo": "will have", "corretta": false},
+        {"id": "d", "testo": "having", "corretta": false}
+      ],
+      "spiegazione": "Second conditional: If + past simple, would + infinitive. Usato per situazioni ipotetiche nel presente/futuro."
+    },
+    {
+      "id": "eng002",
+      "domanda": "What is the meaning of 'deadline'?",
+      "risposte": [
+        {"id": "a", "testo": "A type of line", "corretta": false},
+        {"id": "b", "testo": "The final date or time by which something must be completed", "corretta": true},
+        {"id": "c", "testo": "A dead person", "corretta": false},
+        {"id": "d", "testo": "A type of document", "corretta": false}
+      ],
+      "spiegazione": "Deadline significa 'scadenza', il termine ultimo entro cui qualcosa deve essere completato."
+    },
+    {
+      "id": "eng003",
+      "domanda": "Complete the sentence: 'The meeting ___ at 9 AM tomorrow.'",
+      "risposte": [
+        {"id": "a", "testo": "start", "corretta": false},
+        {"id": "b", "testo": "starts", "corretta": true},
+        {"id": "c", "testo": "starting", "corretta": false},
+        {"id": "d", "testo": "started", "corretta": false}
+      ],
+      "spiegazione": "Per eventi programmati nel futuro (orari, calendari) si usa il Present Simple."
+    },
+    {
+      "id": "eng004",
+      "domanda": "Which word is a synonym of 'to increase'?",
+      "risposte": [
+        {"id": "a", "testo": "To decrease", "corretta": false},
+        {"id": "b", "testo": "To raise", "corretta": true},
+        {"id": "c", "testo": "To lower", "corretta": false},
+        {"id": "d", "testo": "To reduce", "corretta": false}
+      ],
+      "spiegazione": "To raise significa 'aumentare, alzare', sinonimo di to increase."
+    },
+    {
+      "id": "eng005",
+      "domanda": "Choose the correct preposition: 'I am responsible ___ this project.'",
+      "risposte": [
+        {"id": "a", "testo": "of", "corretta": false},
+        {"id": "b", "testo": "for", "corretta": true},
+        {"id": "c", "testo": "to", "corretta": false},
+        {"id": "d", "testo": "with", "corretta": false}
+      ],
+      "spiegazione": "L'aggettivo 'responsible' richiede la preposizione 'for'."
+    },
+    {
+      "id": "eng006",
+      "domanda": "What does 'ASAP' stand for?",
+      "risposte": [
+        {"id": "a", "testo": "As Soon As Possible", "corretta": true},
+        {"id": "b", "testo": "Always Send A Paper", "corretta": false},
+        {"id": "c", "testo": "After Several Attempts Please", "corretta": false},
+        {"id": "d", "testo": "All Staff Are Present", "corretta": false}
+      ],
+      "spiegazione": "ASAP = As Soon As Possible, significa 'il prima possibile'."
+    },
+    {
+      "id": "eng007",
+      "domanda": "Complete: 'She has been working here ___ five years.'",
+      "risposte": [
+        {"id": "a", "testo": "since", "corretta": false},
+        {"id": "b", "testo": "for", "corretta": true},
+        {"id": "c", "testo": "during", "corretta": false},
+        {"id": "d", "testo": "from", "corretta": false}
+      ],
+      "spiegazione": "For si usa con durate di tempo (five years), Since con momenti precisi (2019)."
+    },
+    {
+      "id": "eng008",
+      "domanda": "What is the opposite of 'to approve'?",
+      "risposte": [
+        {"id": "a", "testo": "To accept", "corretta": false},
+        {"id": "b", "testo": "To reject", "corretta": true},
+        {"id": "c", "testo": "To agree", "corretta": false},
+        {"id": "d", "testo": "To confirm", "corretta": false}
+      ],
+      "spiegazione": "To reject (rifiutare, respingere) è il contrario di to approve (approvare)."
+    },
+    {
+      "id": "eng009",
+      "domanda": "Choose the correct form: 'The documents ___ sent yesterday.'",
+      "risposte": [
+        {"id": "a", "testo": "was", "corretta": false},
+        {"id": "b", "testo": "were", "corretta": true},
+        {"id": "c", "testo": "is", "corretta": false},
+        {"id": "d", "testo": "are", "corretta": false}
+      ],
+      "spiegazione": "Documents è plurale, quindi richiede 'were' nella forma passiva al passato."
+    },
+    {
+      "id": "eng010",
+      "domanda": "What does 'to submit a request' mean?",
+      "risposte": [
+        {"id": "a", "testo": "Ritirare una richiesta", "corretta": false},
+        {"id": "b", "testo": "Presentare/inviare una richiesta", "corretta": true},
+        {"id": "c", "testo": "Rifiutare una richiesta", "corretta": false},
+        {"id": "d", "testo": "Modificare una richiesta", "corretta": false}
+      ],
+      "spiegazione": "To submit significa presentare, inviare, sottoporre (un documento, una richiesta)."
+    },
+    {
+      "id": "eng011",
+      "domanda": "Complete: 'I would appreciate it ___ you could reply soon.'",
+      "risposte": [
+        {"id": "a", "testo": "when", "corretta": false},
+        {"id": "b", "testo": "if", "corretta": true},
+        {"id": "c", "testo": "that", "corretta": false},
+        {"id": "d", "testo": "which", "corretta": false}
+      ],
+      "spiegazione": "Formula cortese per richieste: 'I would appreciate it if you could...' (Le sarei grato se potesse...)."
+    },
+    {
+      "id": "eng012",
+      "domanda": "What is a 'stakeholder'?",
+      "risposte": [
+        {"id": "a", "testo": "Un tipo di documento", "corretta": false},
+        {"id": "b", "testo": "Una persona o gruppo con interesse in un'organizzazione o progetto", "corretta": true},
+        {"id": "c", "testo": "Un dipendente", "corretta": false},
+        {"id": "d", "testo": "Un fornitore", "corretta": false}
+      ],
+      "spiegazione": "Stakeholder indica chi ha un interesse (stake) in un progetto o organizzazione: azionisti, dipendenti, clienti, comunità."
+    },
+    {
+      "id": "eng013",
+      "domanda": "Choose the correct option: 'Neither the manager ___ the employees were informed.'",
+      "risposte": [
+        {"id": "a", "testo": "or", "corretta": false},
+        {"id": "b", "testo": "nor", "corretta": true},
+        {"id": "c", "testo": "and", "corretta": false},
+        {"id": "d", "testo": "but", "corretta": false}
+      ],
+      "spiegazione": "Neither...nor è una correlazione negativa: né...né."
+    },
+    {
+      "id": "eng014",
+      "domanda": "What does 'to comply with regulations' mean?",
+      "risposte": [
+        {"id": "a", "testo": "Ignorare le normative", "corretta": false},
+        {"id": "b", "testo": "Rispettare/conformarsi alle normative", "corretta": true},
+        {"id": "c", "testo": "Modificare le normative", "corretta": false},
+        {"id": "d", "testo": "Contestare le normative", "corretta": false}
+      ],
+      "spiegazione": "To comply with significa conformarsi, rispettare, ottemperare."
+    },
+    {
+      "id": "eng015",
+      "domanda": "Complete: 'The report ___ be finished by Friday.'",
+      "risposte": [
+        {"id": "a", "testo": "can", "corretta": false},
+        {"id": "b", "testo": "must", "corretta": true},
+        {"id": "c", "testo": "might", "corretta": false},
+        {"id": "d", "testo": "could", "corretta": false}
+      ],
+      "spiegazione": "Must esprime obbligo/necessità. Il report DEVE essere finito entro venerdì."
+    },
+    {
+      "id": "eng016",
+      "domanda": "What is the meaning of 'to postpone'?",
+      "risposte": [
+        {"id": "a", "testo": "Anticipare", "corretta": false},
+        {"id": "b", "testo": "Rimandare", "corretta": true},
+        {"id": "c", "testo": "Cancellare", "corretta": false},
+        {"id": "d", "testo": "Confermare", "corretta": false}
+      ],
+      "spiegazione": "To postpone significa rimandare, posticipare a una data successiva."
+    },
+    {
+      "id": "eng017",
+      "domanda": "Choose the correct word: 'Please find ___ the requested documents.'",
+      "risposte": [
+        {"id": "a", "testo": "enclosed", "corretta": false},
+        {"id": "b", "testo": "attached", "corretta": true},
+        {"id": "c", "testo": "included", "corretta": false},
+        {"id": "d", "testo": "added", "corretta": false}
+      ],
+      "spiegazione": "In email, 'attached' è usato per allegati. 'Enclosed' è più usato per posta cartacea."
+    },
+    {
+      "id": "eng018",
+      "domanda": "What does 'FYI' mean in business communication?",
+      "risposte": [
+        {"id": "a", "testo": "For Your Information", "corretta": true},
+        {"id": "b", "testo": "Find Your Invoice", "corretta": false},
+        {"id": "c", "testo": "Follow Your Instructions", "corretta": false},
+        {"id": "d", "testo": "File Your Items", "corretta": false}
+      ],
+      "spiegazione": "FYI = For Your Information, usato per condividere informazioni utili."
+    },
+    {
+      "id": "eng019",
+      "domanda": "Complete: 'I look forward ___ from you soon.'",
+      "risposte": [
+        {"id": "a", "testo": "to hear", "corretta": false},
+        {"id": "b", "testo": "to hearing", "corretta": true},
+        {"id": "c", "testo": "hearing", "corretta": false},
+        {"id": "d", "testo": "hear", "corretta": false}
+      ],
+      "spiegazione": "Look forward to + gerund (-ing). Formula di chiusura email: 'Resto in attesa di sue notizie'."
+    },
+    {
+      "id": "eng020",
+      "domanda": "What is the meaning of 'thoroughly'?",
+      "risposte": [
+        {"id": "a", "testo": "Rapidamente", "corretta": false},
+        {"id": "b", "testo": "Approfonditamente, accuratamente", "corretta": true},
+        {"id": "c", "testo": "Superficialmente", "corretta": false},
+        {"id": "d", "testo": "Raramente", "corretta": false}
+      ],
+      "spiegazione": "Thoroughly significa in modo approfondito, accurato, minuzioso."
+    }
+  ]
+}

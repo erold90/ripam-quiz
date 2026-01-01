@@ -1,0 +1,227 @@
+{
+  "materia": "pubblico-impiego",
+  "nome": "Pubblico Impiego",
+  "descrizione": "Responsabilità, doveri, diritti dei pubblici dipendenti, codice di comportamento",
+  "quiz": [
+    {
+      "id": "pi001",
+      "domanda": "Il D.Lgs. 165/2001 disciplina:",
+      "risposte": [
+        {"id": "a", "testo": "Solo i contratti pubblici", "corretta": false},
+        {"id": "b", "testo": "L'organizzazione degli uffici e il rapporto di lavoro alle dipendenze delle amministrazioni pubbliche", "corretta": true},
+        {"id": "c", "testo": "Solo il procedimento amministrativo", "corretta": false},
+        {"id": "d", "testo": "Solo i concorsi pubblici", "corretta": false}
+      ],
+      "spiegazione": "Il D.Lgs. 165/2001 (TUPI - Testo Unico sul Pubblico Impiego) contiene le norme generali sull'ordinamento del lavoro alle dipendenze delle amministrazioni pubbliche."
+    },
+    {
+      "id": "pi002",
+      "domanda": "Il rapporto di lavoro dei dipendenti pubblici è regolato:",
+      "risposte": [
+        {"id": "a", "testo": "Solo dalla legge", "corretta": false},
+        {"id": "b", "testo": "Dalle disposizioni del codice civile e dai contratti collettivi", "corretta": true},
+        {"id": "c", "testo": "Solo dai contratti individuali", "corretta": false},
+        {"id": "d", "testo": "Solo dal regolamento interno", "corretta": false}
+      ],
+      "spiegazione": "Art. 2 D.Lgs. 165/2001: i rapporti di lavoro dei dipendenti delle amministrazioni pubbliche sono disciplinati dalle disposizioni del capo I, titolo II, del libro V del codice civile e dalla legge sui rapporti di lavoro subordinato nell'impresa."
+    },
+    {
+      "id": "pi003",
+      "domanda": "Il codice di comportamento dei dipendenti pubblici è approvato con:",
+      "risposte": [
+        {"id": "a", "testo": "Legge ordinaria", "corretta": false},
+        {"id": "b", "testo": "DPR su proposta del Ministro per la PA", "corretta": true},
+        {"id": "c", "testo": "Decreto del dirigente", "corretta": false},
+        {"id": "d", "testo": "Circolare ministeriale", "corretta": false}
+      ],
+      "spiegazione": "Art. 54 D.Lgs. 165/2001: il codice di comportamento è definito dal Governo con DPR, su proposta del Ministro per la pubblica amministrazione."
+    },
+    {
+      "id": "pi004",
+      "domanda": "Il dipendente pubblico deve astenersi in caso di:",
+      "risposte": [
+        {"id": "a", "testo": "Qualsiasi pratica", "corretta": false},
+        {"id": "b", "testo": "Conflitto di interessi anche potenziale", "corretta": true},
+        {"id": "c", "testo": "Solo su richiesta del dirigente", "corretta": false},
+        {"id": "d", "testo": "Mai, deve sempre agire", "corretta": false}
+      ],
+      "spiegazione": "Art. 6-bis L. 241/1990 e Codice di comportamento: il dipendente pubblico deve astenersi dal prendere decisioni o svolgere attività inerenti alle sue mansioni in situazioni di conflitto di interessi."
+    },
+    {
+      "id": "pi005",
+      "domanda": "La responsabilità disciplinare del dipendente pubblico:",
+      "risposte": [
+        {"id": "a", "testo": "Esclude ogni altra responsabilità", "corretta": false},
+        {"id": "b", "testo": "Concorre con la responsabilità penale, civile e amministrativo-contabile", "corretta": true},
+        {"id": "c", "testo": "Sostituisce la responsabilità penale", "corretta": false},
+        {"id": "d", "testo": "Non esiste", "corretta": false}
+      ],
+      "spiegazione": "Art. 55 D.Lgs. 165/2001: la responsabilità disciplinare concorre con le altre forme di responsabilità (penale, civile, amministrativo-contabile) senza escluderle."
+    },
+    {
+      "id": "pi006",
+      "domanda": "Il licenziamento disciplinare può essere disposto per:",
+      "risposte": [
+        {"id": "a", "testo": "Qualsiasi mancanza", "corretta": false},
+        {"id": "b", "testo": "Giusta causa o giustificato motivo soggettivo", "corretta": true},
+        {"id": "c", "testo": "Solo per reati penali", "corretta": false},
+        {"id": "d", "testo": "Mai senza il consenso del dipendente", "corretta": false}
+      ],
+      "spiegazione": "Art. 55-quater D.Lgs. 165/2001: il licenziamento disciplinare è disposto per giusta causa o giustificato motivo soggettivo, anche nelle ipotesi specificamente previste dalla legge."
+    },
+    {
+      "id": "pi007",
+      "domanda": "La falsa attestazione della presenza in servizio (badge) comporta:",
+      "risposte": [
+        {"id": "a", "testo": "Solo un rimprovero verbale", "corretta": false},
+        {"id": "b", "testo": "Il licenziamento disciplinare e responsabilità penale", "corretta": true},
+        {"id": "c", "testo": "Solo una multa", "corretta": false},
+        {"id": "d", "testo": "Nessuna conseguenza", "corretta": false}
+      ],
+      "spiegazione": "Art. 55-quater e 55-quinquies D.Lgs. 165/2001: la falsa attestazione della presenza in servizio accertata in flagranza comporta il licenziamento senza preavviso e la denuncia penale."
+    },
+    {
+      "id": "pi008",
+      "domanda": "Il periodo di prova del dipendente pubblico può durare:",
+      "risposte": [
+        {"id": "a", "testo": "Sempre 1 anno", "corretta": false},
+        {"id": "b", "testo": "Da 2 a 6 mesi secondo il CCNL", "corretta": true},
+        {"id": "c", "testo": "Sempre 3 mesi", "corretta": false},
+        {"id": "d", "testo": "Non esiste periodo di prova", "corretta": false}
+      ],
+      "spiegazione": "Il periodo di prova è disciplinato dai CCNL di comparto e generalmente varia da 2 a 6 mesi in base alla categoria di inquadramento."
+    },
+    {
+      "id": "pi009",
+      "domanda": "I doveri del dipendente pubblico includono:",
+      "risposte": [
+        {"id": "a", "testo": "Solo l'obbligo di timbratura", "corretta": false},
+        {"id": "b", "testo": "Diligenza, fedeltà, obbedienza, imparzialità, esclusività", "corretta": true},
+        {"id": "c", "testo": "Solo la riservatezza", "corretta": false},
+        {"id": "d", "testo": "Solo l'orario di lavoro", "corretta": false}
+      ],
+      "spiegazione": "Artt. 2104-2105 c.c. e D.Lgs. 165/2001: i doveri fondamentali del dipendente pubblico sono la diligenza, la fedeltà, l'obbedienza, l'imparzialità e l'esclusività del rapporto."
+    },
+    {
+      "id": "pi010",
+      "domanda": "L'incompatibilità del dipendente pubblico riguarda:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il secondo lavoro notturno", "corretta": false},
+        {"id": "b", "testo": "Attività commerciali, professionali, cariche in società con fini di lucro", "corretta": true},
+        {"id": "c", "testo": "Solo attività politiche", "corretta": false},
+        {"id": "d", "testo": "Nessuna attività", "corretta": false}
+      ],
+      "spiegazione": "Art. 53 D.Lgs. 165/2001: i dipendenti pubblici non possono svolgere incarichi che siano in conflitto con i doveri d'ufficio e sono previste incompatibilità con attività commerciali e professionali."
+    },
+    {
+      "id": "pi011",
+      "domanda": "La mobilità volontaria nel pubblico impiego richiede:",
+      "risposte": [
+        {"id": "a", "testo": "Solo la domanda del dipendente", "corretta": false},
+        {"id": "b", "testo": "L'assenso dell'amministrazione di appartenenza e quella di destinazione", "corretta": true},
+        {"id": "c", "testo": "Solo il nulla osta del sindacato", "corretta": false},
+        {"id": "d", "testo": "Non esiste mobilità volontaria", "corretta": false}
+      ],
+      "spiegazione": "Art. 30 D.Lgs. 165/2001: le amministrazioni possono ricoprire posti vacanti mediante cessione del contratto di dipendenti di altre amministrazioni previo assenso dell'amministrazione di appartenenza."
+    },
+    {
+      "id": "pi012",
+      "domanda": "Il Responsabile della prevenzione della corruzione (RPCT) è nominato:",
+      "risposte": [
+        {"id": "a", "testo": "Dal Ministro", "corretta": false},
+        {"id": "b", "testo": "Dall'organo di indirizzo politico-amministrativo", "corretta": true},
+        {"id": "c", "testo": "Dal sindacato", "corretta": false},
+        {"id": "d", "testo": "Dai dipendenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 1, comma 7, L. 190/2012: l'organo di indirizzo individua, di norma tra i dirigenti di ruolo, il Responsabile della prevenzione della corruzione e della trasparenza."
+    },
+    {
+      "id": "pi013",
+      "domanda": "Il whistleblower (segnalante) nel pubblico impiego:",
+      "risposte": [
+        {"id": "a", "testo": "Non è tutelato in alcun modo", "corretta": false},
+        {"id": "b", "testo": "È tutelato da ritorsioni per le segnalazioni di illeciti", "corretta": true},
+        {"id": "c", "testo": "Può essere licenziato per la segnalazione", "corretta": false},
+        {"id": "d", "testo": "Deve sempre rimanere anonimo", "corretta": false}
+      ],
+      "spiegazione": "Art. 54-bis D.Lgs. 165/2001 e D.Lgs. 24/2023: il pubblico dipendente che segnala illeciti è tutelato da misure ritorsive, discriminatorie o comunque pregiudizievoli."
+    },
+    {
+      "id": "pi014",
+      "domanda": "L'accesso ai ruoli della PA avviene di norma mediante:",
+      "risposte": [
+        {"id": "a", "testo": "Chiamata diretta", "corretta": false},
+        {"id": "b", "testo": "Concorso pubblico", "corretta": true},
+        {"id": "c", "testo": "Selezione privata", "corretta": false},
+        {"id": "d", "testo": "Nomina politica", "corretta": false}
+      ],
+      "spiegazione": "Art. 97 Cost. e art. 35 D.Lgs. 165/2001: l'assunzione nelle amministrazioni pubbliche avviene mediante procedure selettive volte all'accertamento della professionalità richiesta."
+    },
+    {
+      "id": "pi015",
+      "domanda": "Il procedimento disciplinare deve concludersi entro:",
+      "risposte": [
+        {"id": "a", "testo": "30 giorni", "corretta": false},
+        {"id": "b", "testo": "120 giorni dalla contestazione dell'addebito", "corretta": true},
+        {"id": "c", "testo": "1 anno", "corretta": false},
+        {"id": "d", "testo": "Non ci sono termini", "corretta": false}
+      ],
+      "spiegazione": "Art. 55-bis D.Lgs. 165/2001: il procedimento disciplinare deve concludersi entro 120 giorni dalla contestazione dell'addebito."
+    },
+    {
+      "id": "pi016",
+      "domanda": "Il dipendente ha diritto alla tutela contro le molestie sessuali:",
+      "risposte": [
+        {"id": "a", "testo": "Solo se donna", "corretta": false},
+        {"id": "b", "testo": "Indipendentemente dal genere", "corretta": true},
+        {"id": "c", "testo": "Solo se dirigente", "corretta": false},
+        {"id": "d", "testo": "No, non è prevista tutela", "corretta": false}
+      ],
+      "spiegazione": "D.Lgs. 198/2006 e Codice di comportamento: tutti i dipendenti sono tutelati dalle molestie sessuali e morali (mobbing) sul luogo di lavoro, indipendentemente dal genere."
+    },
+    {
+      "id": "pi017",
+      "domanda": "Il part-time nel pubblico impiego:",
+      "risposte": [
+        {"id": "a", "testo": "Non è mai consentito", "corretta": false},
+        {"id": "b", "testo": "È consentito nei limiti previsti dalla legge e dai CCNL", "corretta": true},
+        {"id": "c", "testo": "È sempre obbligatorio", "corretta": false},
+        {"id": "d", "testo": "È consentito solo ai dirigenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 1, commi 56-65, L. 662/1996: il rapporto di lavoro a tempo parziale è consentito nel pubblico impiego con diverse tipologie (orizzontale, verticale, misto)."
+    },
+    {
+      "id": "pi018",
+      "domanda": "L'assenza per malattia del dipendente pubblico deve essere:",
+      "risposte": [
+        {"id": "a", "testo": "Comunicata solo al ritorno in servizio", "corretta": false},
+        {"id": "b", "testo": "Comunicata tempestivamente all'ufficio e certificata dal medico", "corretta": true},
+        {"id": "c", "testo": "Autocertificata sempre", "corretta": false},
+        {"id": "d", "testo": "Non deve essere comunicata", "corretta": false}
+      ],
+      "spiegazione": "Art. 55-septies D.Lgs. 165/2001: in caso di assenza per malattia, il dipendente deve comunicare tempestivamente l'assenza e il certificato è trasmesso telematicamente dal medico."
+    },
+    {
+      "id": "pi019",
+      "domanda": "La contrattazione collettiva nel pubblico impiego avviene tra:",
+      "risposte": [
+        {"id": "a", "testo": "Singole amministrazioni e dipendenti", "corretta": false},
+        {"id": "b", "testo": "ARAN e sindacati rappresentativi", "corretta": true},
+        {"id": "c", "testo": "Governo e Parlamento", "corretta": false},
+        {"id": "d", "testo": "Solo i dirigenti", "corretta": false}
+      ],
+      "spiegazione": "Art. 40 ss. D.Lgs. 165/2001: la contrattazione collettiva si svolge su due livelli (nazionale e integrativo) tra l'ARAN (per la parte pubblica) e le organizzazioni sindacali rappresentative."
+    },
+    {
+      "id": "pi020",
+      "domanda": "Il dipendente pubblico che rifiuta di collaborare nei procedimenti disciplinari:",
+      "risposte": [
+        {"id": "a", "testo": "Non ha conseguenze", "corretta": false},
+        {"id": "b", "testo": "Può essere oggetto di sanzioni disciplinari", "corretta": true},
+        {"id": "c", "testo": "Ha diritto a un premio", "corretta": false},
+        {"id": "d", "testo": "Può essere promosso", "corretta": false}
+      ],
+      "spiegazione": "Art. 55-bis, comma 7, D.Lgs. 165/2001: il dipendente o il dirigente che rifiuta la collaborazione nei procedimenti disciplinari è soggetto a responsabilità disciplinare."
+    }
+  ]
+}

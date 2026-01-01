@@ -1,0 +1,227 @@
+{
+  "materia": "ordinamento",
+  "nome": "Ordinamento delle Amministrazioni Pubbliche",
+  "descrizione": "Organizzazione della PA, enti pubblici, Costituzione italiana",
+  "quiz": [
+    {
+      "id": "ord001",
+      "domanda": "L'Italia è una Repubblica:",
+      "risposte": [
+        {"id": "a", "testo": "Federale", "corretta": false},
+        {"id": "b", "testo": "Democratica fondata sul lavoro", "corretta": true},
+        {"id": "c", "testo": "Parlamentare presidenziale", "corretta": false},
+        {"id": "d", "testo": "Monarchica costituzionale", "corretta": false}
+      ],
+      "spiegazione": "Art. 1 Cost.: L'Italia è una Repubblica democratica, fondata sul lavoro. La sovranità appartiene al popolo."
+    },
+    {
+      "id": "ord002",
+      "domanda": "Il Presidente della Repubblica è eletto da:",
+      "risposte": [
+        {"id": "a", "testo": "Il popolo direttamente", "corretta": false},
+        {"id": "b", "testo": "Il Parlamento in seduta comune con delegati regionali", "corretta": true},
+        {"id": "c", "testo": "Il Senato", "corretta": false},
+        {"id": "d", "testo": "Il Governo", "corretta": false}
+      ],
+      "spiegazione": "Art. 83 Cost.: il Presidente della Repubblica è eletto dal Parlamento in seduta comune, integrato da tre delegati per ogni Regione."
+    },
+    {
+      "id": "ord003",
+      "domanda": "Il mandato del Presidente della Repubblica dura:",
+      "risposte": [
+        {"id": "a", "testo": "5 anni", "corretta": false},
+        {"id": "b", "testo": "7 anni", "corretta": true},
+        {"id": "c", "testo": "4 anni", "corretta": false},
+        {"id": "d", "testo": "6 anni", "corretta": false}
+      ],
+      "spiegazione": "Art. 85 Cost.: il Presidente della Repubblica è eletto per sette anni."
+    },
+    {
+      "id": "ord004",
+      "domanda": "Il Governo è composto da:",
+      "risposte": [
+        {"id": "a", "testo": "Solo il Presidente del Consiglio", "corretta": false},
+        {"id": "b", "testo": "Il Presidente del Consiglio e i Ministri", "corretta": true},
+        {"id": "c", "testo": "Il Presidente della Repubblica e i Ministri", "corretta": false},
+        {"id": "d", "testo": "Solo i Ministri", "corretta": false}
+      ],
+      "spiegazione": "Art. 92 Cost.: il Governo della Repubblica è composto del Presidente del Consiglio e dei Ministri, che insieme costituiscono il Consiglio dei Ministri."
+    },
+    {
+      "id": "ord005",
+      "domanda": "Le Regioni a statuto speciale sono:",
+      "risposte": [
+        {"id": "a", "testo": "3", "corretta": false},
+        {"id": "b", "testo": "5", "corretta": true},
+        {"id": "c", "testo": "8", "corretta": false},
+        {"id": "d", "testo": "20", "corretta": false}
+      ],
+      "spiegazione": "Art. 116 Cost.: le Regioni a statuto speciale sono: Friuli Venezia Giulia, Sardegna, Sicilia, Trentino-Alto Adige, Valle d'Aosta."
+    },
+    {
+      "id": "ord006",
+      "domanda": "La Costituzione italiana è entrata in vigore il:",
+      "risposte": [
+        {"id": "a", "testo": "2 giugno 1946", "corretta": false},
+        {"id": "b", "testo": "1 gennaio 1948", "corretta": true},
+        {"id": "c", "testo": "25 aprile 1945", "corretta": false},
+        {"id": "d", "testo": "22 dicembre 1947", "corretta": false}
+      ],
+      "spiegazione": "La Costituzione fu approvata il 22 dicembre 1947 ed è entrata in vigore il 1° gennaio 1948."
+    },
+    {
+      "id": "ord007",
+      "domanda": "I decreti legislativi sono emanati:",
+      "risposte": [
+        {"id": "a", "testo": "Dal Parlamento", "corretta": false},
+        {"id": "b", "testo": "Dal Governo su delega del Parlamento", "corretta": true},
+        {"id": "c", "testo": "Dal Presidente della Repubblica", "corretta": false},
+        {"id": "d", "testo": "Dalle Regioni", "corretta": false}
+      ],
+      "spiegazione": "Art. 76 Cost.: il Parlamento può delegare al Governo l'esercizio della funzione legislativa determinando principi, criteri, oggetto e tempo."
+    },
+    {
+      "id": "ord008",
+      "domanda": "I decreti-legge devono essere convertiti in legge entro:",
+      "risposte": [
+        {"id": "a", "testo": "30 giorni", "corretta": false},
+        {"id": "b", "testo": "60 giorni", "corretta": true},
+        {"id": "c", "testo": "90 giorni", "corretta": false},
+        {"id": "d", "testo": "120 giorni", "corretta": false}
+      ],
+      "spiegazione": "Art. 77 Cost.: i decreti-legge perdono efficacia sin dall'inizio se non convertiti in legge entro 60 giorni dalla pubblicazione."
+    },
+    {
+      "id": "ord009",
+      "domanda": "La Corte Costituzionale è composta da:",
+      "risposte": [
+        {"id": "a", "testo": "9 giudici", "corretta": false},
+        {"id": "b", "testo": "15 giudici", "corretta": true},
+        {"id": "c", "testo": "21 giudici", "corretta": false},
+        {"id": "d", "testo": "12 giudici", "corretta": false}
+      ],
+      "spiegazione": "Art. 135 Cost.: la Corte Costituzionale è composta di 15 giudici (5 nominati dal PdR, 5 dal Parlamento, 5 dalle supreme magistrature)."
+    },
+    {
+      "id": "ord010",
+      "domanda": "Il Consiglio di Stato è:",
+      "risposte": [
+        {"id": "a", "testo": "Un organo del Governo", "corretta": false},
+        {"id": "b", "testo": "Un organo di consulenza giuridico-amministrativa e di tutela della giustizia amministrativa", "corretta": true},
+        {"id": "c", "testo": "Una sezione della Corte dei Conti", "corretta": false},
+        {"id": "d", "testo": "Un ufficio del Parlamento", "corretta": false}
+      ],
+      "spiegazione": "Art. 100 Cost.: il Consiglio di Stato è organo di consulenza giuridico-amministrativa e di tutela della giustizia nell'amministrazione."
+    },
+    {
+      "id": "ord011",
+      "domanda": "La revisione costituzionale richiede:",
+      "risposte": [
+        {"id": "a", "testo": "Una sola approvazione a maggioranza semplice", "corretta": false},
+        {"id": "b", "testo": "Due deliberazioni di ciascuna Camera a intervallo non minore di 3 mesi", "corretta": true},
+        {"id": "c", "testo": "L'approvazione del Presidente della Repubblica", "corretta": false},
+        {"id": "d", "testo": "Un referendum obbligatorio", "corretta": false}
+      ],
+      "spiegazione": "Art. 138 Cost.: le leggi di revisione costituzionale richiedono due successive deliberazioni di ciascuna Camera a intervallo non minore di 3 mesi."
+    },
+    {
+      "id": "ord012",
+      "domanda": "Il principio di legalità nella PA significa che:",
+      "risposte": [
+        {"id": "a", "testo": "La PA può fare tutto ciò che vuole", "corretta": false},
+        {"id": "b", "testo": "L'attività amministrativa deve essere conforme alla legge", "corretta": true},
+        {"id": "c", "testo": "Solo le leggi regionali vincolano la PA", "corretta": false},
+        {"id": "d", "testo": "La PA decide secondo equità", "corretta": false}
+      ],
+      "spiegazione": "Il principio di legalità (art. 97 Cost.) impone che l'azione amministrativa sia sempre fondata sulla legge e conforme ad essa."
+    },
+    {
+      "id": "ord013",
+      "domanda": "L'ANAC (Autorità Nazionale Anticorruzione) vigila su:",
+      "risposte": [
+        {"id": "a", "testo": "Solo i contratti pubblici", "corretta": false},
+        {"id": "b", "testo": "Prevenzione della corruzione, trasparenza e contratti pubblici", "corretta": true},
+        {"id": "c", "testo": "Solo la trasparenza", "corretta": false},
+        {"id": "d", "testo": "Solo i reati penali", "corretta": false}
+      ],
+      "spiegazione": "L'ANAC (L. 190/2012 e D.Lgs. 50/2016) vigila sulla prevenzione della corruzione, sulla trasparenza e sui contratti pubblici."
+    },
+    {
+      "id": "ord014",
+      "domanda": "Il Difensore Civico opera a livello:",
+      "risposte": [
+        {"id": "a", "testo": "Solo nazionale", "corretta": false},
+        {"id": "b", "testo": "Regionale e locale", "corretta": true},
+        {"id": "c", "testo": "Solo europeo", "corretta": false},
+        {"id": "d", "testo": "Solo comunale", "corretta": false}
+      ],
+      "spiegazione": "In Italia il Difensore Civico esiste a livello regionale, provinciale e comunale. Non esiste un Difensore Civico nazionale."
+    },
+    {
+      "id": "ord015",
+      "domanda": "La legge 400/1988 disciplina:",
+      "risposte": [
+        {"id": "a", "testo": "Il procedimento amministrativo", "corretta": false},
+        {"id": "b", "testo": "L'attività di Governo e l'ordinamento della Presidenza del Consiglio", "corretta": true},
+        {"id": "c", "testo": "I contratti pubblici", "corretta": false},
+        {"id": "d", "testo": "Il pubblico impiego", "corretta": false}
+      ],
+      "spiegazione": "La L. 400/1988 disciplina l'attività di Governo e l'ordinamento della Presidenza del Consiglio dei Ministri."
+    },
+    {
+      "id": "ord016",
+      "domanda": "Il principio di buon andamento della PA è sancito:",
+      "risposte": [
+        {"id": "a", "testo": "Dal codice civile", "corretta": false},
+        {"id": "b", "testo": "Dall'art. 97 della Costituzione", "corretta": true},
+        {"id": "c", "testo": "Solo dalla L. 241/1990", "corretta": false},
+        {"id": "d", "testo": "Dal D.Lgs. 165/2001", "corretta": false}
+      ],
+      "spiegazione": "Art. 97 Cost.: i pubblici uffici sono organizzati secondo disposizioni di legge, in modo che siano assicurati il buon andamento e l'imparzialità."
+    },
+    {
+      "id": "ord017",
+      "domanda": "Le Autorità Amministrative Indipendenti:",
+      "risposte": [
+        {"id": "a", "testo": "Dipendono dal Governo", "corretta": false},
+        {"id": "b", "testo": "Operano in posizione di autonomia e indipendenza dal potere politico", "corretta": true},
+        {"id": "c", "testo": "Sono nominate dal Parlamento", "corretta": false},
+        {"id": "d", "testo": "Non hanno poteri sanzionatori", "corretta": false}
+      ],
+      "spiegazione": "Le AAI (AGCOM, ARERA, Garante Privacy, CONSOB, etc.) sono organismi pubblici che operano in autonomia dal Governo per garantire imparzialità."
+    },
+    {
+      "id": "ord018",
+      "domanda": "Il TAR (Tribunale Amministrativo Regionale) è competente per:",
+      "risposte": [
+        {"id": "a", "testo": "Le cause penali", "corretta": false},
+        {"id": "b", "testo": "Le controversie con la PA in materia di interessi legittimi", "corretta": true},
+        {"id": "c", "testo": "Le cause civili tra privati", "corretta": false},
+        {"id": "d", "testo": "Solo i ricorsi tributari", "corretta": false}
+      ],
+      "spiegazione": "Il TAR è giudice amministrativo di primo grado, competente principalmente per la tutela degli interessi legittimi nei confronti della PA."
+    },
+    {
+      "id": "ord019",
+      "domanda": "La separazione tra politica e amministrazione significa che:",
+      "risposte": [
+        {"id": "a", "testo": "I politici non possono occuparsi della PA", "corretta": false},
+        {"id": "b", "testo": "Gli organi politici definiscono gli indirizzi, i dirigenti gestiscono", "corretta": true},
+        {"id": "c", "testo": "I dirigenti fanno politica", "corretta": false},
+        {"id": "d", "testo": "Non c'è distinzione tra politica e amministrazione", "corretta": false}
+      ],
+      "spiegazione": "D.Lgs. 165/2001: gli organi di governo esercitano funzioni di indirizzo politico-amministrativo, mentre ai dirigenti spetta la gestione."
+    },
+    {
+      "id": "ord020",
+      "domanda": "Il Sindaco è:",
+      "risposte": [
+        {"id": "a", "testo": "Solo capo dell'amministrazione comunale", "corretta": false},
+        {"id": "b", "testo": "Capo dell'amministrazione comunale e Ufficiale del Governo", "corretta": true},
+        {"id": "c", "testo": "Nominato dal Prefetto", "corretta": false},
+        {"id": "d", "testo": "Eletto dal Consiglio comunale", "corretta": false}
+      ],
+      "spiegazione": "D.Lgs. 267/2000: il Sindaco è il capo dell'amministrazione comunale, eletto direttamente dai cittadini, e svolge anche funzioni di Ufficiale del Governo."
+    }
+  ]
+}

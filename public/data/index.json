@@ -1,0 +1,105 @@
+{
+  "concorso": "RIPAM 3997 - AMM-13 Puglia",
+  "descrizione": "Quiz per la preparazione al concorso RIPAM 3997 posti - Profilo AMM-13 Puglia (141 posti)",
+  "struttura_esame": {
+    "domande_totali": 40,
+    "tempo_minuti": 60,
+    "punteggio_max": 30,
+    "soglia_superamento": 21,
+    "punteggi": {
+      "corretta": 0.75,
+      "errata": -0.25,
+      "non_data": 0
+    }
+  },
+  "materie": [
+    {
+      "id": "diritto-amministrativo",
+      "nome": "Diritto Amministrativo",
+      "file": "diritto-amministrativo.json",
+      "categoria": "comuni",
+      "domande_esame": 3,
+      "icona": "Scale"
+    },
+    {
+      "id": "diritto-penale",
+      "nome": "Diritto Penale",
+      "file": "diritto-penale.json",
+      "categoria": "comuni",
+      "domande_esame": 2,
+      "icona": "Gavel"
+    },
+    {
+      "id": "cad",
+      "nome": "Codice Amministrazione Digitale",
+      "file": "cad.json",
+      "categoria": "comuni",
+      "domande_esame": 2,
+      "icona": "Monitor"
+    },
+    {
+      "id": "ordinamento",
+      "nome": "Ordinamento PA",
+      "file": "ordinamento.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "icona": "Building"
+    },
+    {
+      "id": "inglese",
+      "nome": "Lingua Inglese",
+      "file": "inglese.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "icona": "Globe"
+    },
+    {
+      "id": "informatica",
+      "nome": "Informatica",
+      "file": "informatica.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "icona": "Laptop"
+    },
+    {
+      "id": "contabilita-stato",
+      "nome": "Contabilità di Stato",
+      "file": "contabilita-stato.json",
+      "categoria": "specifiche",
+      "domande_esame": 5,
+      "icona": "Calculator"
+    },
+    {
+      "id": "diritto-ue",
+      "nome": "Diritto UE",
+      "file": "diritto-ue.json",
+      "categoria": "specifiche",
+      "domande_esame": 5,
+      "icona": "Flag"
+    },
+    {
+      "id": "pubblico-impiego",
+      "nome": "Pubblico Impiego",
+      "file": "pubblico-impiego.json",
+      "categoria": "specifiche",
+      "domande_esame": 5,
+      "icona": "Users"
+    },
+    {
+      "id": "logica",
+      "nome": "Logica",
+      "file": "logica.json",
+      "categoria": "logica",
+      "domande_esame": 7,
+      "icona": "Brain"
+    },
+    {
+      "id": "situazionali",
+      "nome": "Quiz Situazionali",
+      "file": "situazionali.json",
+      "categoria": "situazionali",
+      "domande_esame": 8,
+      "icona": "MessageCircle"
+    }
+  ]
+}

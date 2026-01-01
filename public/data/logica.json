@@ -1,0 +1,227 @@
+{
+  "materia": "logica",
+  "nome": "Logica e Ragionamento",
+  "descrizione": "Capacità logico-deduttiva e ragionamento critico-verbale",
+  "quiz": [
+    {
+      "id": "log001",
+      "domanda": "Se tutti i gatti sono mammiferi e tutti i mammiferi sono animali, allora:",
+      "risposte": [
+        {"id": "a", "testo": "Tutti gli animali sono gatti", "corretta": false},
+        {"id": "b", "testo": "Tutti i gatti sono animali", "corretta": true},
+        {"id": "c", "testo": "Nessun gatto è animale", "corretta": false},
+        {"id": "d", "testo": "Alcuni mammiferi non sono animali", "corretta": false}
+      ],
+      "spiegazione": "Sillogismo: se A⊂B e B⊂C, allora A⊂C. Tutti i gatti sono mammiferi e tutti i mammiferi sono animali, quindi tutti i gatti sono animali."
+    },
+    {
+      "id": "log002",
+      "domanda": "Completa la serie: 2, 6, 18, 54, ...",
+      "risposte": [
+        {"id": "a", "testo": "108", "corretta": false},
+        {"id": "b", "testo": "162", "corretta": true},
+        {"id": "c", "testo": "72", "corretta": false},
+        {"id": "d", "testo": "216", "corretta": false}
+      ],
+      "spiegazione": "Serie geometrica con ragione 3: 2×3=6, 6×3=18, 18×3=54, 54×3=162."
+    },
+    {
+      "id": "log003",
+      "domanda": "Se 'nessun politico è onesto' e 'Marco è un politico', allora:",
+      "risposte": [
+        {"id": "a", "testo": "Marco potrebbe essere onesto", "corretta": false},
+        {"id": "b", "testo": "Marco non è onesto", "corretta": true},
+        {"id": "c", "testo": "Tutti i politici si chiamano Marco", "corretta": false},
+        {"id": "d", "testo": "Marco non è un politico", "corretta": false}
+      ],
+      "spiegazione": "Sillogismo: se nessun A è B e x è A, allora x non è B. Nessun politico è onesto + Marco è politico = Marco non è onesto."
+    },
+    {
+      "id": "log004",
+      "domanda": "Quale numero completa la serie: 1, 1, 2, 3, 5, 8, ...",
+      "risposte": [
+        {"id": "a", "testo": "11", "corretta": false},
+        {"id": "b", "testo": "13", "corretta": true},
+        {"id": "c", "testo": "10", "corretta": false},
+        {"id": "d", "testo": "12", "corretta": false}
+      ],
+      "spiegazione": "Serie di Fibonacci: ogni numero è la somma dei due precedenti. 5+8=13."
+    },
+    {
+      "id": "log005",
+      "domanda": "Se A è maggiore di B e B è maggiore di C, quale affermazione è vera?",
+      "risposte": [
+        {"id": "a", "testo": "C è maggiore di A", "corretta": false},
+        {"id": "b", "testo": "A è maggiore di C", "corretta": true},
+        {"id": "c", "testo": "B è uguale a C", "corretta": false},
+        {"id": "d", "testo": "A è uguale a B", "corretta": false}
+      ],
+      "spiegazione": "Proprietà transitiva: se A>B e B>C, allora A>C."
+    },
+    {
+      "id": "log006",
+      "domanda": "Trova l'intruso: ROMA, PARIGI, LONDRA, ITALIA, BERLINO",
+      "risposte": [
+        {"id": "a", "testo": "ROMA", "corretta": false},
+        {"id": "b", "testo": "ITALIA", "corretta": true},
+        {"id": "c", "testo": "PARIGI", "corretta": false},
+        {"id": "d", "testo": "LONDRA", "corretta": false}
+      ],
+      "spiegazione": "ITALIA è una nazione, mentre tutte le altre sono capitali europee."
+    },
+    {
+      "id": "log007",
+      "domanda": "Se 'piove implica strade bagnate' e 'le strade sono asciutte', allora:",
+      "risposte": [
+        {"id": "a", "testo": "Sta piovendo", "corretta": false},
+        {"id": "b", "testo": "Non sta piovendo", "corretta": true},
+        {"id": "c", "testo": "Non si può dedurre nulla", "corretta": false},
+        {"id": "d", "testo": "Potrebbe piovere", "corretta": false}
+      ],
+      "spiegazione": "Modus tollens: se P→Q e ¬Q, allora ¬P. Se piove→strade bagnate, e strade asciutte (¬Q), allora non piove (¬P)."
+    },
+    {
+      "id": "log008",
+      "domanda": "Completa la serie: 3, 9, 27, 81, ...",
+      "risposte": [
+        {"id": "a", "testo": "162", "corretta": false},
+        {"id": "b", "testo": "243", "corretta": true},
+        {"id": "c", "testo": "200", "corretta": false},
+        {"id": "d", "testo": "270", "corretta": false}
+      ],
+      "spiegazione": "Potenze di 3: 3¹=3, 3²=9, 3³=27, 3⁴=81, 3⁵=243."
+    },
+    {
+      "id": "log009",
+      "domanda": "ACQUA sta a SETE come CIBO sta a:",
+      "risposte": [
+        {"id": "a", "testo": "PRANZO", "corretta": false},
+        {"id": "b", "testo": "FAME", "corretta": true},
+        {"id": "c", "testo": "CUCINA", "corretta": false},
+        {"id": "d", "testo": "TAVOLO", "corretta": false}
+      ],
+      "spiegazione": "Analogia: l'acqua soddisfa la sete, il cibo soddisfa la fame."
+    },
+    {
+      "id": "log010",
+      "domanda": "Se in un gruppo di 100 persone, 60 parlano inglese e 50 parlano francese, quante parlano entrambe le lingue se tutti parlano almeno una lingua?",
+      "risposte": [
+        {"id": "a", "testo": "0", "corretta": false},
+        {"id": "b", "testo": "10", "corretta": true},
+        {"id": "c", "testo": "50", "corretta": false},
+        {"id": "d", "testo": "60", "corretta": false}
+      ],
+      "spiegazione": "Formula degli insiemi: |A∪B| = |A| + |B| - |A∩B|. 100 = 60 + 50 - x, x = 10."
+    },
+    {
+      "id": "log011",
+      "domanda": "Se oggi è mercoledì, che giorno sarà tra 100 giorni?",
+      "risposte": [
+        {"id": "a", "testo": "Lunedì", "corretta": false},
+        {"id": "b", "testo": "Venerdì", "corretta": true},
+        {"id": "c", "testo": "Sabato", "corretta": false},
+        {"id": "d", "testo": "Domenica", "corretta": false}
+      ],
+      "spiegazione": "100 ÷ 7 = 14 settimane + 2 giorni. Mercoledì + 2 giorni = Venerdì."
+    },
+    {
+      "id": "log012",
+      "domanda": "Trova l'intruso: 4, 9, 16, 25, 27, 36",
+      "risposte": [
+        {"id": "a", "testo": "4", "corretta": false},
+        {"id": "b", "testo": "27", "corretta": true},
+        {"id": "c", "testo": "16", "corretta": false},
+        {"id": "d", "testo": "36", "corretta": false}
+      ],
+      "spiegazione": "Tutti sono quadrati perfetti (2²=4, 3²=9, 4²=16, 5²=25, 6²=36) tranne 27 che è 3³."
+    },
+    {
+      "id": "log013",
+      "domanda": "MEDICO sta a PAZIENTE come AVVOCATO sta a:",
+      "risposte": [
+        {"id": "a", "testo": "GIUDICE", "corretta": false},
+        {"id": "b", "testo": "CLIENTE", "corretta": true},
+        {"id": "c", "testo": "TRIBUNALE", "corretta": false},
+        {"id": "d", "testo": "LEGGE", "corretta": false}
+      ],
+      "spiegazione": "Analogia: il medico cura il paziente, l'avvocato difende il cliente."
+    },
+    {
+      "id": "log014",
+      "domanda": "Completa la serie: 1, 4, 9, 16, 25, ...",
+      "risposte": [
+        {"id": "a", "testo": "30", "corretta": false},
+        {"id": "b", "testo": "36", "corretta": true},
+        {"id": "c", "testo": "35", "corretta": false},
+        {"id": "d", "testo": "49", "corretta": false}
+      ],
+      "spiegazione": "Serie dei quadrati perfetti: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25, 6²=36."
+    },
+    {
+      "id": "log015",
+      "domanda": "Se tutti gli A sono B, e alcuni B sono C, allora:",
+      "risposte": [
+        {"id": "a", "testo": "Tutti gli A sono C", "corretta": false},
+        {"id": "b", "testo": "Non si può concludere nulla sugli A e i C", "corretta": true},
+        {"id": "c", "testo": "Nessun A è C", "corretta": false},
+        {"id": "d", "testo": "Tutti i C sono A", "corretta": false}
+      ],
+      "spiegazione": "Con 'alcuni' non si può dedurre una conclusione certa. Gli A potrebbero essere tra i B che sono C, o tra quelli che non lo sono."
+    },
+    {
+      "id": "log016",
+      "domanda": "In una gara, Marco è arrivato dopo Luca e prima di Anna. Chi è arrivato primo?",
+      "risposte": [
+        {"id": "a", "testo": "Marco", "corretta": false},
+        {"id": "b", "testo": "Luca", "corretta": true},
+        {"id": "c", "testo": "Anna", "corretta": false},
+        {"id": "d", "testo": "Non si può determinare", "corretta": false}
+      ],
+      "spiegazione": "Se Marco è dopo Luca e prima di Anna, l'ordine è: Luca, Marco, Anna. Luca è primo."
+    },
+    {
+      "id": "log017",
+      "domanda": "Quale parola NON appartiene al gruppo: MELA, PERA, BANANA, CAROTA, UVA?",
+      "risposte": [
+        {"id": "a", "testo": "MELA", "corretta": false},
+        {"id": "b", "testo": "CAROTA", "corretta": true},
+        {"id": "c", "testo": "BANANA", "corretta": false},
+        {"id": "d", "testo": "UVA", "corretta": false}
+      ],
+      "spiegazione": "La carota è un ortaggio, mentre gli altri sono frutti."
+    },
+    {
+      "id": "log018",
+      "domanda": "Se 5 operai costruiscono un muro in 10 giorni, quanti giorni impiegheranno 10 operai?",
+      "risposte": [
+        {"id": "a", "testo": "20 giorni", "corretta": false},
+        {"id": "b", "testo": "5 giorni", "corretta": true},
+        {"id": "c", "testo": "2 giorni", "corretta": false},
+        {"id": "d", "testo": "10 giorni", "corretta": false}
+      ],
+      "spiegazione": "Proporzionalità inversa: raddoppiando gli operai si dimezza il tempo. 5×10 = 10×x, x=5 giorni."
+    },
+    {
+      "id": "log019",
+      "domanda": "LIBRO sta a BIBLIOTECA come QUADRO sta a:",
+      "risposte": [
+        {"id": "a", "testo": "PITTORE", "corretta": false},
+        {"id": "b", "testo": "MUSEO", "corretta": true},
+        {"id": "c", "testo": "COLORE", "corretta": false},
+        {"id": "d", "testo": "CORNICE", "corretta": false}
+      ],
+      "spiegazione": "Analogia: i libri sono conservati in biblioteca, i quadri sono conservati nei musei."
+    },
+    {
+      "id": "log020",
+      "domanda": "Completa la serie: A, C, F, J, ...",
+      "risposte": [
+        {"id": "a", "testo": "M", "corretta": false},
+        {"id": "b", "testo": "O", "corretta": true},
+        {"id": "c", "testo": "N", "corretta": false},
+        {"id": "d", "testo": "L", "corretta": false}
+      ],
+      "spiegazione": "La differenza aumenta di 1: A(1)+2=C(3), C(3)+3=F(6), F(6)+4=J(10), J(10)+5=O(15)."
+    }
+  ]
+}
