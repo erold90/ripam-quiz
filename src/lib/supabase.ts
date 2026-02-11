@@ -194,7 +194,12 @@ export async function deleteAllUserData(userId: string) {
     .delete()
     .eq('user_id', userId);
 
-  return { error: err1 || err2 };
+  const { error: err3 } = await supabase
+    .from('simulazioni')
+    .delete()
+    .eq('user_id', userId);
+
+  return { error: err1 || err2 || err3 };
 }
 
 // ===== DISPENSE HIGHLIGHTS =====
