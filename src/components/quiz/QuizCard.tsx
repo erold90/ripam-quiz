@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, XCircle, Circle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AiExplanation } from './AiExplanation';
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -16,6 +17,7 @@ interface QuizCardProps {
   onProssimo: () => void;
   indice: number;
   totale: number;
+  materia?: string;
 }
 
 export function QuizCard({
@@ -27,6 +29,7 @@ export function QuizCard({
   onProssimo,
   indice,
   totale,
+  materia,
 }: QuizCardProps) {
   const rispostaCorretta = quiz.risposte.find(r => r.corretta);
   const isCorretta = rispostaCorretta?.id === rispostaSelezionata;
@@ -101,7 +104,7 @@ export function QuizCard({
           })}
         </div>
 
-        {/* Spiegazione */}
+        {/* Spiegazione statica */}
         {mostraSoluzione && quiz.spiegazione && (
           <div className="mb-6 p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
             <p className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-1">
@@ -110,6 +113,18 @@ export function QuizCard({
             <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
               {quiz.spiegazione}
             </p>
+          </div>
+        )}
+
+        {/* Spiegazione AI per risposte sbagliate */}
+        {mostraSoluzione && !isCorretta && rispostaSelezionata && materia && (
+          <div className="mb-6">
+            <AiExplanation
+              key={`${quiz.id}-${rispostaSelezionata}`}
+              quiz={quiz}
+              rispostaUtente={rispostaSelezionata}
+              materia={materia}
+            />
           </div>
         )}
 

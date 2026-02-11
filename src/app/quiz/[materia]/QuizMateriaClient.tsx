@@ -401,6 +401,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
             onProssimo={handleProssimo}
             indice={currentIndex}
             totale={quizList.length}
+            materia={materiaId}
           />
         </main>
       </div>

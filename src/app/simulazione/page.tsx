@@ -18,6 +18,7 @@ import {
   Flag, Eraser,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AiExplanation } from '@/components/quiz/AiExplanation';
 
 type Phase = 'intro' | 'inProgress' | 'results' | 'review';
 
@@ -670,6 +671,16 @@ export default function SimulazionePage() {
                   <p className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-1">Spiegazione:</p>
                   <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">{quiz.spiegazione}</p>
                 </div>
+              )}
+
+              {/* Spiegazione AI per risposte sbagliate */}
+              {userAnswer && !isCorrect && (
+                <AiExplanation
+                  key={`review-${quiz.id}-${userAnswer}`}
+                  quiz={quiz}
+                  rispostaUtente={userAnswer}
+                  materia={quiz.materia}
+                />
               )}
             </CardContent>
           </Card>
