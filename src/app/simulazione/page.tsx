@@ -11,8 +11,7 @@ import { SimulazioneCard } from '@/components/quiz/SimulazioneCard';
 import { useQuizStore } from '@/store/quiz-store';
 import { generaQuizSimulazione, calcolaPunteggio, formatTempoRimanente } from '@/lib/quiz-loader';
 import { Quiz, SimulazioneRisposta } from '@/types/quiz';
-import { useAuth } from '@/components/Providers';
-import { syncSimulazione } from '@/lib/cloud-sync';
+import { syncSimulazioneAnswer, syncSimulazione } from '@/lib/cloud-sync';
 import {
   Play,
   Trophy,
@@ -40,8 +39,7 @@ export default function SimulazionePage() {
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { darkMode, leitnerStates, updateLeitnerFromSimulazione, incrementSimulazioni } = useQuizStore();
-  const { user } = useAuth();
+  const { darkMode, leitnerStates, updateLeitnerFromSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
 
   useEffect(() => {
     if (darkMode) {
@@ -57,7 +55,6 @@ export default function SimulazionePage() {
       timerRef.current = setInterval(() => {
         setTempoRimanente(prev => {
           if (prev <= 1) {
-            // Tempo scaduto
             handleTermina();
             return 0;
           }
@@ -95,20 +92,39 @@ export default function SimulazionePage() {
     setRispostaSelezionata(id);
   }, []);
 
+  // Registra risposta e sincronizza con Supabase
+  const registraRisposta = useCallback((
+    quiz: Quiz & { materia: string },
+    rispostaData: string | null,
+    isCorretta: boolean | null,
+    tempoMs: number
+  ) => {
+    const nuovaRisposta: SimulazioneRisposta = {
+      quiz_id: quiz.id,
+      materia: quiz.materia,
+      risposta_data: rispostaData,
+      corretto: isCorretta,
+      tempo_ms: tempoMs,
+    };
+
+    setRisposte(prev => [...prev, nuovaRisposta]);
+
+    // Sync immediato con Supabase per ogni risposta
+    syncSimulazioneAnswer(quiz.id, quiz.materia, rispostaData, isCorretta, tempoMs);
+
+    // Aggiorna stats locali se ha risposto (non saltata)
+    if (isCorretta !== null) {
+      aggiornaStatistiche(quiz.materia, isCorretta);
+    }
+  }, [aggiornaStatistiche]);
+
   const handleProssimo = useCallback(() => {
     const quiz = quizList[currentIndex];
     const rispostaCorretta = quiz.risposte.find(r => r.corretta);
     const isCorretta = rispostaSelezionata ? rispostaCorretta?.id === rispostaSelezionata : null;
+    const tempoMs = Date.now() - tempoInizio;
 
-    const nuovaRisposta: SimulazioneRisposta = {
-      quiz_id: quiz.id,
-      materia: quiz.materia,
-      risposta_data: rispostaSelezionata,
-      corretto: isCorretta,
-      tempo_ms: Date.now() - tempoInizio,
-    };
-
-    setRisposte(prev => [...prev, nuovaRisposta]);
+    registraRisposta(quiz, rispostaSelezionata, isCorretta, tempoMs);
 
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex(prev => prev + 1);
@@ -117,20 +133,13 @@ export default function SimulazionePage() {
     } else {
       handleTermina();
     }
-  }, [currentIndex, quizList, rispostaSelezionata, tempoInizio]);
+  }, [currentIndex, quizList, rispostaSelezionata, tempoInizio, registraRisposta]);
 
   const handleSalta = useCallback(() => {
     const quiz = quizList[currentIndex];
+    const tempoMs = Date.now() - tempoInizio;
 
-    const nuovaRisposta: SimulazioneRisposta = {
-      quiz_id: quiz.id,
-      materia: quiz.materia,
-      risposta_data: null,
-      corretto: null,
-      tempo_ms: Date.now() - tempoInizio,
-    };
-
-    setRisposte(prev => [...prev, nuovaRisposta]);
+    registraRisposta(quiz, null, null, tempoMs);
 
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex(prev => prev + 1);
@@ -139,7 +148,7 @@ export default function SimulazionePage() {
     } else {
       handleTermina();
     }
-  }, [currentIndex, quizList, tempoInizio]);
+  }, [currentIndex, quizList, tempoInizio, registraRisposta]);
 
   const handleTermina = useCallback(() => {
     if (timerRef.current) {
@@ -148,17 +157,15 @@ export default function SimulazionePage() {
     setPhase('completed');
   }, []);
 
-  // Aggiorna Leitner, incrementa contatore e salva su cloud quando la simulazione è completata
+  // Quando la simulazione è completata: salva record e aggiorna leitner
   useEffect(() => {
     if (phase === 'completed' && risposte.length > 0) {
       updateLeitnerFromSimulazione(risposte);
       incrementSimulazioni();
 
-      // Salva simulazione su cloud (fire-and-forget)
-      if (user) {
-        const tempoTotaleMs = (60 * 60 - tempoRimanente) * 1000;
-        syncSimulazione(user.id, calcolaPunteggio(risposte), tempoTotaleMs, risposte);
-      }
+      // Salva record simulazione su Supabase
+      const tempoTotaleMs = (60 * 60 - tempoRimanente) * 1000;
+      syncSimulazione(calcolaPunteggio(risposte), tempoTotaleMs, risposte);
     }
   }, [phase]);
 

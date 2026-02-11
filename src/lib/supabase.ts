@@ -5,6 +5,9 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOi
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Utente unico - Sara
+export const SARA_USER_ID = 'f3eaf2d1-1b0f-43aa-9a37-b44a3fa27e65';
+
 // ===== USER PROGRESS =====
 
 export async function saveProgress(

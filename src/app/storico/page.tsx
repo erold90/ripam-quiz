@@ -7,8 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
-import { getUserSimulazioni } from '@/lib/supabase';
-import { useAuth } from '@/components/Providers';
+import { getUserSimulazioni, SARA_USER_ID } from '@/lib/supabase';
 import {
   ArrowLeft,
   History,
@@ -17,8 +16,6 @@ import {
   Clock,
   GraduationCap,
   Play,
-  Cloud,
-  HardDrive,
 } from 'lucide-react';
 
 interface SimulazioneRecord {
@@ -33,7 +30,6 @@ interface SimulazioneRecord {
     tempo_ms: number;
   }>;
   created_at: string;
-  source: 'cloud' | 'local';
 }
 
 function formatDate(dateStr: string): string {
@@ -56,8 +52,7 @@ function formatTempo(ms: number): string {
 export default function StoricoPage() {
   const [simulazioni, setSimulazioni] = useState<SimulazioneRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const { darkMode, simulazioniCount } = useQuizStore();
-  const { user } = useAuth();
+  const { darkMode } = useQuizStore();
 
   useEffect(() => {
     if (darkMode) {
@@ -69,21 +64,14 @@ export default function StoricoPage() {
 
   useEffect(() => {
     async function loadStorico() {
-      if (user) {
-        const { data } = await getUserSimulazioni(user.id);
-        if (data) {
-          setSimulazioni(
-            data.map((sim: Record<string, unknown>) => ({
-              ...sim,
-              source: 'cloud' as const,
-            })) as SimulazioneRecord[]
-          );
-        }
+      const { data } = await getUserSimulazioni(SARA_USER_ID);
+      if (data) {
+        setSimulazioni(data as SimulazioneRecord[]);
       }
       setLoading(false);
     }
     loadStorico();
-  }, [user]);
+  }, []);
 
   if (loading) {
     return (
@@ -110,25 +98,9 @@ export default function StoricoPage() {
             Storico Simulazioni
           </h1>
           <p className="text-muted-foreground">
-            {user
-              ? 'Le tue simulazioni salvate nel cloud'
-              : 'Accedi per salvare e visualizzare le tue simulazioni'}
+            Tutte le simulazioni completate ({simulazioni.length} totali)
           </p>
-          {simulazioniCount > 0 && (
-            <p className="text-sm text-muted-foreground mt-1">
-              <HardDrive className="h-3 w-3 inline mr-1" />
-              {simulazioniCount} simulazioni completate in questa sessione
-            </p>
-          )}
         </div>
-
-        {!user && (
-          <Card className="mb-4 border-yellow-200 dark:border-yellow-800 bg-yellow-50/50 dark:bg-yellow-950/20">
-            <CardContent className="p-4 text-sm text-yellow-800 dark:text-yellow-200">
-              Effettua il login per salvare automaticamente le tue simulazioni nel cloud e visualizzarle qui.
-            </CardContent>
-          </Card>
-        )}
 
         {simulazioni.length === 0 ? (
           <Card>
@@ -170,7 +142,6 @@ export default function StoricoPage() {
                         <Badge variant={superato ? 'default' : 'destructive'}>
                           {superato ? 'Superato' : 'Non superato'}
                         </Badge>
-                        <Cloud className="h-3 w-3 text-muted-foreground" />
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {formatDate(sim.created_at)}

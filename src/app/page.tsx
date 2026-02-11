@@ -8,7 +8,6 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
-import { useAuth } from '@/components/Providers';
 import { getQuizIndex, getAllQuiz } from '@/lib/quiz-loader';
 import { QuizIndex } from '@/types/quiz';
 import {
@@ -42,7 +41,6 @@ import {
   Languages,
   Puzzle,
   Presentation,
-  LogIn,
   Trash2,
   Loader2,
 } from 'lucide-react';
@@ -122,9 +120,8 @@ export default function Home() {
     simulazioniCount,
     leitnerStates,
     darkMode,
+    dataLoaded,
   } = useQuizStore();
-
-  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
     if (darkMode) {
@@ -153,17 +150,9 @@ export default function Home() {
     loadData();
   }, []);
 
-  // Se non loggato, tutto a 0
-  const isLoggedIn = !!user;
-  const effectiveStats = isLoggedIn ? statsPerMateria : {};
-  const effectiveCompletati = isLoggedIn ? quizCompletati : new Set<string>();
-  const effectiveSbagliati = isLoggedIn ? quizSbagliati : new Set<string>();
-  const effectiveSimulazioni = isLoggedIn ? simulazioniCount : 0;
-  const effectiveLeitner = isLoggedIn ? leitnerStates : {};
-
   // Statistiche globali
-  const totaleRisposte = Object.values(effectiveStats).reduce((acc, s) => acc + s.totale, 0);
-  const totaleCorrette = Object.values(effectiveStats).reduce((acc, s) => acc + s.corrette, 0);
+  const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + s.totale, 0);
+  const totaleCorrette = Object.values(statsPerMateria).reduce((acc, s) => acc + s.corrette, 0);
   const percentualeGlobale = totaleRisposte > 0 ? Math.round((totaleCorrette / totaleRisposte) * 100) : 0;
 
   // Calcolo categorie Leitner
@@ -174,7 +163,7 @@ export default function Home() {
     }));
 
     const trackedQuizIds = new Set<string>();
-    for (const [quizId, state] of Object.entries(effectiveLeitner)) {
+    for (const [quizId, state] of Object.entries(leitnerStates)) {
       trackedQuizIds.add(quizId);
       const catIndex = counts.findIndex(c => c.boxes.includes(state.box));
       if (catIndex >= 0) counts[catIndex].count++;
@@ -186,7 +175,7 @@ export default function Home() {
     }
 
     return counts;
-  }, [effectiveLeitner, totalQuizCount]);
+  }, [leitnerStates, totalQuizCount]);
 
   const totalTracked = leitnerCounts.reduce((acc, c) => acc + c.count, 0);
   const progressoApprendimento = totalTracked > 0
@@ -199,7 +188,7 @@ export default function Home() {
     let worst: { nome: string; id: string; perc: number } | null = null;
 
     for (const materia of quizData.materie) {
-      const stats = effectiveStats[materia.id];
+      const stats = statsPerMateria[materia.id];
       if (stats && stats.totale >= 5) {
         if (!worst || stats.percentuale < worst.perc) {
           worst = { nome: materia.nome, id: materia.id, perc: stats.percentuale };
@@ -208,16 +197,16 @@ export default function Home() {
     }
 
     return worst;
-  }, [quizData, effectiveStats]);
+  }, [quizData, statsPerMateria]);
 
   // Materie da migliorare (sotto 70%)
   const materieDaMigliorare = useMemo(() => {
     if (!quizData) return [];
     return quizData.materie
-      .map(m => ({ ...m, stats: effectiveStats[m.id] }))
+      .map(m => ({ ...m, stats: statsPerMateria[m.id] }))
       .filter(m => m.stats && m.stats.totale > 0 && m.stats.percentuale < 70)
       .sort((a, b) => (a.stats?.percentuale || 0) - (b.stats?.percentuale || 0));
-  }, [quizData, effectiveStats]);
+  }, [quizData, statsPerMateria]);
 
   // Tempo stimato di studio
   const tempoStimato = useMemo(() => {
@@ -229,10 +218,7 @@ export default function Home() {
     return `${ore}h ${minuti % 60}min`;
   }, [leitnerCounts]);
 
-  // Nome utente dal email
-  const userName = user?.email?.split('@')[0] || null;
-
-  if (loading || authLoading) {
+  if (loading || !dataLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -251,35 +237,19 @@ export default function Home() {
         {/* Saluto */}
         <section className="mb-6">
           <h1 className="text-2xl font-bold">
-            {getGreeting()}{userName ? `, ${userName}` : ''}!
+            {getGreeting()}, Sara!
           </h1>
           <p className="text-muted-foreground">
-            {isLoggedIn
-              ? 'Continua la tua preparazione per il concorso RIPAM'
-              : 'Preparati al concorso RIPAM 3997 posti'}
+            Continua la tua preparazione per il concorso RIPAM
           </p>
         </section>
-
-        {/* Banner login se non loggato */}
-        {!isLoggedIn && (
-          <Card className="mb-6 border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <LogIn className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  Accedi per salvare i tuoi progressi e sincronizzarli su tutti i dispositivi
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {/* 4 Stat Cards */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <Card>
             <CardContent className="p-4 text-center">
               <BookOpen className="h-5 w-5 mx-auto mb-1.5 text-primary" />
-              <p className="text-2xl font-bold">{effectiveCompletati.size}</p>
+              <p className="text-2xl font-bold">{quizCompletati.size}</p>
               <p className="text-xs text-muted-foreground">Quiz completati</p>
             </CardContent>
           </Card>
@@ -293,65 +263,63 @@ export default function Home() {
           <Card>
             <CardContent className="p-4 text-center">
               <ClipboardList className="h-5 w-5 mx-auto mb-1.5 text-blue-500" />
-              <p className="text-2xl font-bold">{effectiveSimulazioni}</p>
+              <p className="text-2xl font-bold">{simulazioniCount}</p>
               <p className="text-xs text-muted-foreground">Simulazioni</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <AlertCircle className="h-5 w-5 mx-auto mb-1.5 text-red-500" />
-              <p className="text-2xl font-bold">{effectiveSbagliati.size}</p>
+              <p className="text-2xl font-bold">{quizSbagliati.size}</p>
               <p className="text-xs text-muted-foreground">Da ripassare</p>
             </CardContent>
           </Card>
         </section>
 
-        {/* Cosa studiare oggi - solo se loggato con dati */}
-        {isLoggedIn && (
-          <section className="mb-6">
-            <Card>
-              <CardContent className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <h2 className="font-semibold text-lg">Cosa studiare oggi</h2>
-                </div>
+        {/* Cosa studiare oggi */}
+        <section className="mb-6">
+          <Card>
+            <CardContent className="p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <h2 className="font-semibold text-lg">Cosa studiare oggi</h2>
+              </div>
 
-                {/* Progress Apprendimento */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-1.5">
-                    <span className="text-muted-foreground">Progresso apprendimento</span>
-                    <span className="font-medium">{progressoApprendimento}%</span>
+              {/* Progress Apprendimento */}
+              <div className="mb-4">
+                <div className="flex justify-between text-sm mb-1.5">
+                  <span className="text-muted-foreground">Progresso apprendimento</span>
+                  <span className="font-medium">{progressoApprendimento}%</span>
+                </div>
+                <Progress value={progressoApprendimento} className="h-2.5" />
+              </div>
+
+              {/* Categorie colorate */}
+              <div className="grid grid-cols-5 gap-2 mb-4">
+                {leitnerCounts.map((cat) => (
+                  <div key={cat.label} className="text-center">
+                    <div className={cn('w-full h-2 rounded-full mb-1.5', cat.color)} />
+                    <p className="text-lg font-bold">{cat.count}</p>
+                    <p className="text-[10px] text-muted-foreground leading-tight">{cat.label}</p>
                   </div>
-                  <Progress value={progressoApprendimento} className="h-2.5" />
-                </div>
+                ))}
+              </div>
 
-                {/* Categorie colorate */}
-                <div className="grid grid-cols-5 gap-2 mb-4">
-                  {leitnerCounts.map((cat) => (
-                    <div key={cat.label} className="text-center">
-                      <div className={cn('w-full h-2 rounded-full mb-1.5', cat.color)} />
-                      <p className="text-lg font-bold">{cat.count}</p>
-                      <p className="text-[10px] text-muted-foreground leading-tight">{cat.label}</p>
-                    </div>
-                  ))}
+              {/* Info aggiuntive */}
+              <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-3">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4" />
+                  <span>Tempo stimato: {tempoStimato}</span>
                 </div>
-
-                {/* Info aggiuntive */}
-                <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-3">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="h-4 w-4" />
-                    <span>Tempo stimato: {tempoStimato}</span>
-                  </div>
-                  {materiaDebole && (
-                    <span>
-                      Concentrati su: <Link href={`/quiz/${materiaDebole.id}`} className="text-primary font-medium hover:underline">{materiaDebole.nome.toLowerCase()}</Link>
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-        )}
+                {materiaDebole && (
+                  <span>
+                    Concentrati su: <Link href={`/quiz/${materiaDebole.id}`} className="text-primary font-medium hover:underline">{materiaDebole.nome.toLowerCase()}</Link>
+                  </span>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
 
         {/* CTA: Studio libero e Simulazione */}
         <section className="grid grid-cols-2 gap-3 mb-6">
@@ -417,7 +385,7 @@ export default function Home() {
           <div className="space-y-2">
             {quizData?.materie.map((materia) => {
               const IconComponent = iconMap[materia.icona] || BookOpen;
-              const stats = effectiveStats[materia.id];
+              const stats = statsPerMateria[materia.id];
               const progress = stats ? stats.percentuale : 0;
 
               return (

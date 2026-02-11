@@ -5,13 +5,13 @@ import {
   loadUserData,
   getUserStats,
   getUserSimulazioni,
-  saveFullStats,
+  SARA_USER_ID,
 } from '@/lib/supabase';
+import { useQuizStore } from '@/store/quiz-store';
 import type { SimulazioneRisposta, StatisticheMateria } from '@/types/quiz';
 
-// Fire-and-forget: salva progresso singolo quiz su cloud
+// Salva singola risposta quiz su Supabase (awaited)
 export async function syncQuizAnswer(
-  userId: string,
   quizId: string,
   materia: string,
   rispostaData: string | null,
@@ -20,17 +20,35 @@ export async function syncQuizAnswer(
 ) {
   try {
     await Promise.all([
-      saveProgress(userId, quizId, materia, rispostaData, corretto, tempoMs),
-      updateStats(userId, materia, corretto, tempoMs),
+      saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs),
+      updateStats(SARA_USER_ID, materia, corretto, tempoMs),
     ]);
   } catch (err) {
-    console.error('[CloudSync] Errore sync quiz:', err);
+    console.error('[Sync] Errore sync quiz:', err);
   }
 }
 
-// Fire-and-forget: salva simulazione completata su cloud
+// Salva risposta singola durante simulazione (solo user_progress, senza stats)
+export async function syncSimulazioneAnswer(
+  quizId: string,
+  materia: string,
+  rispostaData: string | null,
+  corretto: boolean | null,
+  tempoMs: number
+) {
+  try {
+    await saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs);
+    // Se ha risposto (non saltata), aggiorna anche le stats
+    if (corretto !== null) {
+      await updateStats(SARA_USER_ID, materia, corretto, tempoMs);
+    }
+  } catch (err) {
+    console.error('[Sync] Errore sync risposta simulazione:', err);
+  }
+}
+
+// Salva simulazione completata su Supabase
 export async function syncSimulazione(
-  userId: string,
   punteggio: number,
   tempoMs: number,
   risposte: SimulazioneRisposta[]
@@ -43,48 +61,28 @@ export async function syncSimulazione(
       corretto: r.corretto,
       tempo_ms: r.tempo_ms,
     }));
-    await saveSimulazione(userId, punteggio, tempoMs, risposteForDb);
+    await saveSimulazione(SARA_USER_ID, punteggio, tempoMs, risposteForDb);
   } catch (err) {
-    console.error('[CloudSync] Errore sync simulazione:', err);
+    console.error('[Sync] Errore sync simulazione:', err);
   }
 }
 
-// Sync stats complete al cloud
-export async function syncStatsToCloud(
-  userId: string,
-  statsPerMateria: Record<string, StatisticheMateria>,
-  totaleRisposte: number,
-  risposteCorrette: number
-) {
-  try {
-    await saveFullStats(userId, {
-      totale_risposte: totaleRisposte,
-      risposte_corrette: risposteCorrette,
-      ultima_sessione: new Date().toISOString(),
-      stats_per_materia: statsPerMateria,
-    });
-  } catch (err) {
-    console.error('[CloudSync] Errore sync stats:', err);
-  }
-}
-
-// Carica dati dal cloud e restituisci per merge locale
-export async function loadFromCloud(userId: string) {
+// Carica TUTTI i dati di Sara da Supabase e aggiorna lo store
+export async function loadAllFromSupabase() {
   try {
     const [progressResult, statsResult, simulazioniResult] = await Promise.all([
-      loadUserData(userId),
-      getUserStats(userId),
-      getUserSimulazioni(userId),
+      loadUserData(SARA_USER_ID),
+      getUserStats(SARA_USER_ID),
+      getUserSimulazioni(SARA_USER_ID),
     ]);
 
     const progress = progressResult.data || [];
     const stats = statsResult.data;
     const simulazioni = simulazioniResult.data || [];
 
-    // Costruisci set di quiz completati e sbagliati dal cloud
+    // Ricostruisci set di quiz completati e sbagliati
     const quizCompletati = new Set<string>();
     const quizSbagliati = new Set<string>();
-    const statsPerMateria: Record<string, StatisticheMateria> = {};
 
     for (const p of progress) {
       quizCompletati.add(p.quiz_id);
@@ -93,65 +91,25 @@ export async function loadFromCloud(userId: string) {
       }
     }
 
-    // Stats dal cloud
-    if (stats?.stats_per_materia) {
-      Object.assign(statsPerMateria, stats.stats_per_materia);
-    }
+    // Stats per materia dal cloud
+    const statsPerMateria: Record<string, StatisticheMateria> = stats?.stats_per_materia || {};
 
-    return {
+    // Aggiorna lo store Zustand
+    useQuizStore.setState({
       quizCompletati,
       quizSbagliati,
       statsPerMateria,
       simulazioniCount: simulazioni.length,
-      simulazioni,
-      cloudStats: stats,
-    };
+      dataLoaded: true,
+    });
+
+    console.log('[Sync] Dati caricati da Supabase:', {
+      quiz: quizCompletati.size,
+      simulazioni: simulazioni.length,
+      materie: Object.keys(statsPerMateria).length,
+    });
   } catch (err) {
-    console.error('[CloudSync] Errore load from cloud:', err);
-    return null;
+    console.error('[Sync] Errore caricamento da Supabase:', err);
+    useQuizStore.setState({ dataLoaded: true });
   }
-}
-
-// Merge dati locali + cloud (il dato con piu risposte vince)
-export function mergeLocalAndCloud(
-  localStats: Record<string, StatisticheMateria>,
-  cloudStats: Record<string, StatisticheMateria>,
-  localCompletati: Set<string>,
-  cloudCompletati: Set<string>,
-  localSbagliati: Set<string>,
-  cloudSbagliati: Set<string>,
-) {
-  // Merge quiz completati (unione)
-  const mergedCompletati = new Set([...localCompletati, ...cloudCompletati]);
-  const mergedSbagliati = new Set([...localSbagliati, ...cloudSbagliati]);
-  // Rimuovi da sbagliati quelli che non sono piu sbagliati localmente
-  for (const id of mergedSbagliati) {
-    if (localCompletati.has(id) && !localSbagliati.has(id)) {
-      mergedSbagliati.delete(id);
-    }
-  }
-
-  // Merge stats (prendi quello con piu risposte totali per materia)
-  const mergedStats: Record<string, StatisticheMateria> = {};
-  const allMaterie = new Set([...Object.keys(localStats), ...Object.keys(cloudStats)]);
-
-  for (const materia of allMaterie) {
-    const local = localStats[materia];
-    const cloud = cloudStats[materia];
-
-    if (!local) {
-      mergedStats[materia] = cloud;
-    } else if (!cloud) {
-      mergedStats[materia] = local;
-    } else {
-      // Prendi quello con piu risposte totali
-      mergedStats[materia] = local.totale >= cloud.totale ? local : cloud;
-    }
-  }
-
-  return {
-    quizCompletati: mergedCompletati,
-    quizSbagliati: mergedSbagliati,
-    statsPerMateria: mergedStats,
-  };
 }

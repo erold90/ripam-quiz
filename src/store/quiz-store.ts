@@ -4,20 +4,17 @@ import { Quiz, SimulazioneRisposta, StatisticheMateria, QuizLeitnerState } from 
 import { updateQuizLeitnerState } from '@/lib/leitner';
 
 interface QuizStore {
-  // Stato utente (per ora locale, poi sincronizzato con Supabase)
-  userId: string | null;
-  isLoggedIn: boolean;
-
-  // Statistiche locali
+  // Dati da Supabase (caricati on mount, aggiornati per ogni azione)
   statsPerMateria: Record<string, StatisticheMateria>;
   quizCompletati: Set<string>;
   quizSbagliati: Set<string>;
   simulazioniCount: number;
+  dataLoaded: boolean;
 
-  // Leitner Adattivo
+  // Leitner Adattivo (persistito in localStorage come ottimizzazione locale)
   leitnerStates: Record<string, QuizLeitnerState>;
 
-  // Stato sessione corrente
+  // Stato sessione corrente (in-memory, non persistito)
   sessioneAttiva: boolean;
   materiaCorrente: string | null;
   quizCorrente: Quiz | null;
@@ -26,22 +23,15 @@ interface QuizStore {
   mostraSoluzione: boolean;
   tempoInizio: number;
 
-  // Stato simulazione
+  // Stato simulazione (in-memory)
   simulazioneAttiva: boolean;
   quizSimulazione: Array<Quiz & { materia: string }>;
   risposteSimulazione: SimulazioneRisposta[];
   tempoRimanente: number;
   simulazioneCompletata: boolean;
 
-  // Theme
+  // Theme (persistito)
   darkMode: boolean;
-
-  // Flag migrazione
-  dataMigrated: boolean;
-
-  // Azioni
-  setUserId: (id: string | null) => void;
-  setLoggedIn: (value: boolean) => void;
 
   // Azioni quiz
   iniziaQuiz: (materia: string, quiz: Quiz[]) => void;
@@ -66,15 +56,6 @@ interface QuizStore {
   updateLeitnerFromSimulazione: (risposte: SimulazioneRisposta[]) => void;
   updateLeitnerSingle: (quizId: string, materia: string, corretto: boolean) => void;
 
-  // Azione migrazione
-  setDataFromMigration: (data: {
-    statsPerMateria: Record<string, StatisticheMateria>;
-    quizCompletati: string[];
-    quizSbagliati: string[];
-    leitnerStates: Record<string, QuizLeitnerState>;
-    simulazioniCount: number;
-  }) => void;
-
   // Theme
   toggleDarkMode: () => void;
 }
@@ -82,14 +63,15 @@ interface QuizStore {
 export const useQuizStore = create<QuizStore>()(
   persist(
     (set, get) => ({
-      // Stato iniziale
-      userId: null,
-      isLoggedIn: false,
+      // Stato iniziale - dati da Supabase
       statsPerMateria: {},
       quizCompletati: new Set(),
       quizSbagliati: new Set(),
       simulazioniCount: 0,
+      dataLoaded: false,
       leitnerStates: {},
+
+      // Stato sessione
       sessioneAttiva: false,
       materiaCorrente: null,
       quizCorrente: null,
@@ -97,17 +79,16 @@ export const useQuizStore = create<QuizStore>()(
       rispostaSelezionata: null,
       mostraSoluzione: false,
       tempoInizio: 0,
+
+      // Stato simulazione
       simulazioneAttiva: false,
       quizSimulazione: [],
       risposteSimulazione: [],
       tempoRimanente: 60 * 60,
       simulazioneCompletata: false,
-      darkMode: false,
-      dataMigrated: false,
 
-      // Azioni utente
-      setUserId: (id) => set({ userId: id }),
-      setLoggedIn: (value) => set({ isLoggedIn: value }),
+      // Theme
+      darkMode: false,
 
       // Azioni quiz
       iniziaQuiz: (materia, quiz) => set({
@@ -129,7 +110,7 @@ export const useQuizStore = create<QuizStore>()(
         const rispostaCorretta = state.quizCorrente.risposte.find(r => r.corretta);
         const isCorretta = rispostaCorretta?.id === state.rispostaSelezionata;
 
-        // Aggiorna statistiche
+        // Aggiorna statistiche locali
         if (state.materiaCorrente) {
           get().aggiornaStatistiche(state.materiaCorrente, isCorretta);
         }
@@ -270,7 +251,6 @@ export const useQuizStore = create<QuizStore>()(
         quizSbagliati: new Set(),
         leitnerStates: {},
         simulazioniCount: 0,
-        dataMigrated: false,
       }),
 
       // Azioni Leitner
@@ -306,39 +286,16 @@ export const useQuizStore = create<QuizStore>()(
         set({ leitnerStates: newLeitnerStates });
       },
 
-      // Azione migrazione dati
-      setDataFromMigration: (data) => {
-        set({
-          statsPerMateria: data.statsPerMateria,
-          quizCompletati: new Set(data.quizCompletati),
-          quizSbagliati: new Set(data.quizSbagliati),
-          leitnerStates: data.leitnerStates,
-          simulazioniCount: data.simulazioniCount,
-          dataMigrated: true,
-        });
-      },
-
       toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
     }),
     {
       name: 'ripam-quiz-v2',
+      // Persisti SOLO preferenze locali (darkMode, leitnerStates)
+      // Stats e progressi vengono SEMPRE da Supabase
       partialize: (state) => ({
-        userId: state.userId,
-        isLoggedIn: state.isLoggedIn,
-        statsPerMateria: state.statsPerMateria,
-        quizCompletati: Array.from(state.quizCompletati),
-        quizSbagliati: Array.from(state.quizSbagliati),
         leitnerStates: state.leitnerStates,
-        simulazioniCount: state.simulazioniCount,
         darkMode: state.darkMode,
-        dataMigrated: state.dataMigrated,
       }),
-      onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.quizCompletati = new Set(state.quizCompletati as unknown as string[]);
-          state.quizSbagliati = new Set(state.quizSbagliati as unknown as string[]);
-        }
-      },
     }
   )
 );

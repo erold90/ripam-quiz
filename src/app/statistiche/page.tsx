@@ -9,6 +9,8 @@ import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
 import { getQuizIndex } from '@/lib/quiz-loader';
+import { deleteAllUserData, SARA_USER_ID } from '@/lib/supabase';
+import { loadAllFromSupabase } from '@/lib/cloud-sync';
 import { QuizIndex } from '@/types/quiz';
 import {
   ArrowLeft,
@@ -128,7 +130,11 @@ export default function StatistichePage() {
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                  <Button variant="destructive" onClick={resetStatistiche}>
+                  <Button variant="destructive" onClick={async () => {
+                    resetStatistiche();
+                    await deleteAllUserData(SARA_USER_ID);
+                    loadAllFromSupabase();
+                  }}>
                     Conferma Reset
                   </Button>
                 </DialogFooter>

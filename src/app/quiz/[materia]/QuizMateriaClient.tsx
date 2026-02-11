@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, use } from 'react';
+import { useEffect, useState, useCallback, useRef, use } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,6 @@ import { useQuizStore } from '@/store/quiz-store';
 import { getQuizByMateria, getQuizIndex } from '@/lib/quiz-loader';
 import { Quiz, MateriaData, Materia } from '@/types/quiz';
 import { ArrowLeft, GraduationCap, RotateCcw, CheckCircle2 } from 'lucide-react';
-import { useAuth } from '@/components/Providers';
 import { syncQuizAnswer } from '@/lib/cloud-sync';
 
 interface QuizMateriaClientProps {
@@ -30,6 +29,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
   const [loading, setLoading] = useState(true);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionStats, setSessionStats] = useState({ corrette: 0, totale: 0 });
+  const tempoInizioRef = useRef(Date.now());
 
   const {
     rispostaSelezionata,
@@ -42,7 +42,6 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     statsPerMateria,
     updateLeitnerSingle,
   } = useQuizStore();
-  const { user } = useAuth();
 
   useEffect(() => {
     if (darkMode) {
@@ -86,26 +85,27 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
 
     const rispostaCorretta = currentQuiz.risposte.find(r => r.corretta);
     const isCorretta = rispostaCorretta?.id === rispostaSelezionata;
+    const tempoMs = Date.now() - tempoInizioRef.current;
 
     setSessionStats(prev => ({
       corrette: prev.corrette + (isCorretta ? 1 : 0),
       totale: prev.totale + 1,
     }));
 
-    // Aggiorna stato Leitner
+    // Aggiorna stato Leitner locale
     updateLeitnerSingle(currentQuiz.id, materiaId, isCorretta);
 
-    // Salva su cloud (fire-and-forget)
-    if (user) {
-      syncQuizAnswer(user.id, currentQuiz.id, materiaId, rispostaSelezionata, isCorretta, Date.now() - Date.now());
-    }
+    // Salva su Supabase (awaited)
+    syncQuizAnswer(currentQuiz.id, materiaId, rispostaSelezionata, isCorretta, tempoMs);
 
+    // Aggiorna store locale
     confermaRisposta();
-  }, [currentQuiz, rispostaSelezionata, confermaRisposta, updateLeitnerSingle, materiaId, user]);
+  }, [currentQuiz, rispostaSelezionata, confermaRisposta, updateLeitnerSingle, materiaId]);
 
   const handleProssimo = useCallback(() => {
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex(prev => prev + 1);
+      tempoInizioRef.current = Date.now();
       prossimoQuiz();
     } else {
       setSessionComplete(true);
@@ -118,6 +118,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     setCurrentIndex(0);
     setSessionComplete(false);
     setSessionStats({ corrette: 0, totale: 0 });
+    tempoInizioRef.current = Date.now();
     prossimoQuiz();
   }, [materiaData, prossimoQuiz]);
 
