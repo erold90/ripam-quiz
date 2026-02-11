@@ -329,7 +329,7 @@ export default function SimulazionePage() {
 
   const handleStartReview = useCallback((filter: 'all' | 'wrong') => {
     const indices = filter === 'wrong'
-      ? risposte.map((r, i) => r.corretto === false ? i : -1).filter(i => i !== -1)
+      ? risposte.map((r, i) => r.corretto !== true ? i : -1).filter(i => i !== -1)
       : Array.from({ length: quizList.length }, (_, i) => i);
     setReviewIndices(indices);
     setReviewCurrentIdx(0);
@@ -559,8 +559,8 @@ export default function SimulazionePage() {
                 <Button variant="outline" onClick={() => handleStartReview('all')} className="flex-1 gap-2">
                   <Eye className="h-4 w-4" /> Rivedi tutte
                 </Button>
-                <Button variant="outline" onClick={() => handleStartReview('wrong')} className="flex-1 gap-2" disabled={errate === 0}>
-                  <Filter className="h-4 w-4" /> Solo errate ({errate})
+                <Button variant="outline" onClick={() => handleStartReview('wrong')} className="flex-1 gap-2" disabled={errate + saltate === 0}>
+                  <Filter className="h-4 w-4" /> Da rivedere ({errate + saltate})
                 </Button>
               </div>
 
@@ -673,10 +673,10 @@ export default function SimulazionePage() {
                 </div>
               )}
 
-              {/* Spiegazione AI per risposte sbagliate */}
-              {userAnswer && !isCorrect && (
+              {/* Spiegazione AI per risposte sbagliate e saltate */}
+              {!isCorrect && (
                 <AiExplanation
-                  key={`review-${quiz.id}-${userAnswer}`}
+                  key={`review-${quiz.id}-${userAnswer ?? 'skip'}`}
                   quiz={quiz}
                   rispostaUtente={userAnswer}
                   materia={quiz.materia}

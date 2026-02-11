@@ -8,7 +8,7 @@ const AI_WORKER_URL = 'https://ripamquiz-ai.erold90.workers.dev';
 
 interface AiExplanationProps {
   quiz: Quiz;
-  rispostaUtente: string;
+  rispostaUtente: string | null;
   materia: string;
 }
 

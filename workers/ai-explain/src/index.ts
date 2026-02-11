@@ -6,13 +6,13 @@ interface Env {
 interface ExplainRequest {
   domanda: string;
   risposte: Array<{ id: string; testo: string; corretta: boolean; efficacia?: string }>;
-  rispostaUtente: string;
+  rispostaUtente: string | null;
   materia: string;
 }
 
 const SYSTEM_PROMPT = `Sei un tutor esperto per il concorso pubblico RIPAM 3997 posti (Assistenti Amministrativi per la Pubblica Amministrazione italiana).
 
-Il tuo compito è spiegare BREVEMENTE perché la risposta data è sbagliata e perché quella corretta è giusta.
+Il tuo compito è spiegare BREVEMENTE perché la risposta corretta è giusta. Se l'utente ha dato una risposta sbagliata, spiega anche perché è sbagliata. Se l'utente ha saltato la domanda, spiega direttamente la risposta corretta.
 
 Regole:
 - Rispondi in italiano
@@ -50,7 +50,7 @@ export default {
     try {
       const body = (await request.json()) as ExplainRequest;
 
-      if (!body.domanda || !body.risposte || !body.rispostaUtente) {
+      if (!body.domanda || !body.risposte) {
         return new Response(JSON.stringify({ error: 'Missing fields' }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -58,13 +58,19 @@ export default {
       }
 
       const rispostaCorretta = body.risposte.find(r => r.corretta);
-      const rispostaData = body.risposte.find(r => r.id === body.rispostaUtente);
+      const rispostaData = body.rispostaUtente
+        ? body.risposte.find(r => r.id === body.rispostaUtente)
+        : null;
+
+      const rigaUtente = rispostaData
+        ? `Risposta data dall'utente (SBAGLIATA): ${rispostaData.id.toUpperCase()}) ${rispostaData.testo}`
+        : `L'utente NON ha risposto a questa domanda (saltata).`;
 
       const userPrompt = `Materia: ${body.materia.replace(/-/g, ' ')}
 
 Domanda: ${body.domanda}
 
-Risposta data dall'utente (SBAGLIATA): ${rispostaData?.id?.toUpperCase()}) ${rispostaData?.testo}
+${rigaUtente}
 Risposta corretta: ${rispostaCorretta?.id?.toUpperCase()}) ${rispostaCorretta?.testo}${rispostaCorretta?.efficacia ? ` (efficacia: ${rispostaCorretta.efficacia})` : ''}
 
 Spiega brevemente perché la risposta corretta è giusta.`;
