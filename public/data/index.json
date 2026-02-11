@@ -1,0 +1,136 @@
+{
+  "concorso": "RIPAM 3997 - AMM-13 Puglia",
+  "descrizione": "Quiz per la preparazione al concorso RIPAM 3997 posti - Profilo AMM-13 Puglia (141 posti)",
+  "versione": "2.1",
+  "ultimoAggiornamento": "2026-01-02",
+  "struttura_esame": {
+    "domande_totali": 40,
+    "tempo_minuti": 60,
+    "punteggio_max": 30,
+    "soglia_superamento": 21,
+    "punteggi": {
+      "corretta": 0.75,
+      "errata": -0.25,
+      "non_data": 0
+    }
+  },
+  "materie": [
+    {
+      "id": "diritto-amministrativo",
+      "nome": "Diritto Amministrativo",
+      "file": "diritto-amministrativo.json",
+      "categoria": "comuni",
+      "domande_esame": 2,
+      "totaleQuiz": 2035,
+      "icona": "Scale"
+    },
+    {
+      "id": "diritto-penale",
+      "nome": "Diritto Penale",
+      "file": "diritto-penale.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "totaleQuiz": 700,
+      "icona": "Gavel"
+    },
+    {
+      "id": "trattamento-dati",
+      "nome": "Trattamento Dati / Privacy",
+      "file": "trattamento-dati.json",
+      "categoria": "comuni",
+      "domande_esame": 2,
+      "totaleQuiz": 722,
+      "icona": "ShieldCheck"
+    },
+    {
+      "id": "cad",
+      "nome": "Codice Amministrazione Digitale",
+      "file": "cad.json",
+      "categoria": "comuni",
+      "domande_esame": 2,
+      "totaleQuiz": 357,
+      "icona": "Monitor"
+    },
+    {
+      "id": "ordinamento",
+      "nome": "Ordinamento Amministrazioni",
+      "file": "ordinamento.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "totaleQuiz": 433,
+      "icona": "Building"
+    },
+    {
+      "id": "inglese",
+      "nome": "Lingua Inglese",
+      "file": "inglese.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "totaleQuiz": 1040,
+      "icona": "Globe"
+    },
+    {
+      "id": "informatica",
+      "nome": "Informatica",
+      "file": "informatica.json",
+      "categoria": "comuni",
+      "domande_esame": 1,
+      "totaleQuiz": 961,
+      "icona": "Laptop"
+    },
+    {
+      "id": "contabilita-stato",
+      "nome": "Contabilità di Stato",
+      "file": "contabilita-stato.json",
+      "categoria": "specifiche",
+      "domande_esame": 4,
+      "totaleQuiz": 892,
+      "icona": "Calculator"
+    },
+    {
+      "id": "diritto-ue",
+      "nome": "Diritto Unione Europea",
+      "file": "diritto-ue.json",
+      "categoria": "specifiche",
+      "domande_esame": 4,
+      "totaleQuiz": 1055,
+      "icona": "Flag"
+    },
+    {
+      "id": "pubblico-impiego",
+      "nome": "Pubblico Impiego",
+      "file": "pubblico-impiego.json",
+      "categoria": "specifiche",
+      "domande_esame": 4,
+      "totaleQuiz": 935,
+      "icona": "Users"
+    },
+    {
+      "id": "contratti-pubblici",
+      "nome": "Contratti Pubblici",
+      "file": "contratti-pubblici.json",
+      "categoria": "specifiche",
+      "domande_esame": 3,
+      "totaleQuiz": 874,
+      "icona": "MessageCircle"
+    },
+    {
+      "id": "logica",
+      "nome": "Logica",
+      "file": "logica.json",
+      "categoria": "logica",
+      "domande_esame": 7,
+      "totaleQuiz": 1104,
+      "icona": "Brain"
+    },
+    {
+      "id": "situazionali",
+      "nome": "Quiz Situazionali",
+      "file": "situazionali.json",
+      "categoria": "situazionali",
+      "domande_esame": 8,
+      "totaleQuiz": 1024,
+      "icona": "Brain"
+    }
+  ]
+}

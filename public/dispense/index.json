@@ -1,0 +1,121 @@
+{
+  "versione": "2.0",
+  "ultimoAggiornamento": "2026-01-17",
+  "dispense": [
+    {
+      "id": "diritto-ue",
+      "titolo": "Diritto dell'Unione Europea",
+      "descrizione": "Guida completa: storia, istituzioni, competenze, atti e cittadinanza europea",
+      "fonte": "european-union.europa.eu",
+      "icona": "Flag",
+      "colore": "blue",
+      "capitoli": [
+        {
+          "id": "principi-valori",
+          "titolo": "Principi e Valori dell'UE",
+          "sommario": "Art. 2 TUE, Carta dei diritti fondamentali, principi di funzionamento"
+        },
+        {
+          "id": "storia-trattati",
+          "titolo": "Storia e Trattati Fondamentali",
+          "sommario": "Dal Trattato di Roma a Lisbona, i 27 Stati membri"
+        },
+        {
+          "id": "istituzioni",
+          "titolo": "Le 7 Istituzioni Europee",
+          "sommario": "Art. 13 TUE: Parlamento, Consiglio europeo, Consiglio, Commissione, Corte, BCE, Corte dei conti"
+        },
+        {
+          "id": "competenze",
+          "titolo": "Le Competenze dell'UE",
+          "sommario": "Competenze esclusive, concorrenti e di sostegno (artt. 2-6 TFUE)"
+        },
+        {
+          "id": "atti-giuridici",
+          "titolo": "Gli Atti Giuridici dell'UE",
+          "sommario": "Regolamenti, direttive, decisioni, raccomandazioni, pareri"
+        },
+        {
+          "id": "cittadinanza",
+          "titolo": "Cittadinanza e Liberta' Fondamentali",
+          "sommario": "Diritti dei cittadini UE, quattro liberta' di circolazione"
+        }
+      ]
+    },
+    {
+      "id": "contabilita-stato",
+      "titolo": "Contabilita' di Stato",
+      "descrizione": "La L. 196/2009: programmazione finanziaria, bilancio, controlli",
+      "fonte": "L. 196/2009 - Legge di contabilita' e finanza pubblica",
+      "icona": "Coins",
+      "colore": "green",
+      "capitoli": [
+        {
+          "id": "principi-generali",
+          "titolo": "Principi Generali della Contabilita'",
+          "sommario": "Art. 81 Cost., principi contabili, armonizzazione dei bilanci"
+        },
+        {
+          "id": "ciclo-bilancio",
+          "titolo": "Il Ciclo del Bilancio",
+          "sommario": "DEF, Nota di aggiornamento, Legge di bilancio, rendiconto"
+        },
+        {
+          "id": "struttura-bilancio",
+          "titolo": "Struttura del Bilancio dello Stato",
+          "sommario": "Missioni, programmi, UPB, classificazione economica"
+        },
+        {
+          "id": "fasi-spesa",
+          "titolo": "Le Fasi della Spesa Pubblica",
+          "sommario": "Impegno, liquidazione, ordinazione, pagamento"
+        },
+        {
+          "id": "controlli",
+          "titolo": "I Controlli sulla Finanza Pubblica",
+          "sommario": "RGS, Corte dei conti, controllo di regolarita' e gestione"
+        }
+      ]
+    },
+    {
+      "id": "pubblico-impiego",
+      "titolo": "Pubblico Impiego",
+      "descrizione": "Il D.Lgs. 165/2001 (TUPI): accesso, diritti, doveri, responsabilita'",
+      "fonte": "D.Lgs. 165/2001 - Testo Unico Pubblico Impiego",
+      "icona": "BadgeCheck",
+      "colore": "purple",
+      "capitoli": [
+        {
+          "id": "fondamenti",
+          "titolo": "Fondamenti del Pubblico Impiego",
+          "sommario": "Evoluzione normativa, privatizzazione, fonti del rapporto"
+        },
+        {
+          "id": "accesso-impiego",
+          "titolo": "Accesso al Pubblico Impiego",
+          "sommario": "Concorso pubblico, requisiti, contratto individuale"
+        },
+        {
+          "id": "diritti-doveri",
+          "titolo": "Diritti e Doveri del Dipendente",
+          "sommario": "Orario di lavoro, ferie, codice di comportamento"
+        },
+        {
+          "id": "responsabilita-disciplinare",
+          "titolo": "Responsabilita' e Procedimento Disciplinare",
+          "sommario": "Sanzioni, procedimento, UPD, termini e garanzie"
+        },
+        {
+          "id": "contrattazione",
+          "titolo": "Contrattazione Collettiva e ARAN",
+          "sommario": "CCNL, contrattazione integrativa, ruolo dell'ARAN"
+        },
+        {
+          "id": "dirigenza",
+          "titolo": "La Dirigenza Pubblica",
+          "sommario": "Accesso, incarichi, valutazione, responsabilita' dirigenziale"
+        }
+      ]
+    }
+  ]
+}
