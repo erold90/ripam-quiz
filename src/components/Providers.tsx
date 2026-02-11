@@ -94,7 +94,16 @@ function AuthProvider({ children }: { children: ReactNode }) {
           useQuizStore.setState({ userId: u.id, isLoggedIn: true });
           syncFromCloud(u.id);
         } else {
-          useQuizStore.setState({ userId: null, isLoggedIn: false });
+          // Logout: pulisci dati utente dallo store
+          useQuizStore.setState({
+            userId: null,
+            isLoggedIn: false,
+            statsPerMateria: {},
+            quizCompletati: new Set(),
+            quizSbagliati: new Set(),
+            leitnerStates: {},
+            simulazioniCount: 0,
+          });
           setSynced(false);
         }
       }
