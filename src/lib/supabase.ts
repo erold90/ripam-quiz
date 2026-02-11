@@ -38,14 +38,14 @@ export async function saveProgress(
 export async function loadUserData(userId: string) {
   // Supabase ritorna max 1000 righe per default - paginazione necessaria
   const PAGE_SIZE = 1000;
-  const allData: Array<{ quiz_id: string; corretto: boolean | null }> = [];
+  const allData: Array<{ quiz_id: string; corretto: boolean | null; materia: string }> = [];
   let offset = 0;
   let hasMore = true;
 
   while (hasMore) {
     const { data, error } = await supabase
       .from('user_progress')
-      .select('quiz_id,corretto')
+      .select('quiz_id,corretto,materia')
       .eq('user_id', userId)
       .range(offset, offset + PAGE_SIZE - 1);
 

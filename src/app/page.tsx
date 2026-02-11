@@ -178,8 +178,9 @@ export default function Home() {
   }, [leitnerStates, totalQuizCount]);
 
   const totalTracked = leitnerCounts.reduce((acc, c) => acc + c.count, 0);
+  const nuoveCount = leitnerCounts.find(c => c.boxes.includes(0))?.count || 0;
   const progressoApprendimento = totalTracked > 0
-    ? Math.round((leitnerCounts[0].count / totalTracked) * 100)
+    ? Math.round(((totalTracked - nuoveCount) / totalTracked) * 100)
     : 0;
 
   // Materia piu debole

@@ -92,6 +92,27 @@ export async function loadAllFromSupabase() {
       }
     }
 
+    // Ricostruisci leitner states da Supabase per quiz senza stato locale
+    const currentLeitner = useQuizStore.getState().leitnerStates;
+    const newLeitnerStates = { ...currentLeitner };
+    let leitnerReconstructed = 0;
+
+    for (const p of progress) {
+      if (!newLeitnerStates[p.quiz_id] && p.materia && p.corretto !== null) {
+        leitnerReconstructed++;
+        newLeitnerStates[p.quiz_id] = {
+          quizId: p.quiz_id,
+          materia: p.materia,
+          box: p.corretto ? 2 : 1,
+          totalAttempts: 1,
+          totalCorrect: p.corretto ? 1 : 0,
+          consecutiveCorrect: p.corretto ? 1 : 0,
+          lastAttemptAt: Date.now() - 86400000,
+          nextReviewAt: Date.now(),
+        };
+      }
+    }
+
     // Stats per materia dal cloud (filtra chiavi invalide come __quiz_attempts__)
     const rawStats = stats?.stats_per_materia || {};
     const statsPerMateria: Record<string, StatisticheMateria> = {};
@@ -107,10 +128,12 @@ export async function loadAllFromSupabase() {
       statsPerMateria,
       simulazioniCount: simulazioni.length,
       dataLoaded: true,
+      ...(leitnerReconstructed > 0 ? { leitnerStates: newLeitnerStates } : {}),
     });
 
     console.log('[Sync] Dati caricati da Supabase:', {
       quiz: quizCompletati.size,
+      leitnerReconstructed,
       simulazioni: simulazioni.length,
       materie: Object.keys(statsPerMateria).length,
     });

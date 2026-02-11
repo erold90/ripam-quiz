@@ -125,59 +125,105 @@ export async function generaQuizSimulazione(
 }
 
 /**
- * Genera quiz per studio di una materia con ordinamento intelligente.
- * Ordine: mai viste → sbagliate → in apprendimento → corrette → consolidate.
- * Le domande MASTERED vengono messe alla fine (non escluse, è allenamento).
+ * Conta i quiz per categoria (per la schermata pre-studio).
+ */
+export async function countQuizByCategory(
+  materiaId: string,
+  quizCompletati: Set<string>,
+  quizSbagliati: Set<string>,
+  leitnerStates: Record<string, QuizLeitnerState>
+): Promise<{ total: number; unseen: number; wrong: number; review: number; mastered: number }> {
+  const data = await getQuizByMateria(materiaId);
+  const counts = { total: data.quiz.length, unseen: 0, wrong: 0, review: 0, mastered: 0 };
+
+  for (const q of data.quiz) {
+    if (!quizCompletati.has(q.id)) {
+      counts.unseen++;
+    } else if (quizSbagliati.has(q.id)) {
+      counts.wrong++;
+    } else {
+      const lState = leitnerStates[q.id];
+      if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) {
+        counts.mastered++;
+      } else {
+        counts.review++;
+      }
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * Genera quiz per studio di una materia con filtri e limite.
+ * Filtri: all (ordinamento PWAS), unseen, wrong, review.
+ * Limit: numero massimo di domande per la sessione.
  */
 export async function generaQuizStudio(
   materiaId: string,
   leitnerStates: Record<string, QuizLeitnerState>,
   quizCompletati: Set<string>,
   quizSbagliati: Set<string>,
-  soloErrori?: boolean
+  filter: 'all' | 'unseen' | 'wrong' | 'review' = 'all',
+  limit?: number
 ): Promise<Quiz[]> {
   const data = await getQuizByMateria(materiaId);
-  const now = Date.now();
+  let filtered: Quiz[];
 
-  if (soloErrori) {
-    // Filtra solo quelli sbagliati
-    const quiz = data.quiz.filter(q => quizSbagliati.has(q.id));
-    shuffleArray(quiz);
-    return quiz;
+  switch (filter) {
+    case 'unseen':
+      filtered = data.quiz.filter(q => !quizCompletati.has(q.id));
+      shuffleArray(filtered);
+      break;
+
+    case 'wrong':
+      filtered = data.quiz.filter(q => quizSbagliati.has(q.id));
+      shuffleArray(filtered);
+      break;
+
+    case 'review':
+      filtered = data.quiz.filter(q => {
+        if (!quizCompletati.has(q.id)) return false;
+        if (quizSbagliati.has(q.id)) return false;
+        const lState = leitnerStates[q.id];
+        if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) return false;
+        return true;
+      });
+      shuffleArray(filtered);
+      break;
+
+    case 'all':
+    default: {
+      const tiers: Record<string, Quiz[]> = {
+        unseen: [], wrong: [], learning: [],
+        correct: [], consolidated: [], mastered: [],
+      };
+
+      for (const q of data.quiz) {
+        const lState = leitnerStates[q.id] || null;
+        const isCompleted = quizCompletati.has(q.id);
+        const isWrong = quizSbagliati.has(q.id);
+        const category = categorizeQuiz(lState, isCompleted, isWrong);
+        tiers[category].push(q);
+      }
+
+      for (const tier of Object.values(tiers)) {
+        shuffleArray(tier);
+      }
+
+      filtered = [
+        ...tiers.unseen, ...tiers.wrong, ...tiers.learning,
+        ...tiers.correct, ...tiers.consolidated, ...tiers.mastered,
+      ];
+      break;
+    }
   }
 
-  // Categorizza e ordina per priorità
-  const tiers: Record<string, Quiz[]> = {
-    unseen: [],
-    wrong: [],
-    learning: [],
-    correct: [],
-    consolidated: [],
-    mastered: [],
-  };
-
-  for (const q of data.quiz) {
-    const lState = leitnerStates[q.id] || null;
-    const isCompleted = quizCompletati.has(q.id);
-    const isWrong = quizSbagliati.has(q.id);
-    const category = categorizeQuiz(lState, isCompleted, isWrong);
-    tiers[category].push(q);
+  if (limit && limit < filtered.length) {
+    filtered = filtered.slice(0, limit);
   }
 
-  // Mescola dentro ogni tier per varietà
-  for (const tier of Object.values(tiers)) {
-    shuffleArray(tier);
-  }
-
-  // Concatena in ordine di priorità (unseen prima, mastered ultima)
-  return [
-    ...tiers.unseen,
-    ...tiers.wrong,
-    ...tiers.learning,
-    ...tiers.correct,
-    ...tiers.consolidated,
-    ...tiers.mastered,
-  ];
+  return filtered;
 }
 
 // Utility per mescolare array
