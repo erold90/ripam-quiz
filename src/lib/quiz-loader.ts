@@ -188,17 +188,35 @@ function shuffleArray<T>(array: T[]): void {
   }
 }
 
-// Calcola punteggio simulazione
+/**
+ * Calcola punteggio simulazione secondo le regole ufficiali del bando RIPAM.
+ *
+ * Conoscenze + Logica (32 domande):
+ *   - Corretta: +0,75 | Errata: -0,25 | Non data: 0
+ *
+ * Situazionali (8 domande):
+ *   - Più efficace: +0,75 | Neutra: +0,375 | Meno efficace: 0
+ *   (NESSUNA penalità per risposta errata)
+ */
 export function calcolaPunteggio(
-  risposte: Array<{ corretto: boolean | null }>
+  risposte: Array<{ corretto: boolean | null; materia: string }>
 ): number {
   let punteggio = 0;
 
   for (const risposta of risposte) {
+    const isSituazionale = risposta.materia === 'situazionali';
+
     if (risposta.corretto === true) {
       punteggio += 0.75;
     } else if (risposta.corretto === false) {
-      punteggio -= 0.25;
+      if (isSituazionale) {
+        // Situazionali: risposta errata = 0 punti (NO penalità)
+        // Il bando prevede +0.375 per "neutra" ma i dati non distinguono
+        // tra neutra e meno efficace, quindi applichiamo 0
+      } else {
+        // Conoscenze + Logica: risposta errata = -0.25
+        punteggio -= 0.25;
+      }
     }
     // null = non risposto = 0 punti
   }

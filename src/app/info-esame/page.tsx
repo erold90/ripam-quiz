@@ -103,27 +103,62 @@ export default function InfoEsamePage() {
             <CardTitle className="text-lg">Sistema di Punteggio</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-950">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
-                <div className="flex-1">
-                  <p className="font-medium">Risposta corretta</p>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide mb-2">
+                  Conoscenze + Logica (32 domande)
+                </h4>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-950">
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    <div className="flex-1">
+                      <p className="font-medium">Risposta esatta</p>
+                    </div>
+                    <Badge className="bg-green-600">+0,75</Badge>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-950">
+                    <XCircle className="h-5 w-5 text-red-600" />
+                    <div className="flex-1">
+                      <p className="font-medium">Risposta errata</p>
+                    </div>
+                    <Badge variant="destructive">-0,25</Badge>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                    <Minus className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex-1">
+                      <p className="font-medium">Mancata risposta</p>
+                    </div>
+                    <Badge variant="secondary">0</Badge>
+                  </div>
                 </div>
-                <Badge className="bg-green-600">+0,75</Badge>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-950">
-                <XCircle className="h-5 w-5 text-red-600" />
-                <div className="flex-1">
-                  <p className="font-medium">Risposta errata</p>
+              <div>
+                <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide mb-2">
+                  Quesiti Situazionali (8 domande)
+                </h4>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-950">
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    <div className="flex-1">
+                      <p className="font-medium">Risposta più efficace</p>
+                    </div>
+                    <Badge className="bg-green-600">+0,75</Badge>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-950">
+                    <Minus className="h-5 w-5 text-yellow-600" />
+                    <div className="flex-1">
+                      <p className="font-medium">Risposta neutra</p>
+                    </div>
+                    <Badge className="bg-yellow-600">+0,375</Badge>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                    <Minus className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex-1">
+                      <p className="font-medium">Risposta meno efficace</p>
+                    </div>
+                    <Badge variant="secondary">0</Badge>
+                  </div>
                 </div>
-                <Badge variant="destructive">-0,25</Badge>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-                <Minus className="h-5 w-5 text-muted-foreground" />
-                <div className="flex-1">
-                  <p className="font-medium">Risposta non data</p>
-                </div>
-                <Badge variant="secondary">0</Badge>
               </div>
             </div>
           </CardContent>
@@ -142,13 +177,13 @@ export default function InfoEsamePage() {
                 </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span>Diritto amministrativo</span><Badge variant="outline">2</Badge></div>
-                  <div className="flex justify-between"><span>Contratti pubblici</span><Badge variant="outline">1</Badge></div>
-                  <div className="flex justify-between"><span>Trattamento dati personali</span><Badge variant="outline">1</Badge></div>
+                  <div className="flex justify-between"><span>Contratti pubblici</span><Badge variant="outline">2</Badge></div>
+                  <div className="flex justify-between"><span>Trattamento dati / Privacy</span><Badge variant="outline">1</Badge></div>
                   <div className="flex justify-between"><span>Diritto penale (reati PA)</span><Badge variant="outline">1</Badge></div>
-                  <div className="flex justify-between"><span>Codice amministrazione digitale</span><Badge variant="outline">2</Badge></div>
-                  <div className="flex justify-between"><span>Ordinamento del lavoro</span><Badge variant="outline">1</Badge></div>
+                  <div className="flex justify-between"><span>Codice amministrazione digitale</span><Badge variant="outline">1</Badge></div>
+                  <div className="flex justify-between"><span>Ordinamento amministrazioni</span><Badge variant="outline">1</Badge></div>
                   <div className="flex justify-between"><span>Lingua inglese</span><Badge variant="outline">1</Badge></div>
-                  <div className="flex justify-between"><span>Competenze informatiche</span><Badge variant="outline">1</Badge></div>
+                  <div className="flex justify-between"><span>Informatica</span><Badge variant="outline">1</Badge></div>
                 </div>
               </div>
 

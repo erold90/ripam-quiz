@@ -222,11 +222,10 @@ export default function SimulazionePage() {
               </div>
 
               <div className="space-y-2 text-sm">
-                <h4 className="font-medium">Regole:</h4>
+                <h4 className="font-medium">Regole (da bando ufficiale):</h4>
                 <ul className="text-muted-foreground space-y-1">
-                  <li>• Risposta corretta: +0,75 punti</li>
-                  <li>• Risposta errata: -0,25 punti</li>
-                  <li>• Risposta non data: 0 punti</li>
+                  <li>• Conoscenze/Logica: +0,75 corretta | -0,25 errata | 0 non data</li>
+                  <li>• Situazionali: +0,75 efficace | +0,375 neutra | 0 meno efficace</li>
                   <li>• Soglia superamento: 21/30 punti</li>
                 </ul>
               </div>

@@ -8,10 +8,15 @@
     "tempo_minuti": 60,
     "punteggio_max": 30,
     "soglia_superamento": 21,
-    "punteggi": {
+    "punteggi_conoscenze_logica": {
       "corretta": 0.75,
       "errata": -0.25,
       "non_data": 0
+    },
+    "punteggi_situazionali": {
+      "piu_efficace": 0.75,
+      "neutra": 0.375,
+      "meno_efficace": 0
     }
   },
   "materie": [
@@ -38,7 +43,7 @@
       "nome": "Trattamento Dati / Privacy",
       "file": "trattamento-dati.json",
       "categoria": "comuni",
-      "domande_esame": 2,
+      "domande_esame": 1,
       "totaleQuiz": 722,
       "icona": "ShieldCheck"
     },
@@ -47,7 +52,7 @@
       "nome": "Codice Amministrazione Digitale",
       "file": "cad.json",
       "categoria": "comuni",
-      "domande_esame": 2,
+      "domande_esame": 1,
       "totaleQuiz": 357,
       "icona": "Monitor"
     },
@@ -83,7 +88,7 @@
       "nome": "Contabilità di Stato",
       "file": "contabilita-stato.json",
       "categoria": "specifiche",
-      "domande_esame": 4,
+      "domande_esame": 5,
       "totaleQuiz": 892,
       "icona": "Calculator"
     },
@@ -92,7 +97,7 @@
       "nome": "Diritto Unione Europea",
       "file": "diritto-ue.json",
       "categoria": "specifiche",
-      "domande_esame": 4,
+      "domande_esame": 5,
       "totaleQuiz": 1055,
       "icona": "Flag"
     },
@@ -101,7 +106,7 @@
       "nome": "Pubblico Impiego",
       "file": "pubblico-impiego.json",
       "categoria": "specifiche",
-      "domande_esame": 4,
+      "domande_esame": 5,
       "totaleQuiz": 935,
       "icona": "Users"
     },
@@ -109,8 +114,8 @@
       "id": "contratti-pubblici",
       "nome": "Contratti Pubblici",
       "file": "contratti-pubblici.json",
-      "categoria": "specifiche",
-      "domande_esame": 3,
+      "categoria": "comuni",
+      "domande_esame": 2,
       "totaleQuiz": 874,
       "icona": "MessageCircle"
     },
