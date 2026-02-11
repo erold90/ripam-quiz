@@ -10,11 +10,11 @@ import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
 import { generaQuizSimulazione, calcolaPunteggio, formatTempoRimanente } from '@/lib/quiz-loader';
 import { Quiz, SimulazioneRisposta } from '@/types/quiz';
-import { syncSimulazioneAnswer, syncSimulazione } from '@/lib/cloud-sync';
+import { syncSimulazioneAnswer, syncSimulazione, syncProgressOnly } from '@/lib/cloud-sync';
 import {
   Play, Trophy, XCircle, CheckCircle2, Clock, Target,
   ArrowLeft, Home, RotateCcw, GraduationCap, ChevronLeft,
-  ChevronRight, Square, Eye, Filter, Save, AlertTriangle,
+  ChevronRight, Square, Eye, Filter, AlertTriangle,
   Flag, Eraser,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,6 +25,7 @@ interface QuestionState {
   risposta: string | null;
   visited: boolean;
   flagged: boolean;
+  synced: boolean; // true = già sincronizzata su Supabase (evita duplicati stats)
 }
 
 // ========== Question Palette (during exam) ==========
@@ -168,15 +169,16 @@ export default function SimulazionePage() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [phase]);
 
-  // Sync helper
+  // Sync helper - durante l'esame salva SOLO il progresso (upsert safe)
+  // Le stats vengono aggiornate UNA sola volta alla terminazione
   const syncAnswerToDb = useCallback((index: number, rispostaId: string) => {
     const quiz = quizListRef.current[index];
     if (!quiz) return;
     const corretta = quiz.risposte.find(r => r.corretta);
     const isCorretta = corretta?.id === rispostaId;
-    syncSimulazioneAnswer(quiz.id, quiz.materia, rispostaId, isCorretta, Date.now() - tempoInizioRef.current);
-    if (isCorretta !== null) aggiornaStatistiche(quiz.materia, isCorretta);
-  }, [aggiornaStatistiche]);
+    // Solo saveProgress (upsert su user_id+quiz_id) - niente updateStats
+    syncProgressOnly(quiz.id, quiz.materia, rispostaId, isCorretta, Date.now() - tempoInizioRef.current);
+  }, []);
 
   // Computed results
   const currentAnswer = answers[currentIndex]?.risposta || null;
@@ -218,7 +220,7 @@ export default function SimulazionePage() {
     try {
       const quiz = await generaQuizSimulazione(leitnerStates, quizCompletati, quizSbagliati);
       setQuizList(quiz);
-      setAnswers(quiz.map((_, i) => ({ risposta: null, visited: i === 0, flagged: false })));
+      setAnswers(quiz.map((_, i) => ({ risposta: null, visited: i === 0, flagged: false, synced: false })));
       setCurrentIndex(0);
       setTempoRimanente(60 * 60);
       setTempoInizio(Date.now());
@@ -301,12 +303,26 @@ export default function SimulazionePage() {
 
   const handleTerminaExam = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
-    answersRef.current.forEach((a, i) => {
-      if (a.risposta) syncAnswerToDb(i, a.risposta);
+    const currentAnswers = answersRef.current;
+    const currentQuizList = quizListRef.current;
+
+    // Sync UNA volta per risposta: saveProgress (upsert) + updateStats (increment)
+    // + aggiornaStatistiche locale
+    currentAnswers.forEach((a, i) => {
+      if (!a.risposta) return;
+      const quiz = currentQuizList[i];
+      if (!quiz) return;
+      const corretta = quiz.risposte.find(r => r.corretta);
+      const isCorretta = corretta?.id === a.risposta;
+      // Supabase: progress (upsert) + stats (increment 1 volta)
+      syncSimulazioneAnswer(quiz.id, quiz.materia, a.risposta, isCorretta, Date.now() - tempoInizioRef.current);
+      // Locale: stats Zustand
+      aggiornaStatistiche(quiz.materia, isCorretta);
     });
+
     setShowTerminaConfirm(false);
     setPhase('results');
-  }, [syncAnswerToDb]);
+  }, [aggiornaStatistiche]);
 
   handleTerminaRef.current = handleTerminaExam;
 
@@ -319,13 +335,19 @@ export default function SimulazionePage() {
     setPhase('review');
   }, [risposte, quizList.length]);
 
-  const handleSave = useCallback(async () => {
-    const tempoTotaleMs = (60 * 60 - tempoRimanente) * 1000;
-    await syncSimulazione(punteggio, tempoTotaleMs, risposte);
-    updateLeitnerFromSimulazione(risposte);
-    incrementSimulazioni();
-    setSaved(true);
-  }, [tempoRimanente, punteggio, risposte, updateLeitnerFromSimulazione, incrementSimulazioni]);
+  // Auto-save simulazione quando si entra in fase risultati
+  const tempoRimanenteRef = useRef(tempoRimanente);
+  tempoRimanenteRef.current = tempoRimanente;
+
+  useEffect(() => {
+    if (phase === 'results' && !saved && risposte.length > 0) {
+      const tempoTotaleMs = (60 * 60 - tempoRimanenteRef.current) * 1000;
+      syncSimulazione(punteggio, tempoTotaleMs, risposte);
+      updateLeitnerFromSimulazione(risposte);
+      incrementSimulazioni();
+      setSaved(true);
+    }
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ===== INTRO =====
   if (phase === 'intro') {
@@ -541,15 +563,9 @@ export default function SimulazionePage() {
                 </Button>
               </div>
 
-              {!saved ? (
-                <Button onClick={handleSave} className="w-full h-12 text-base gap-2 mb-4">
-                  <Save className="h-5 w-5" /> Salva Simulazione
-                </Button>
-              ) : (
-                <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 flex items-center justify-center gap-2 mb-4">
-                  <CheckCircle2 className="h-5 w-5" /> Simulazione salvata nello storico!
-                </div>
-              )}
+              <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 flex items-center justify-center gap-2 mb-4">
+                <CheckCircle2 className="h-5 w-5" /> {saved ? 'Simulazione salvata nello storico!' : 'Salvataggio in corso...'}
+              </div>
 
               <div className="flex gap-3">
                 <Button onClick={handleStart} variant="outline" className="flex-1 gap-2"><RotateCcw className="h-4 w-4" /> Nuova</Button>

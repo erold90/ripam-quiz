@@ -47,6 +47,22 @@ export async function syncSimulazioneAnswer(
   }
 }
 
+// Salva solo il progresso senza incrementare stats (per uso durante simulazione)
+// saveProgress è upsert su user_id+quiz_id, quindi safe per chiamate ripetute
+export async function syncProgressOnly(
+  quizId: string,
+  materia: string,
+  rispostaData: string | null,
+  corretto: boolean | null,
+  tempoMs: number
+) {
+  try {
+    await saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs);
+  } catch (err) {
+    console.error('[Sync] Errore sync progress:', err);
+  }
+}
+
 // Salva simulazione completata su Supabase
 export async function syncSimulazione(
   punteggio: number,
