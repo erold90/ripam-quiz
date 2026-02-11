@@ -1,5 +1,5 @@
 import { QuizIndex, MateriaData, Quiz, QuizLeitnerState } from '@/types/quiz';
-import { calculateSelectionWeight, weightedRandomSample } from '@/lib/leitner';
+import { categorizeQuiz, calculateTierWeight, weightedRandomSample, QuizCategory } from '@/lib/leitner';
 
 let quizIndex: QuizIndex | null = null;
 const quizCache: Record<string, MateriaData> = {};
@@ -37,9 +37,27 @@ export async function getAllQuiz(): Promise<Record<string, Quiz[]>> {
   return allQuiz;
 }
 
-// Genera quiz per simulazione con selezione adattiva Leitner
+/**
+ * ALGORITMO PWAS (Priority-Weighted Adaptive Selection)
+ *
+ * Seleziona le domande per la simulazione con selezione a tier:
+ *   1. UNSEEN → domande mai tentate (massima priorità)
+ *   2. WRONG → domande sbagliate (da ripassare urgentemente)
+ *   3. LEARNING → domande in fase di apprendimento (box 3-4)
+ *   4. CORRECT → risposte giuste 1 volta (minima presenza)
+ *   5. CONSOLIDATED → box 5-6 (solo se pool esaurito)
+ *   6. MASTERED → box ≥6 + 2+ corrette consecutive → ESCLUSE
+ *
+ * Principi scientifici applicati:
+ *   - Regola dell'85% (Wilson 2019): punta a ~85% tasso di successo
+ *   - Spaced Repetition: priorità a domande overdue
+ *   - Interleaving: mescolamento finale tra materie
+ *   - Desirable Difficulties: mix calibrato di difficoltà
+ */
 export async function generaQuizSimulazione(
-  leitnerStates?: Record<string, QuizLeitnerState>
+  leitnerStates: Record<string, QuizLeitnerState>,
+  quizCompletati: Set<string>,
+  quizSbagliati: Set<string>
 ): Promise<Array<Quiz & { materia: string }>> {
   const index = await getQuizIndex();
   const quizSimulazione: Array<Quiz & { materia: string }> = [];
@@ -49,47 +67,117 @@ export async function generaQuizSimulazione(
     const data = await getQuizByMateria(materia.id);
     const nDomande = materia.domande_esame;
 
-    if (!leitnerStates || Object.keys(leitnerStates).length === 0) {
-      // Fallback: shuffle casuale (prima sessione in assoluto)
-      const quizMateria = [...data.quiz];
-      shuffleArray(quizMateria);
-      quizMateria.slice(0, nDomande).forEach(q => {
-        quizSimulazione.push({ ...q, materia: materia.id });
-      });
-    } else {
-      // Selezione pesata basata su Leitner
-      const weighted = data.quiz.map(q => ({
-        item: { ...q, materia: materia.id },
-        weight: calculateSelectionWeight(leitnerStates[q.id] || null, now),
-      }));
+    // Categorizza ogni domanda della materia
+    const tiers: Record<QuizCategory, Array<{ item: Quiz & { materia: string }; weight: number }>> = {
+      unseen: [],
+      wrong: [],
+      learning: [],
+      correct: [],
+      consolidated: [],
+      mastered: [], // Mai usato nella selezione
+    };
 
-      const selected = weightedRandomSample(weighted, nDomande);
-      quizSimulazione.push(...selected);
+    for (const q of data.quiz) {
+      const lState = leitnerStates[q.id] || null;
+      const isCompleted = quizCompletati.has(q.id);
+      const isWrong = quizSbagliati.has(q.id);
+
+      const category = categorizeQuiz(lState, isCompleted, isWrong);
+
+      // MASTERED → skip completamente
+      if (category === 'mastered') continue;
+
+      tiers[category].push({
+        item: { ...q, materia: materia.id },
+        weight: calculateTierWeight(lState, now, category),
+      });
     }
+
+    // Selezione a tier: riempi in ordine di priorità
+    const selected: Array<Quiz & { materia: string }> = [];
+    const tierOrder: QuizCategory[] = ['unseen', 'wrong', 'learning', 'correct', 'consolidated'];
+
+    for (const tierName of tierOrder) {
+      if (selected.length >= nDomande) break;
+
+      const tier = tiers[tierName];
+      if (tier.length === 0) continue;
+
+      const needed = nDomande - selected.length;
+
+      if (tier.length <= needed) {
+        // Prendi tutto dal tier
+        selected.push(...tier.map(t => t.item));
+      } else {
+        // Weighted random sample dal tier
+        const sampled = weightedRandomSample(tier, needed);
+        selected.push(...sampled);
+      }
+    }
+
+    quizSimulazione.push(...selected);
   }
 
-  // Mescola l'ordine finale
+  // Mescola l'ordine finale (interleaving tra materie)
   shuffleArray(quizSimulazione);
 
   return quizSimulazione;
 }
 
-// Genera quiz per studio di una materia (escludi quelli già fatti correttamente)
+/**
+ * Genera quiz per studio di una materia con ordinamento intelligente.
+ * Ordine: mai viste → sbagliate → in apprendimento → corrette → consolidate.
+ * Le domande MASTERED vengono messe alla fine (non escluse, è allenamento).
+ */
 export async function generaQuizStudio(
   materiaId: string,
-  quizGiaFatti?: Set<string>,
+  leitnerStates: Record<string, QuizLeitnerState>,
+  quizCompletati: Set<string>,
+  quizSbagliati: Set<string>,
   soloErrori?: boolean
 ): Promise<Quiz[]> {
   const data = await getQuizByMateria(materiaId);
-  let quiz = [...data.quiz];
+  const now = Date.now();
 
-  if (soloErrori && quizGiaFatti) {
-    // Filtra solo quelli già sbagliati
-    quiz = quiz.filter(q => quizGiaFatti.has(q.id));
+  if (soloErrori) {
+    // Filtra solo quelli sbagliati
+    const quiz = data.quiz.filter(q => quizSbagliati.has(q.id));
+    shuffleArray(quiz);
+    return quiz;
   }
 
-  shuffleArray(quiz);
-  return quiz;
+  // Categorizza e ordina per priorità
+  const tiers: Record<string, Quiz[]> = {
+    unseen: [],
+    wrong: [],
+    learning: [],
+    correct: [],
+    consolidated: [],
+    mastered: [],
+  };
+
+  for (const q of data.quiz) {
+    const lState = leitnerStates[q.id] || null;
+    const isCompleted = quizCompletati.has(q.id);
+    const isWrong = quizSbagliati.has(q.id);
+    const category = categorizeQuiz(lState, isCompleted, isWrong);
+    tiers[category].push(q);
+  }
+
+  // Mescola dentro ogni tier per varietà
+  for (const tier of Object.values(tiers)) {
+    shuffleArray(tier);
+  }
+
+  // Concatena in ordine di priorità (unseen prima, mastered ultima)
+  return [
+    ...tiers.unseen,
+    ...tiers.wrong,
+    ...tiers.learning,
+    ...tiers.correct,
+    ...tiers.consolidated,
+    ...tiers.mastered,
+  ];
 }
 
 // Utility per mescolare array

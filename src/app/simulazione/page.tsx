@@ -39,7 +39,7 @@ export default function SimulazionePage() {
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { darkMode, leitnerStates, updateLeitnerFromSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
+  const { darkMode, leitnerStates, quizCompletati, quizSbagliati, updateLeitnerFromSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
 
   useEffect(() => {
     if (darkMode) {
@@ -73,7 +73,7 @@ export default function SimulazionePage() {
   const handleStart = async () => {
     setLoading(true);
     try {
-      const quiz = await generaQuizSimulazione(leitnerStates);
+      const quiz = await generaQuizSimulazione(leitnerStates, quizCompletati, quizSbagliati);
       setQuizList(quiz);
       setCurrentIndex(0);
       setRisposte([]);

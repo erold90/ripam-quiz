@@ -24,7 +24,115 @@ const BOX_WEIGHT: Record<number, number> = {
   7: 5,    // Padroneggiata: minima priorità
 };
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+export const DAY_MS = 24 * 60 * 60 * 1000;
+
+// ===== CATEGORIZZAZIONE INTELLIGENTE =====
+
+export type QuizCategory = 'unseen' | 'wrong' | 'learning' | 'correct' | 'consolidated' | 'mastered';
+
+/**
+ * Categorizza un quiz in base allo stato Leitner e ai dati Supabase.
+ * Usato dall'algoritmo PWAS per la selezione a tier nelle simulazioni.
+ */
+export function categorizeQuiz(
+  lState: QuizLeitnerState | null,
+  isCompleted: boolean,
+  isWrong: boolean
+): QuizCategory {
+  // MASTERED: box >= 6, risposte corrette consecutive >= 2 → ESCLUSA
+  if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) {
+    return 'mastered';
+  }
+
+  // UNSEEN: mai tentata in nessun sistema
+  if (!isCompleted && !lState) {
+    return 'unseen';
+  }
+
+  // WRONG: sbagliata l'ultima volta (Supabase) o box 1-2 (Leitner)
+  if (isWrong || (lState && lState.box >= 1 && lState.box <= 2)) {
+    return 'wrong';
+  }
+
+  // LEARNING: box 3-4
+  if (lState && lState.box >= 3 && lState.box <= 4) {
+    return 'learning';
+  }
+
+  // CONSOLIDATED: box 5+ (ma non mastered, già filtrato sopra)
+  if (lState && lState.box >= 5) {
+    return 'consolidated';
+  }
+
+  // CORRECT: completata correttamente, senza stato Leitner avanzato
+  if (isCompleted && !isWrong) {
+    return 'correct';
+  }
+
+  // Fallback: tratta come mai vista
+  return 'unseen';
+}
+
+/**
+ * Calcola il bonus overdue: quanto la domanda è in ritardo sulla revisione.
+ * > 1.0 = in ritardo (urgente), < 1.0 = non ancora il momento.
+ */
+export function getOverdueMultiplier(state: QuizLeitnerState, now: number): number {
+  const boxInterval = BOX_INTERVALS[state.box];
+  if (boxInterval === 0) {
+    // Box 0-1: sempre urgente, cresce col tempo
+    const daysSince = (now - state.lastAttemptAt) / DAY_MS;
+    return Math.max(1, 1 + daysSince * 0.3);
+  }
+  const overdueRatio = (now - state.lastAttemptAt) / (boxInterval * DAY_MS);
+  return Math.max(0.2, Math.min(2.5, overdueRatio));
+}
+
+/**
+ * Calcola il peso di selezione DENTRO un tier.
+ * Usato per decidere quali domande scegliere all'interno della stessa categoria.
+ */
+export function calculateTierWeight(
+  state: QuizLeitnerState | null,
+  now: number,
+  category: QuizCategory
+): number {
+  // Base weights per categoria (per varietà intra-tier)
+  switch (category) {
+    case 'unseen':
+      return 80 + Math.random() * 20; // 80-100, randomizzato per varietà
+
+    case 'wrong': {
+      if (!state) return 90;
+      const errorRate = state.totalAttempts > 0
+        ? 1 - (state.totalCorrect / state.totalAttempts)
+        : 0.5;
+      const overdue = getOverdueMultiplier(state, now);
+      return (70 + errorRate * 30) * overdue; // 70-200+
+    }
+
+    case 'learning': {
+      if (!state) return 40;
+      const overdue = getOverdueMultiplier(state, now);
+      return 40 * overdue; // 8-100
+    }
+
+    case 'correct':
+      return 10 + Math.random() * 5; // 10-15, basso
+
+    case 'consolidated': {
+      if (!state) return 5;
+      const overdue = getOverdueMultiplier(state, now);
+      return 5 * overdue; // 1-12.5
+    }
+
+    case 'mastered':
+      return 0; // Mai selezionata
+
+    default:
+      return 50;
+  }
+}
 
 /**
  * Aggiorna lo stato Leitner di un quiz dopo una risposta

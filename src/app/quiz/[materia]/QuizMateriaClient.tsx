@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { QuizCard } from '@/components/quiz/QuizCard';
 import { useQuizStore } from '@/store/quiz-store';
-import { getQuizByMateria, getQuizIndex } from '@/lib/quiz-loader';
+import { getQuizByMateria, getQuizIndex, generaQuizStudio } from '@/lib/quiz-loader';
 import { Quiz, MateriaData, Materia } from '@/types/quiz';
 import { ArrowLeft, GraduationCap, RotateCcw, CheckCircle2 } from 'lucide-react';
 import { syncQuizAnswer } from '@/lib/cloud-sync';
@@ -40,6 +40,9 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     terminaSessione,
     darkMode,
     statsPerMateria,
+    leitnerStates,
+    quizCompletati,
+    quizSbagliati,
     updateLeitnerSingle,
   } = useQuizStore();
 
@@ -62,9 +65,9 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
         const data = await getQuizByMateria(materiaId);
         setMateriaData(data);
 
-        // Mescola i quiz
-        const shuffled = [...data.quiz].sort(() => Math.random() - 0.5);
-        setQuizList(shuffled);
+        // Selezione intelligente: mai viste → sbagliate → in apprendimento → resto
+        const ordered = await generaQuizStudio(materiaId, leitnerStates, quizCompletati, quizSbagliati);
+        setQuizList(ordered);
       } catch (error) {
         console.error('Errore caricamento quiz:', error);
       } finally {
@@ -112,15 +115,15 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     }
   }, [currentIndex, quizList.length, prossimoQuiz]);
 
-  const handleRicomincia = useCallback(() => {
-    const shuffled = [...(materiaData?.quiz || [])].sort(() => Math.random() - 0.5);
-    setQuizList(shuffled);
+  const handleRicomincia = useCallback(async () => {
+    const ordered = await generaQuizStudio(materiaId, leitnerStates, quizCompletati, quizSbagliati);
+    setQuizList(ordered);
     setCurrentIndex(0);
     setSessionComplete(false);
     setSessionStats({ corrette: 0, totale: 0 });
     tempoInizioRef.current = Date.now();
     prossimoQuiz();
-  }, [materiaData, prossimoQuiz]);
+  }, [materiaId, leitnerStates, quizCompletati, quizSbagliati, prossimoQuiz]);
 
   if (loading) {
     return (
