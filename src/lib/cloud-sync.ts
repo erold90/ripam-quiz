@@ -59,6 +59,7 @@ export async function syncSimulazione(
       materia: r.materia,
       risposta_data: r.risposta_data,
       corretto: r.corretto,
+      efficacia: r.efficacia ?? null,
       tempo_ms: r.tempo_ms,
     }));
     await saveSimulazione(SARA_USER_ID, punteggio, tempoMs, risposteForDb);
