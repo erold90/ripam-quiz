@@ -97,13 +97,15 @@ export default function SimulazionePage() {
     quiz: Quiz & { materia: string },
     rispostaData: string | null,
     isCorretta: boolean | null,
-    tempoMs: number
+    tempoMs: number,
+    efficacia?: 'alta' | 'neutra' | 'bassa' | null
   ) => {
     const nuovaRisposta: SimulazioneRisposta = {
       quiz_id: quiz.id,
       materia: quiz.materia,
       risposta_data: rispostaData,
       corretto: isCorretta,
+      efficacia: efficacia ?? null,
       tempo_ms: tempoMs,
     };
 
@@ -124,7 +126,11 @@ export default function SimulazionePage() {
     const isCorretta = rispostaSelezionata ? rispostaCorretta?.id === rispostaSelezionata : null;
     const tempoMs = Date.now() - tempoInizio;
 
-    registraRisposta(quiz, rispostaSelezionata, isCorretta, tempoMs);
+    // Per situazionali: trova efficacia della risposta selezionata
+    const rispostaObj = rispostaSelezionata ? quiz.risposte.find(r => r.id === rispostaSelezionata) : null;
+    const efficacia = rispostaObj?.efficacia ?? null;
+
+    registraRisposta(quiz, rispostaSelezionata, isCorretta, tempoMs, efficacia);
 
     if (currentIndex < quizList.length - 1) {
       setCurrentIndex(prev => prev + 1);

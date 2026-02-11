@@ -4,6 +4,7 @@ export interface Risposta {
   id: string;
   testo: string;
   corretta: boolean;
+  efficacia?: 'alta' | 'neutra' | 'bassa';
 }
 
 export interface Quiz {
@@ -40,10 +41,15 @@ export interface QuizIndex {
     tempo_minuti: number;
     punteggio_max: number;
     soglia_superamento: number;
-    punteggi: {
+    punteggi_conoscenze_logica: {
       corretta: number;
       errata: number;
       non_data: number;
+    };
+    punteggi_situazionali: {
+      piu_efficace: number;
+      neutra: number;
+      meno_efficace: number;
     };
   };
   materie: Materia[];
@@ -96,6 +102,7 @@ export interface SimulazioneRisposta {
   materia: string;
   risposta_data: string | null;
   corretto: boolean | null;
+  efficacia?: 'alta' | 'neutra' | 'bassa' | null;
   tempo_ms: number;
 }
 

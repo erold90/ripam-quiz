@@ -199,7 +199,7 @@ function shuffleArray<T>(array: T[]): void {
  *   (NESSUNA penalità per risposta errata)
  */
 export function calcolaPunteggio(
-  risposte: Array<{ corretto: boolean | null; materia: string }>
+  risposte: Array<{ corretto: boolean | null; materia: string; efficacia?: 'alta' | 'neutra' | 'bassa' | null }>
 ): number {
   let punteggio = 0;
 
@@ -207,12 +207,15 @@ export function calcolaPunteggio(
     const isSituazionale = risposta.materia === 'situazionali';
 
     if (risposta.corretto === true) {
+      // Corretta / più efficace: +0.75
       punteggio += 0.75;
     } else if (risposta.corretto === false) {
       if (isSituazionale) {
-        // Situazionali: risposta errata = 0 punti (NO penalità)
-        // Il bando prevede +0.375 per "neutra" ma i dati non distinguono
-        // tra neutra e meno efficace, quindi applichiamo 0
+        // Situazionali: usa campo efficacia per punteggio graduato
+        if (risposta.efficacia === 'neutra') {
+          punteggio += 0.375;
+        }
+        // 'bassa' = 0 punti, nessuna penalità
       } else {
         // Conoscenze + Logica: risposta errata = -0.25
         punteggio -= 0.25;
