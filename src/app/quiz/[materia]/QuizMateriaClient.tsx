@@ -12,6 +12,8 @@ import { useQuizStore } from '@/store/quiz-store';
 import { getQuizByMateria, getQuizIndex } from '@/lib/quiz-loader';
 import { Quiz, MateriaData, Materia } from '@/types/quiz';
 import { ArrowLeft, GraduationCap, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '@/components/Providers';
+import { syncQuizAnswer } from '@/lib/cloud-sync';
 
 interface QuizMateriaClientProps {
   paramsPromise: Promise<{ materia: string }>;
@@ -40,6 +42,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     statsPerMateria,
     updateLeitnerSingle,
   } = useQuizStore();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (darkMode) {
@@ -92,8 +95,13 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     // Aggiorna stato Leitner
     updateLeitnerSingle(currentQuiz.id, materiaId, isCorretta);
 
+    // Salva su cloud (fire-and-forget)
+    if (user) {
+      syncQuizAnswer(user.id, currentQuiz.id, materiaId, rispostaSelezionata, isCorretta, Date.now() - Date.now());
+    }
+
     confermaRisposta();
-  }, [currentQuiz, rispostaSelezionata, confermaRisposta, updateLeitnerSingle, materiaId]);
+  }, [currentQuiz, rispostaSelezionata, confermaRisposta, updateLeitnerSingle, materiaId, user]);
 
   const handleProssimo = useCallback(() => {
     if (currentIndex < quizList.length - 1) {

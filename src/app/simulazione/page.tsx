@@ -11,6 +11,8 @@ import { SimulazioneCard } from '@/components/quiz/SimulazioneCard';
 import { useQuizStore } from '@/store/quiz-store';
 import { generaQuizSimulazione, calcolaPunteggio, formatTempoRimanente } from '@/lib/quiz-loader';
 import { Quiz, SimulazioneRisposta } from '@/types/quiz';
+import { useAuth } from '@/components/Providers';
+import { syncSimulazione } from '@/lib/cloud-sync';
 import {
   Play,
   Trophy,
@@ -39,6 +41,7 @@ export default function SimulazionePage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const { darkMode, leitnerStates, updateLeitnerFromSimulazione, incrementSimulazioni } = useQuizStore();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (darkMode) {
@@ -145,11 +148,17 @@ export default function SimulazionePage() {
     setPhase('completed');
   }, []);
 
-  // Aggiorna Leitner e incrementa contatore quando la simulazione è completata
+  // Aggiorna Leitner, incrementa contatore e salva su cloud quando la simulazione è completata
   useEffect(() => {
     if (phase === 'completed' && risposte.length > 0) {
       updateLeitnerFromSimulazione(risposte);
       incrementSimulazioni();
+
+      // Salva simulazione su cloud (fire-and-forget)
+      if (user) {
+        const tempoTotaleMs = (60 * 60 - tempoRimanente) * 1000;
+        syncSimulazione(user.id, calcolaPunteggio(risposte), tempoTotaleMs, risposte);
+      }
     }
   }, [phase]);
 
