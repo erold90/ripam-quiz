@@ -36,12 +36,30 @@ export async function saveProgress(
 }
 
 export async function loadUserData(userId: string) {
-  const { data, error } = await supabase
-    .from('user_progress')
-    .select('*')
-    .eq('user_id', userId);
+  // Supabase ritorna max 1000 righe per default - paginazione necessaria
+  const PAGE_SIZE = 1000;
+  const allData: Array<{ quiz_id: string; corretto: boolean | null }> = [];
+  let offset = 0;
+  let hasMore = true;
 
-  return { data, error };
+  while (hasMore) {
+    const { data, error } = await supabase
+      .from('user_progress')
+      .select('quiz_id,corretto')
+      .eq('user_id', userId)
+      .range(offset, offset + PAGE_SIZE - 1);
+
+    if (error) return { data: null, error };
+    if (!data || data.length === 0) {
+      hasMore = false;
+    } else {
+      allData.push(...data);
+      offset += PAGE_SIZE;
+      if (data.length < PAGE_SIZE) hasMore = false;
+    }
+  }
+
+  return { data: allData, error: null };
 }
 
 export async function getUserProgress(userId: string) {

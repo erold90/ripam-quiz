@@ -150,9 +150,9 @@ export default function Home() {
     loadData();
   }, []);
 
-  // Statistiche globali
-  const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + s.totale, 0);
-  const totaleCorrette = Object.values(statsPerMateria).reduce((acc, s) => acc + s.corrette, 0);
+  // Statistiche globali (safe: filtra valori senza totale)
+  const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.totale || 0), 0);
+  const totaleCorrette = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.corrette || 0), 0);
   const percentualeGlobale = totaleRisposte > 0 ? Math.round((totaleCorrette / totaleRisposte) * 100) : 0;
 
   // Calcolo categorie Leitner

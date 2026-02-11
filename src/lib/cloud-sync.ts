@@ -91,8 +91,13 @@ export async function loadAllFromSupabase() {
       }
     }
 
-    // Stats per materia dal cloud
-    const statsPerMateria: Record<string, StatisticheMateria> = stats?.stats_per_materia || {};
+    // Stats per materia dal cloud (filtra chiavi invalide come __quiz_attempts__)
+    const rawStats = stats?.stats_per_materia || {};
+    const statsPerMateria: Record<string, StatisticheMateria> = {};
+    for (const [key, value] of Object.entries(rawStats)) {
+      if (key.startsWith('__') || !value || typeof (value as StatisticheMateria).totale !== 'number') continue;
+      statsPerMateria[key] = value as StatisticheMateria;
+    }
 
     // Aggiorna lo store Zustand
     useQuizStore.setState({

@@ -64,10 +64,10 @@ export default function StatistichePage() {
     loadData();
   }, []);
 
-  // Calcoli statistiche globali
-  const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + s.totale, 0);
-  const totaleCorrette = Object.values(statsPerMateria).reduce((acc, s) => acc + s.corrette, 0);
-  const totaleErrate = Object.values(statsPerMateria).reduce((acc, s) => acc + s.errate, 0);
+  // Calcoli statistiche globali (safe defaults per campi mancanti)
+  const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.totale || 0), 0);
+  const totaleCorrette = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.corrette || 0), 0);
+  const totaleErrate = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.errate || 0), 0);
   const percentualeGlobale = totaleRisposte > 0 ? Math.round((totaleCorrette / totaleRisposte) * 100) : 0;
 
   // Materie ordinate per performance
