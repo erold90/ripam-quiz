@@ -1,163 +1,142 @@
-import {
-  saveProgress,
-  updateStats,
-  saveSimulazione,
-  loadUserData,
-  getUserStats,
-  getUserSimulazioni,
-  SARA_USER_ID,
-} from '@/lib/supabase';
+// Sincronizzazione cross-device via Cloudflare Worker + KV.
+// Sostituisce il vecchio backend Supabase (dismesso: bannato/in pausa 2 volte).
+// localStorage resta la memoria AUTORITATIVA locale; questo modulo allinea i
+// dispositivi tra loro: ad ogni device il suo snapshot, il Worker fa il merge.
 import { useQuizStore } from '@/store/quiz-store';
-import type { SimulazioneRisposta, StatisticheMateria } from '@/types/quiz';
+import type { QuizLeitnerState, StatisticheMateria } from '@/types/quiz';
 
-// Salva singola risposta quiz su Supabase (awaited)
-export async function syncQuizAnswer(
-  quizId: string,
-  materia: string,
-  rispostaData: string | null,
-  corretto: boolean,
-  tempoMs: number
-) {
-  try {
-    await Promise.all([
-      saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs),
-      updateStats(SARA_USER_ID, materia, corretto, tempoMs),
-    ]);
-  } catch (err) {
-    console.error('[Sync] Errore sync quiz:', err);
-  }
+const SYNC_URL = process.env.NEXT_PUBLIC_SYNC_URL || 'https://ripam-sync.erold90.workers.dev';
+// Utente logico unico condiviso tra i dispositivi (Sara)
+const USER = 'f3eaf2d1-1b0f-43aa-9a37-b44a3fa27e65';
+
+interface ProgressEntry {
+  c: 0 | 1; // ultimo esito: 1 = corretta, 0 = sbagliata
+  m: string | null; // materia
+  t: number; // timestamp ultimo tentativo
 }
 
-// Salva risposta singola durante simulazione (solo user_progress, senza stats)
-export async function syncSimulazioneAnswer(
-  quizId: string,
-  materia: string,
-  rispostaData: string | null,
-  corretto: boolean | null,
-  tempoMs: number
-) {
-  try {
-    await saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs);
-    // Se ha risposto (non saltata), aggiorna anche le stats
-    if (corretto !== null) {
-      await updateStats(SARA_USER_ID, materia, corretto, tempoMs);
+interface CloudSnapshot {
+  progress: Record<string, ProgressEntry>;
+  leitner: Record<string, QuizLeitnerState>;
+  stats: Record<string, StatisticheMateria>;
+  simCount: number;
+  updatedAt: number;
+}
+
+// Costruisce lo snapshot del dispositivo dallo stato corrente dello store.
+function buildSnapshot(): CloudSnapshot {
+  const s = useQuizStore.getState();
+  const progress: Record<string, ProgressEntry> = {};
+  for (const id of s.quizCompletati) {
+    const l = s.leitnerStates[id];
+    progress[id] = {
+      c: s.quizSbagliati.has(id) ? 0 : 1,
+      m: l?.materia ?? null,
+      t: l?.lastAttemptAt ?? Date.now(),
+    };
+  }
+  return {
+    progress,
+    leitner: s.leitnerStates,
+    stats: s.statsPerMateria,
+    simCount: s.simulazioniCount,
+    updatedAt: Date.now(),
+  };
+}
+
+// Applica lo stato unificato ricevuto dal cloud facendo UNION col locale.
+function applyMerged(merged: CloudSnapshot) {
+  const s = useQuizStore.getState();
+  const quizCompletati = new Set(s.quizCompletati);
+  const quizSbagliati = new Set(s.quizSbagliati);
+  for (const [id, p] of Object.entries(merged.progress || {})) {
+    quizCompletati.add(id);
+    if (p.c === 0) quizSbagliati.add(id);
+    else quizSbagliati.delete(id);
+  }
+
+  const leitnerStates: Record<string, QuizLeitnerState> = { ...s.leitnerStates };
+  for (const [id, l] of Object.entries(merged.leitner || {})) {
+    const cur = leitnerStates[id];
+    if (!cur || (l.lastAttemptAt || 0) >= (cur.lastAttemptAt || 0)) leitnerStates[id] = l;
+  }
+
+  const statsPerMateria: Record<string, StatisticheMateria> = { ...s.statsPerMateria };
+  for (const [m, v] of Object.entries(merged.stats || {})) {
+    if (!statsPerMateria[m] || (v.totale || 0) >= (statsPerMateria[m].totale || 0)) {
+      statsPerMateria[m] = v;
     }
-  } catch (err) {
-    console.error('[Sync] Errore sync risposta simulazione:', err);
   }
+
+  useQuizStore.setState({
+    quizCompletati,
+    quizSbagliati,
+    leitnerStates,
+    statsPerMateria,
+    simulazioniCount: Math.max(s.simulazioniCount, merged.simCount || 0),
+    dataLoaded: true,
+  });
 }
 
-// Salva solo il progresso senza incrementare stats (per uso durante simulazione)
-// saveProgress è upsert su user_id+quiz_id, quindi safe per chiamate ripetute
-export async function syncProgressOnly(
-  quizId: string,
-  materia: string,
-  rispostaData: string | null,
-  corretto: boolean | null,
-  tempoMs: number
-) {
+let pushTimer: ReturnType<typeof setTimeout> | null = null;
+
+async function pushNow() {
   try {
-    await saveProgress(SARA_USER_ID, quizId, materia, rispostaData, corretto, tempoMs);
+    const res = await fetch(`${SYNC_URL}/state?u=${USER}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(buildSnapshot()),
+    });
+    if (res.ok) applyMerged((await res.json()) as CloudSnapshot);
   } catch (err) {
-    console.error('[Sync] Errore sync progress:', err);
+    console.error('[Sync] push fallito:', err);
   }
 }
 
-// Salva simulazione completata su Supabase
-export async function syncSimulazione(
-  punteggio: number,
-  tempoMs: number,
-  risposte: SimulazioneRisposta[]
-) {
-  try {
-    const risposteForDb = risposte.map(r => ({
-      quiz_id: r.quiz_id,
-      materia: r.materia,
-      risposta_data: r.risposta_data,
-      corretto: r.corretto,
-      efficacia: r.efficacia ?? null,
-      tempo_ms: r.tempo_ms,
-    }));
-    await saveSimulazione(SARA_USER_ID, punteggio, tempoMs, risposteForDb);
-  } catch (err) {
-    console.error('[Sync] Errore sync simulazione:', err);
-  }
+// Debounce: raggruppa risposte ravvicinate in un'unica scrittura sul cloud.
+function schedulePush() {
+  if (typeof window === 'undefined') return;
+  if (pushTimer) clearTimeout(pushTimer);
+  pushTimer = setTimeout(pushNow, 2500);
 }
 
-// Carica TUTTI i dati di Sara da Supabase e aggiorna lo store
+// Carica lo stato dal cloud, UNION col locale, poi ripubblica i progressi locali.
+// (Nome invariato per compatibilità coi chiamanti esistenti.)
 export async function loadAllFromSupabase() {
   try {
-    const [progressResult, statsResult, simulazioniResult] = await Promise.all([
-      loadUserData(SARA_USER_ID),
-      getUserStats(SARA_USER_ID),
-      getUserSimulazioni(SARA_USER_ID),
-    ]);
-
-    const progress = progressResult.data || [];
-    const stats = statsResult.data;
-    const simulazioni = simulazioniResult.data || [];
-
-    // Parti dai set LOCALI (già ripristinati da localStorage) e fai UNION col cloud:
-    // così un backend vuoto/nuovo non cancella il progresso salvato in locale.
-    const localState = useQuizStore.getState();
-    const quizCompletati = new Set<string>(localState.quizCompletati);
-    const quizSbagliati = new Set<string>(localState.quizSbagliati);
-
-    for (const p of progress) {
-      quizCompletati.add(p.quiz_id);
-      if (p.corretto === false) {
-        quizSbagliati.add(p.quiz_id);
-      }
-    }
-
-    // Ricostruisci leitner states da Supabase per quiz senza stato locale
-    const currentLeitner = useQuizStore.getState().leitnerStates;
-    const newLeitnerStates = { ...currentLeitner };
-    let leitnerReconstructed = 0;
-
-    for (const p of progress) {
-      if (!newLeitnerStates[p.quiz_id] && p.materia && p.corretto !== null) {
-        leitnerReconstructed++;
-        newLeitnerStates[p.quiz_id] = {
-          quizId: p.quiz_id,
-          materia: p.materia,
-          box: p.corretto ? 2 : 1,
-          totalAttempts: 1,
-          totalCorrect: p.corretto ? 1 : 0,
-          consecutiveCorrect: p.corretto ? 1 : 0,
-          lastAttemptAt: Date.now() - 86400000,
-          nextReviewAt: Date.now(),
-        };
-      }
-    }
-
-    // Stats per materia: parti dalle locali e sovrascrivi con quelle cloud dove presenti
-    // (filtra chiavi invalide come __quiz_attempts__). Backend vuoto non azzera le stats locali.
-    const rawStats = stats?.stats_per_materia || {};
-    const statsPerMateria: Record<string, StatisticheMateria> = { ...localState.statsPerMateria };
-    for (const [key, value] of Object.entries(rawStats)) {
-      if (key.startsWith('__') || !value || typeof (value as StatisticheMateria).totale !== 'number') continue;
-      statsPerMateria[key] = value as StatisticheMateria;
-    }
-
-    // Aggiorna lo store Zustand
-    useQuizStore.setState({
-      quizCompletati,
-      quizSbagliati,
-      statsPerMateria,
-      simulazioniCount: Math.max(simulazioni.length, localState.simulazioniCount),
-      dataLoaded: true,
-      ...(leitnerReconstructed > 0 ? { leitnerStates: newLeitnerStates } : {}),
-    });
-
-    console.log('[Sync] Dati caricati da Supabase:', {
-      quiz: quizCompletati.size,
-      leitnerReconstructed,
-      simulazioni: simulazioni.length,
-      materie: Object.keys(statsPerMateria).length,
-    });
+    const res = await fetch(`${SYNC_URL}/state?u=${USER}`, { cache: 'no-store' });
+    if (res.ok) applyMerged((await res.json()) as CloudSnapshot);
+    else useQuizStore.setState({ dataLoaded: true });
   } catch (err) {
-    console.error('[Sync] Errore caricamento da Supabase:', err);
+    console.error('[Sync] load fallito:', err);
     useQuizStore.setState({ dataLoaded: true });
   }
+  schedulePush(); // spingi eventuali progressi presenti solo in locale
 }
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// Firme invariate per compatibilità: ora attivano un push (debounced) verso il cloud.
+export async function syncQuizAnswer(
+  _quizId: string, _materia: string, _rispostaData: string | null, _corretto: boolean, _tempoMs: number,
+) {
+  schedulePush();
+}
+
+export async function syncSimulazioneAnswer(
+  _quizId: string, _materia: string, _rispostaData: string | null, _corretto: boolean | null, _tempoMs: number,
+) {
+  schedulePush();
+}
+
+export async function syncProgressOnly(
+  _quizId: string, _materia: string, _rispostaData: string | null, _corretto: boolean | null, _tempoMs: number,
+) {
+  schedulePush();
+}
+
+export async function syncSimulazione(
+  _punteggio: number, _tempoMs: number, _risposte: unknown[],
+) {
+  schedulePush();
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */

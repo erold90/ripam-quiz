@@ -1,0 +1,8 @@
+name = "ripam-sync"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+# Storage sincronizzazione cross-device (quiz fatti, leitner, stats)
+[[kv_namespaces]]
+binding = "RIPAM_KV"
+id = "ada36db34a0741b3a00d98e9cac742a5"
