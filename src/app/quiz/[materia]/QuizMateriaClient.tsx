@@ -50,7 +50,7 @@ const FILTERS: Array<{
   { id: 'review', label: 'Ripasso', description: 'Risposte giuste da consolidare', countKey: 'review', icon: RefreshCw, color: 'text-yellow-600' },
 ];
 
-const SESSION_SIZES = [50, 100, 200] as const;
+const SESSION_SIZES = [30, 50, 100] as const;
 
 interface QuizMateriaClientProps {
   paramsPromise: Promise<{ materia: string }>;
@@ -65,7 +65,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
 
   // Setup state
   const [filter, setFilter] = useState<StudioFilter>('all');
-  const [sessionSize, setSessionSize] = useState<number | null>(50);
+  const [sessionSize, setSessionSize] = useState<number | null>(30);
   const [counts, setCounts] = useState<QuizCounts | null>(null);
   const [materiaInfo, setMateriaInfo] = useState<Materia | null>(null);
   const [loading, setLoading] = useState(true);

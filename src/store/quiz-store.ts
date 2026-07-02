@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Quiz, SimulazioneRisposta, StatisticheMateria, QuizLeitnerState } from '@/types/quiz';
+import { Quiz, SimulazioneRisposta, StatisticheMateria, QuizLeitnerState, SimulazioneSummary } from '@/types/quiz';
 import { updateQuizLeitnerState } from '@/lib/leitner';
 
 interface QuizStore {
@@ -9,6 +9,7 @@ interface QuizStore {
   quizCompletati: Set<string>;
   quizSbagliati: Set<string>;
   simulazioniCount: number;
+  simulazioniStorico: SimulazioneSummary[];
   dataLoaded: boolean;
 
   // Leitner Adattivo (persistito in localStorage come ottimizzazione locale)
@@ -47,6 +48,7 @@ interface QuizStore {
   decrementaTempo: () => void;
   terminaSimulazione: () => void;
   incrementSimulazioni: () => void;
+  salvaSimulazione: (summary: SimulazioneSummary) => void;
 
   // Azioni statistiche
   aggiornaStatistiche: (materia: string, corretto: boolean) => void;
@@ -69,6 +71,7 @@ export const useQuizStore = create<QuizStore>()(
       quizCompletati: new Set(),
       quizSbagliati: new Set(),
       simulazioniCount: 0,
+      simulazioniStorico: [],
       dataLoaded: false,
       leitnerStates: {},
 
@@ -219,6 +222,13 @@ export const useQuizStore = create<QuizStore>()(
         simulazioniCount: state.simulazioniCount + 1,
       })),
 
+      // Salva il riepilogo di una simulazione nello storico (dedup per id).
+      salvaSimulazione: (summary) => set((state) => (
+        state.simulazioniStorico.some(s => s.id === summary.id)
+          ? {}
+          : { simulazioniStorico: [summary, ...state.simulazioniStorico] }
+      )),
+
       // Azioni statistiche
       aggiornaStatistiche: (materia, corretto) => {
         const state = get();
@@ -252,6 +262,7 @@ export const useQuizStore = create<QuizStore>()(
         quizSbagliati: new Set(),
         leitnerStates: {},
         simulazioniCount: 0,
+        simulazioniStorico: [],
       }),
 
       // Azioni Leitner
@@ -326,6 +337,7 @@ export const useQuizStore = create<QuizStore>()(
         quizSbagliati: Array.from(state.quizSbagliati),
         statsPerMateria: state.statsPerMateria,
         simulazioniCount: state.simulazioniCount,
+        simulazioniStorico: state.simulazioniStorico,
       }),
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<{
@@ -335,6 +347,7 @@ export const useQuizStore = create<QuizStore>()(
           quizSbagliati: string[];
           statsPerMateria: Record<string, StatisticheMateria>;
           simulazioniCount: number;
+          simulazioniStorico: SimulazioneSummary[];
         }>;
         return {
           ...current,
@@ -342,6 +355,7 @@ export const useQuizStore = create<QuizStore>()(
           darkMode: p.darkMode ?? current.darkMode,
           statsPerMateria: p.statsPerMateria ?? current.statsPerMateria,
           simulazioniCount: p.simulazioniCount ?? current.simulazioniCount,
+          simulazioniStorico: p.simulazioniStorico ?? current.simulazioniStorico,
           quizCompletati: new Set(p.quizCompletati ?? []),
           quizSbagliati: new Set(p.quizSbagliati ?? []),
         };

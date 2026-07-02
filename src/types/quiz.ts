@@ -106,6 +106,20 @@ export interface SimulazioneRisposta {
   tempo_ms: number;
 }
 
+// Riepilogo leggero di una simulazione completata (per storico + andamento).
+export interface SimulazioneSummary {
+  id: string;
+  data: number;        // timestamp di completamento
+  punteggio: number;   // su 30
+  superato: boolean;   // >= 21
+  corrette: number;
+  errate: number;
+  saltate: number;
+  totale: number;
+  tempoMs: number;
+  perMateria: Record<string, { corrette: number; errate: number; totale: number }>;
+}
+
 // Tipi per il sistema Leitner Adattivo
 
 export interface QuizLeitnerState {

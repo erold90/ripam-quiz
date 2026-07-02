@@ -22,6 +22,8 @@ import {
   CheckCircle2,
   XCircle,
   GraduationCap,
+  Trophy,
+  History,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -44,9 +46,16 @@ export default function StatistichePage() {
     quizCompletati,
     quizSbagliati,
     leitnerStates,
+    simulazioniStorico,
     resetStatistiche,
     darkMode,
   } = useQuizStore();
+
+  // Metriche simulazioni (separate dallo studio)
+  const proveSim = simulazioniStorico.length;
+  const ultimoSim = proveSim > 0 ? [...simulazioniStorico].sort((a, b) => b.data - a.data)[0] : null;
+  const mediaSim = proveSim > 0 ? simulazioniStorico.reduce((a, s) => a + s.punteggio, 0) / proveSim : 0;
+  const superateSim = simulazioniStorico.filter(s => s.superato).length;
 
   useEffect(() => {
     if (darkMode) {
@@ -148,7 +157,43 @@ export default function StatistichePage() {
           </div>
         </div>
 
-        {/* Overview Cards */}
+        {/* ===== SIMULAZIONI (rendimento in condizioni d'esame) ===== */}
+        <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-2 mb-2 uppercase tracking-wide">
+          <Trophy className="h-4 w-4" /> Simulazioni
+        </h2>
+        <Card className="mb-8">
+          <CardContent className="p-4">
+            {proveSim === 0 ? (
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground">Nessuna simulazione ancora. Mettiti alla prova con l&apos;esame simulato.</p>
+                <Link href="/simulazione"><Button size="sm" className="shrink-0">Inizia</Button></Link>
+              </div>
+            ) : (
+              <div className="flex items-center gap-5 flex-wrap">
+                <div className="text-center">
+                  <p className={cn("text-2xl font-bold", ultimoSim?.superato ? "text-green-600" : "text-orange-600")}>{ultimoSim?.punteggio.toFixed(1)}</p>
+                  <p className="text-[10px] text-muted-foreground">ultimo /30</p>
+                </div>
+                <div className="text-center">
+                  <p className={cn("text-2xl font-bold", mediaSim >= 21 ? "text-green-600" : "text-orange-600")}>{mediaSim.toFixed(1)}</p>
+                  <p className="text-[10px] text-muted-foreground">media /30</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-bold">{superateSim}/{proveSim}</p>
+                  <p className="text-[10px] text-muted-foreground">superate</p>
+                </div>
+                <Link href="/storico" className="ml-auto">
+                  <Button variant="outline" size="sm" className="gap-1.5"><History className="h-4 w-4" /> Andamento</Button>
+                </Link>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* ===== STUDIO LIBERO (rendimento durante l'esercizio) ===== */}
+        <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-2 mb-2 uppercase tracking-wide">
+          <BookOpen className="h-4 w-4" /> Studio libero
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4 text-center">

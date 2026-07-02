@@ -3,7 +3,7 @@
 // localStorage resta la memoria AUTORITATIVA locale; questo modulo allinea i
 // dispositivi tra loro: ad ogni device il suo snapshot, il Worker fa il merge.
 import { useQuizStore } from '@/store/quiz-store';
-import type { QuizLeitnerState, StatisticheMateria } from '@/types/quiz';
+import type { QuizLeitnerState, StatisticheMateria, SimulazioneSummary } from '@/types/quiz';
 
 const SYNC_URL = process.env.NEXT_PUBLIC_SYNC_URL || 'https://ripam-sync.erold90.workers.dev';
 // Utente logico unico condiviso tra i dispositivi (Sara)
@@ -20,6 +20,7 @@ interface CloudSnapshot {
   leitner: Record<string, QuizLeitnerState>;
   stats: Record<string, StatisticheMateria>;
   simCount: number;
+  simStorico: SimulazioneSummary[];
   updatedAt: number;
 }
 
@@ -40,6 +41,7 @@ function buildSnapshot(): CloudSnapshot {
     leitner: s.leitnerStates,
     stats: s.statsPerMateria,
     simCount: s.simulazioniCount,
+    simStorico: s.simulazioniStorico,
     updatedAt: Date.now(),
   };
 }
@@ -68,12 +70,19 @@ function applyMerged(merged: CloudSnapshot) {
     }
   }
 
+  // Storico simulazioni: UNION per id, ordinato dal più recente
+  const storicoMap = new Map<string, SimulazioneSummary>();
+  for (const x of s.simulazioniStorico) storicoMap.set(x.id, x);
+  for (const x of merged.simStorico || []) if (!storicoMap.has(x.id)) storicoMap.set(x.id, x);
+  const simulazioniStorico = Array.from(storicoMap.values()).sort((a, b) => b.data - a.data);
+
   useQuizStore.setState({
     quizCompletati,
     quizSbagliati,
     leitnerStates,
     statsPerMateria,
-    simulazioniCount: Math.max(s.simulazioniCount, merged.simCount || 0),
+    simulazioniCount: Math.max(s.simulazioniCount, merged.simCount || 0, simulazioniStorico.length),
+    simulazioniStorico,
     dataLoaded: true,
   });
 }

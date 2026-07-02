@@ -9,8 +9,8 @@ import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
 import { generaQuizSimulazione, calcolaPunteggio, formatTempoRimanente } from '@/lib/quiz-loader';
-import { Quiz, SimulazioneRisposta } from '@/types/quiz';
-import { syncSimulazioneAnswer, syncSimulazione, syncProgressOnly } from '@/lib/cloud-sync';
+import { Quiz, SimulazioneRisposta, SimulazioneSummary } from '@/types/quiz';
+import { syncSimulazione, syncProgressOnly } from '@/lib/cloud-sync';
 import {
   Play, Trophy, XCircle, CheckCircle2, Clock, Target,
   ArrowLeft, Home, RotateCcw, GraduationCap, ChevronLeft,
@@ -148,7 +148,7 @@ export default function SimulazionePage() {
   tempoInizioRef.current = tempoInizio;
   const handleTerminaRef = useRef<() => void>(() => {});
 
-  const { darkMode, leitnerStates, quizCompletati, quizSbagliati, registraRisposteSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
+  const { darkMode, leitnerStates, quizCompletati, quizSbagliati, registraRisposteSimulazione, incrementSimulazioni, salvaSimulazione } = useQuizStore();
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -304,26 +304,12 @@ export default function SimulazionePage() {
 
   const handleTerminaExam = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
-    const currentAnswers = answersRef.current;
-    const currentQuizList = quizListRef.current;
-
-    // Sync UNA volta per risposta: saveProgress (upsert) + updateStats (increment)
-    // + aggiornaStatistiche locale
-    currentAnswers.forEach((a, i) => {
-      if (!a.risposta) return;
-      const quiz = currentQuizList[i];
-      if (!quiz) return;
-      const corretta = quiz.risposte.find(r => r.corretta);
-      const isCorretta = corretta?.id === a.risposta;
-      // Supabase: progress (upsert) + stats (increment 1 volta)
-      syncSimulazioneAnswer(quiz.id, quiz.materia, a.risposta, isCorretta, Date.now() - tempoInizioRef.current);
-      // Locale: stats Zustand
-      aggiornaStatistiche(quiz.materia, isCorretta);
-    });
-
+    // Il salvataggio (storico simulazioni + ripasso Leitner + sync cloud)
+    // avviene nell'effect della fase 'results'. Le statistiche di STUDIO
+    // non vengono toccate: studio e simulazioni restano separati.
     setShowTerminaConfirm(false);
     setPhase('results');
-  }, [aggiornaStatistiche]);
+  }, []);
 
   handleTerminaRef.current = handleTerminaExam;
 
@@ -343,9 +329,22 @@ export default function SimulazionePage() {
   useEffect(() => {
     if (phase === 'results' && !saved && risposte.length > 0) {
       const tempoTotaleMs = (60 * 60 - tempoRimanenteRef.current) * 1000;
-      syncSimulazione(punteggio, tempoTotaleMs, risposte);
-      registraRisposteSimulazione(risposte);
+      const summary: SimulazioneSummary = {
+        id: `sim_${Date.now()}`,
+        data: Date.now(),
+        punteggio,
+        superato,
+        corrette,
+        errate,
+        saltate,
+        totale: risposte.length,
+        tempoMs: tempoTotaleMs,
+        perMateria: statsByMateria,
+      };
+      registraRisposteSimulazione(risposte); // ripasso condiviso (Leitner + quiz fatti/sbagliati)
+      salvaSimulazione(summary);             // storico simulazioni (separato dallo studio)
       incrementSimulazioni();
+      syncSimulazione(punteggio, tempoTotaleMs, risposte); // → push snapshot al cloud
       setSaved(true);
     }
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
