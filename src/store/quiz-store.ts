@@ -290,12 +290,36 @@ export const useQuizStore = create<QuizStore>()(
     }),
     {
       name: 'ripam-quiz-v2',
-      // Persisti SOLO preferenze locali (darkMode, leitnerStates)
-      // Stats e progressi vengono SEMPRE da Supabase
+      // localStorage è la memoria AUTORITATIVA: progressi/stats sopravvivono
+      // anche se il backend (Supabase) è offline, in pausa o irraggiungibile.
+      // I Set non sono serializzabili in JSON → salvati come Array e ricostruiti nel merge.
       partialize: (state) => ({
         leitnerStates: state.leitnerStates,
         darkMode: state.darkMode,
+        quizCompletati: Array.from(state.quizCompletati),
+        quizSbagliati: Array.from(state.quizSbagliati),
+        statsPerMateria: state.statsPerMateria,
+        simulazioniCount: state.simulazioniCount,
       }),
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<{
+          leitnerStates: Record<string, QuizLeitnerState>;
+          darkMode: boolean;
+          quizCompletati: string[];
+          quizSbagliati: string[];
+          statsPerMateria: Record<string, StatisticheMateria>;
+          simulazioniCount: number;
+        }>;
+        return {
+          ...current,
+          leitnerStates: p.leitnerStates ?? current.leitnerStates,
+          darkMode: p.darkMode ?? current.darkMode,
+          statsPerMateria: p.statsPerMateria ?? current.statsPerMateria,
+          simulazioniCount: p.simulazioniCount ?? current.simulazioniCount,
+          quizCompletati: new Set(p.quizCompletati ?? []),
+          quizSbagliati: new Set(p.quizSbagliati ?? []),
+        };
+      },
     }
   )
 );

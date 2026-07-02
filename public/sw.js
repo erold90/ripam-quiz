@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ripam-quiz-v1';
+const CACHE_NAME = 'ripam-quiz-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',

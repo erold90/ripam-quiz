@@ -97,9 +97,11 @@ export async function loadAllFromSupabase() {
     const stats = statsResult.data;
     const simulazioni = simulazioniResult.data || [];
 
-    // Ricostruisci set di quiz completati e sbagliati
-    const quizCompletati = new Set<string>();
-    const quizSbagliati = new Set<string>();
+    // Parti dai set LOCALI (già ripristinati da localStorage) e fai UNION col cloud:
+    // così un backend vuoto/nuovo non cancella il progresso salvato in locale.
+    const localState = useQuizStore.getState();
+    const quizCompletati = new Set<string>(localState.quizCompletati);
+    const quizSbagliati = new Set<string>(localState.quizSbagliati);
 
     for (const p of progress) {
       quizCompletati.add(p.quiz_id);
@@ -129,9 +131,10 @@ export async function loadAllFromSupabase() {
       }
     }
 
-    // Stats per materia dal cloud (filtra chiavi invalide come __quiz_attempts__)
+    // Stats per materia: parti dalle locali e sovrascrivi con quelle cloud dove presenti
+    // (filtra chiavi invalide come __quiz_attempts__). Backend vuoto non azzera le stats locali.
     const rawStats = stats?.stats_per_materia || {};
-    const statsPerMateria: Record<string, StatisticheMateria> = {};
+    const statsPerMateria: Record<string, StatisticheMateria> = { ...localState.statsPerMateria };
     for (const [key, value] of Object.entries(rawStats)) {
       if (key.startsWith('__') || !value || typeof (value as StatisticheMateria).totale !== 'number') continue;
       statsPerMateria[key] = value as StatisticheMateria;
@@ -142,7 +145,7 @@ export async function loadAllFromSupabase() {
       quizCompletati,
       quizSbagliati,
       statsPerMateria,
-      simulazioniCount: simulazioni.length,
+      simulazioniCount: Math.max(simulazioni.length, localState.simulazioniCount),
       dataLoaded: true,
       ...(leitnerReconstructed > 0 ? { leitnerStates: newLeitnerStates } : {}),
     });
