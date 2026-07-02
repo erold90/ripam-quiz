@@ -54,6 +54,7 @@ interface QuizStore {
 
   // Azioni Leitner
   updateLeitnerFromSimulazione: (risposte: SimulazioneRisposta[]) => void;
+  registraRisposteSimulazione: (risposte: SimulazioneRisposta[]) => void;
   updateLeitnerSingle: (quizId: string, materia: string, corretto: boolean) => void;
 
   // Theme
@@ -270,6 +271,31 @@ export const useQuizStore = create<QuizStore>()(
         }
 
         set({ leitnerStates: newLeitnerStates });
+      },
+
+      // Registra una simulazione completa: aggiorna Leitner E i set quiz fatti/sbagliati,
+      // così le domande viste in simulazione non ricompaiono come "Nuove" nello studio.
+      registraRisposteSimulazione: (risposte) => {
+        const state = get();
+        const newLeitnerStates = { ...state.leitnerStates };
+        const quizCompletati = new Set(state.quizCompletati);
+        const quizSbagliati = new Set(state.quizSbagliati);
+
+        for (const risposta of risposte) {
+          if (risposta.corretto === null) continue; // saltata → non conta
+
+          newLeitnerStates[risposta.quiz_id] = updateQuizLeitnerState(
+            newLeitnerStates[risposta.quiz_id] || null,
+            risposta.quiz_id,
+            risposta.materia,
+            risposta.corretto
+          );
+          quizCompletati.add(risposta.quiz_id);
+          if (risposta.corretto) quizSbagliati.delete(risposta.quiz_id);
+          else quizSbagliati.add(risposta.quiz_id);
+        }
+
+        set({ leitnerStates: newLeitnerStates, quizCompletati, quizSbagliati });
       },
 
       updateLeitnerSingle: (quizId, materia, corretto) => {

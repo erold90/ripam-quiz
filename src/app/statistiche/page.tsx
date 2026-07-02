@@ -8,9 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { useQuizStore } from '@/store/quiz-store';
-import { getQuizIndex } from '@/lib/quiz-loader';
-import { deleteAllUserData, SARA_USER_ID } from '@/lib/supabase';
-import { loadAllFromSupabase } from '@/lib/cloud-sync';
+import { getQuizIndex, getCoverageStats, CoverageMateria } from '@/lib/quiz-loader';
+import { resetCloud } from '@/lib/cloud-sync';
 import { QuizIndex } from '@/types/quiz';
 import {
   ArrowLeft,
@@ -38,11 +37,13 @@ import {
 export default function StatistichePage() {
   const [quizData, setQuizData] = useState<QuizIndex | null>(null);
   const [loading, setLoading] = useState(true);
+  const [coverage, setCoverage] = useState<{ totBank: number; totSeen: number; totMastered: number; totWrong: number; perMateria: CoverageMateria[] } | null>(null);
 
   const {
     statsPerMateria,
     quizCompletati,
     quizSbagliati,
+    leitnerStates,
     resetStatistiche,
     darkMode,
   } = useQuizStore();
@@ -63,6 +64,11 @@ export default function StatistichePage() {
     }
     loadData();
   }, []);
+
+  // Copertura banca dati (ricalcolata quando cambiano i progressi)
+  useEffect(() => {
+    getCoverageStats(leitnerStates, quizCompletati, quizSbagliati).then(setCoverage);
+  }, [leitnerStates, quizCompletati, quizSbagliati]);
 
   // Calcoli statistiche globali (safe defaults per campi mancanti)
   const totaleRisposte = Object.values(statsPerMateria).reduce((acc, s) => acc + (s.totale || 0), 0);
@@ -132,8 +138,7 @@ export default function StatistichePage() {
                 <DialogFooter>
                   <Button variant="destructive" onClick={async () => {
                     resetStatistiche();
-                    await deleteAllUserData(SARA_USER_ID);
-                    loadAllFromSupabase();
+                    await resetCloud();
                   }}>
                     Conferma Reset
                   </Button>
@@ -174,6 +179,44 @@ export default function StatistichePage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Copertura banca dati */}
+        {coverage && coverage.totBank > 0 && (
+          <Card className="mb-6">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Copertura Banca Dati
+              </CardTitle>
+              <CardDescription>Quanta parte del programma hai già affrontato</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-end gap-3 mb-2">
+                <span className="text-4xl font-bold">{Math.round((coverage.totSeen / coverage.totBank) * 100)}%</span>
+                <span className="text-sm text-muted-foreground mb-1">
+                  {coverage.totSeen.toLocaleString('it-IT')} / {coverage.totBank.toLocaleString('it-IT')} viste
+                  {' · '}<span className="text-green-600">{coverage.totMastered.toLocaleString('it-IT')} padroneggiate</span>
+                </span>
+              </div>
+              <Progress value={(coverage.totSeen / coverage.totBank) * 100} className="h-3 mb-4" />
+              <div className="space-y-1.5">
+                {coverage.perMateria.map(m => {
+                  const perc = m.total > 0 ? Math.round((m.seen / m.total) * 100) : 0;
+                  return (
+                    <div key={m.id} className="flex items-center gap-3 text-sm">
+                      <span className="flex-1 truncate">{m.nome}</span>
+                      {m.wrong > 0 && (
+                        <span className="text-[10px] text-red-500">{m.wrong} da recuperare</span>
+                      )}
+                      <span className="text-xs text-muted-foreground w-16 text-right tabular-nums">{m.seen}/{m.total}</span>
+                      <div className="w-20"><Progress value={perc} className="h-1.5" /></div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Punti deboli */}
         {puntiDeboli.length > 0 && (

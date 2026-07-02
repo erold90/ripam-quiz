@@ -28,49 +28,56 @@ export const DAY_MS = 24 * 60 * 60 * 1000;
 
 // ===== CATEGORIZZAZIONE INTELLIGENTE =====
 
-export type QuizCategory = 'unseen' | 'wrong' | 'learning' | 'correct' | 'consolidated' | 'mastered';
+export type QuizCategory = 'unseen' | 'wrong' | 'learning' | 'consolidated' | 'mastered';
 
 /**
- * Categorizza un quiz in base allo stato Leitner e ai dati Supabase.
- * Usato dall'algoritmo PWAS per la selezione a tier nelle simulazioni.
+ * Una domanda è "padroneggiata" (esclusa dal ripasso) dopo 3 risposte corrette
+ * consecutive (box >= 4). Soglia calibrata sul concorso: banca dati enorme,
+ * tempo limitato → si consolida in fretta senza sprecare ripetizioni.
+ */
+export function isMastered(lState: QuizLeitnerState | null): boolean {
+  return !!lState && lState.box >= 4 && lState.consecutiveCorrect >= 3;
+}
+
+/**
+ * Categorizza un quiz in base allo stato Leitner e all'ultimo esito.
+ * TASSONOMIA UNICA usata sia per generare le sessioni sia per i contatori UI.
+ *
+ * Regola chiave: "wrong" dipende dall'ULTIMA risposta errata, non dal box basso.
+ * Così una domanda azzeccata (box 2) NON viene trattata come sbagliata.
  */
 export function categorizeQuiz(
   lState: QuizLeitnerState | null,
   isCompleted: boolean,
   isWrong: boolean
 ): QuizCategory {
-  // MASTERED: box >= 6, risposte corrette consecutive >= 2 → ESCLUSA
-  if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) {
+  // MASTERED: consolidata → esclusa dal ripasso
+  if (isMastered(lState)) {
     return 'mastered';
   }
 
-  // UNSEEN: mai tentata in nessun sistema
+  // UNSEEN: mai tentata
   if (!isCompleted && !lState) {
     return 'unseen';
   }
 
-  // WRONG: sbagliata l'ultima volta (Supabase) o box 1-2 (Leitner)
-  if (isWrong || (lState && lState.box >= 1 && lState.box <= 2)) {
+  // WRONG: ultima risposta ERRATA (vero errore da recuperare) o mai saputa (box 1)
+  if (isWrong || (lState && lState.box <= 1)) {
     return 'wrong';
   }
 
-  // LEARNING: box 3-4
-  if (lState && lState.box >= 3 && lState.box <= 4) {
+  // LEARNING: in apprendimento — 1-2 risposte corrette (box 2-3)
+  if (lState && lState.box <= 3) {
     return 'learning';
   }
 
-  // CONSOLIDATED: box 5+ (ma non mastered, già filtrato sopra)
-  if (lState && lState.box >= 5) {
+  // CONSOLIDATED: box 4+ ma non ancora padroneggiata
+  if (lState) {
     return 'consolidated';
   }
 
-  // CORRECT: completata correttamente, senza stato Leitner avanzato
-  if (isCompleted && !isWrong) {
-    return 'correct';
-  }
-
-  // Fallback: tratta come mai vista
-  return 'unseen';
+  // Completata senza stato Leitner (dati legacy) → da rivedere
+  return 'learning';
 }
 
 /**
@@ -116,9 +123,6 @@ export function calculateTierWeight(
       const overdue = getOverdueMultiplier(state, now);
       return 40 * overdue; // 8-100
     }
-
-    case 'correct':
-      return 10 + Math.random() * 5; // 10-15, basso
 
     case 'consolidated': {
       if (!state) return 5;

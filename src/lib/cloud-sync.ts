@@ -114,6 +114,16 @@ export async function loadAllFromSupabase() {
   schedulePush(); // spingi eventuali progressi presenti solo in locale
 }
 
+// Cancella lo stato sincronizzato sul cloud (usato dal Reset delle statistiche).
+export async function resetCloud() {
+  if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; } // evita un push che rimetterebbe i dati
+  try {
+    await fetch(`${SYNC_URL}/state?u=${USER}`, { method: 'DELETE' });
+  } catch (err) {
+    console.error('[Sync] reset cloud fallito:', err);
+  }
+}
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Firme invariate per compatibilità: ora attivano un push (debounced) verso il cloud.
 export async function syncQuizAnswer(

@@ -5,7 +5,7 @@
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
@@ -81,6 +81,11 @@ export default {
         const merged = mergeState(cur, incoming);
         await env.RIPAM_KV.put(kvKey(u), JSON.stringify(merged));
         return json(merged);
+      }
+
+      if (url.pathname === '/state' && request.method === 'DELETE') {
+        await env.RIPAM_KV.delete(kvKey(u));
+        return json({ ok: true, reset: true });
       }
 
       if (url.pathname === '/' || url.pathname === '/health') {

@@ -148,7 +148,7 @@ export default function SimulazionePage() {
   tempoInizioRef.current = tempoInizio;
   const handleTerminaRef = useRef<() => void>(() => {});
 
-  const { darkMode, leitnerStates, quizCompletati, quizSbagliati, updateLeitnerFromSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
+  const { darkMode, leitnerStates, quizCompletati, quizSbagliati, registraRisposteSimulazione, incrementSimulazioni, aggiornaStatistiche } = useQuizStore();
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -344,7 +344,7 @@ export default function SimulazionePage() {
     if (phase === 'results' && !saved && risposte.length > 0) {
       const tempoTotaleMs = (60 * 60 - tempoRimanenteRef.current) * 1000;
       syncSimulazione(punteggio, tempoTotaleMs, risposte);
-      updateLeitnerFromSimulazione(risposte);
+      registraRisposteSimulazione(risposte);
       incrementSimulazioni();
       setSaved(true);
     }

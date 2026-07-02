@@ -72,7 +72,6 @@ export async function generaQuizSimulazione(
       unseen: [],
       wrong: [],
       learning: [],
-      correct: [],
       consolidated: [],
       mastered: [], // Mai usato nella selezione
     };
@@ -95,7 +94,7 @@ export async function generaQuizSimulazione(
 
     // Selezione a tier: riempi in ordine di priorità
     const selected: Array<Quiz & { materia: string }> = [];
-    const tierOrder: QuizCategory[] = ['unseen', 'wrong', 'learning', 'correct', 'consolidated'];
+    const tierOrder: QuizCategory[] = ['unseen', 'wrong', 'learning', 'consolidated'];
 
     for (const tierName of tierOrder) {
       if (selected.length >= nDomande) break;
@@ -136,22 +135,58 @@ export async function countQuizByCategory(
   const data = await getQuizByMateria(materiaId);
   const counts = { total: data.quiz.length, unseen: 0, wrong: 0, review: 0, mastered: 0 };
 
+  // Usa la STESSA categorizzazione della generazione → contatori coerenti col comportamento
   for (const q of data.quiz) {
-    if (!quizCompletati.has(q.id)) {
-      counts.unseen++;
-    } else if (quizSbagliati.has(q.id)) {
-      counts.wrong++;
-    } else {
-      const lState = leitnerStates[q.id];
-      if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) {
-        counts.mastered++;
-      } else {
-        counts.review++;
-      }
-    }
+    const lState = leitnerStates[q.id] || null;
+    const cat = categorizeQuiz(lState, quizCompletati.has(q.id), quizSbagliati.has(q.id));
+    if (cat === 'unseen') counts.unseen++;
+    else if (cat === 'wrong') counts.wrong++;
+    else if (cat === 'mastered') counts.mastered++;
+    else counts.review++; // learning + consolidated
   }
 
   return counts;
+}
+
+export interface CoverageMateria {
+  id: string;
+  nome: string;
+  total: number;
+  seen: number;      // domande viste almeno una volta (non "unseen")
+  mastered: number;  // domande padroneggiate (fuori dal ripasso)
+  wrong: number;     // domande con ultima risposta errata
+}
+
+/**
+ * Statistiche di COPERTURA della banca dati (metrica di prontezza per il concorso):
+ * quante domande hai visto e quante padroneggi, globale e per materia.
+ */
+export async function getCoverageStats(
+  leitnerStates: Record<string, QuizLeitnerState>,
+  quizCompletati: Set<string>,
+  quizSbagliati: Set<string>
+): Promise<{ totBank: number; totSeen: number; totMastered: number; totWrong: number; perMateria: CoverageMateria[] }> {
+  const index = await getQuizIndex();
+  const perMateria: CoverageMateria[] = [];
+  let totBank = 0, totSeen = 0, totMastered = 0, totWrong = 0;
+
+  for (const m of index.materie) {
+    const data = await getQuizByMateria(m.id);
+    let seen = 0, mastered = 0, wrong = 0;
+    for (const q of data.quiz) {
+      const cat = categorizeQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id), quizSbagliati.has(q.id));
+      if (cat !== 'unseen') seen++;
+      if (cat === 'mastered') mastered++;
+      if (cat === 'wrong') wrong++;
+    }
+    perMateria.push({ id: m.id, nome: m.nome, total: data.quiz.length, seen, mastered, wrong });
+    totBank += data.quiz.length;
+    totSeen += seen;
+    totMastered += mastered;
+    totWrong += wrong;
+  }
+
+  return { totBank, totSeen, totMastered, totWrong, perMateria };
 }
 
 /**
@@ -183,11 +218,8 @@ export async function generaQuizStudio(
 
     case 'review':
       filtered = data.quiz.filter(q => {
-        if (!quizCompletati.has(q.id)) return false;
-        if (quizSbagliati.has(q.id)) return false;
-        const lState = leitnerStates[q.id];
-        if (lState && lState.box >= 6 && lState.consecutiveCorrect >= 2) return false;
-        return true;
+        const cat = categorizeQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id), quizSbagliati.has(q.id));
+        return cat === 'learning' || cat === 'consolidated';
       });
       shuffleArray(filtered);
       break;
@@ -196,7 +228,7 @@ export async function generaQuizStudio(
     default: {
       const tiers: Record<string, Quiz[]> = {
         unseen: [], wrong: [], learning: [],
-        correct: [], consolidated: [], mastered: [],
+        consolidated: [], mastered: [],
       };
 
       for (const q of data.quiz) {
@@ -211,9 +243,11 @@ export async function generaQuizStudio(
         shuffleArray(tier);
       }
 
+      // Priorità: nuove → errori da recuperare → in apprendimento → consolidate.
+      // Le padroneggiate restano in coda (fallback se il resto è esaurito).
       filtered = [
         ...tiers.unseen, ...tiers.wrong, ...tiers.learning,
-        ...tiers.correct, ...tiers.consolidated, ...tiers.mastered,
+        ...tiers.consolidated, ...tiers.mastered,
       ];
       break;
     }
