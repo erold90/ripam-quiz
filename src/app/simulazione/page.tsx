@@ -26,7 +26,35 @@ interface QuestionState {
   risposta: string | null;
   visited: boolean;
   flagged: boolean;
-  synced: boolean; // true = già sincronizzata su Supabase (evita duplicati stats)
+  synced: boolean; // legacy, non più usato
+}
+
+// ===== Salvataggio locale della simulazione IN CORSO (auto-resume) =====
+// Chiave dedicata: leggera, indipendente dallo store, non sincronizzata (temporanea/locale).
+const SIM_KEY = 'ripam-sim-in-corso';
+
+interface SimInCorso {
+  quizList: Array<Quiz & { materia: string }>;
+  answers: QuestionState[];
+  currentIndex: number;
+  tempoRimanente: number;
+  tempoInizio: number;
+  savedAt: number;
+}
+
+function salvaSimLocale(s: SimInCorso) {
+  try { localStorage.setItem(SIM_KEY, JSON.stringify(s)); } catch { /* quota */ }
+}
+function leggiSimLocale(): SimInCorso | null {
+  try {
+    const v = localStorage.getItem(SIM_KEY);
+    if (!v) return null;
+    const s = JSON.parse(v) as SimInCorso;
+    return (s && Array.isArray(s.quizList) && s.quizList.length > 0 && s.tempoRimanente > 0) ? s : null;
+  } catch { return null; }
+}
+function pulisciSimLocale() {
+  try { localStorage.removeItem(SIM_KEY); } catch { /* noop */ }
 }
 
 // ========== Question Palette (during exam) ==========
@@ -137,6 +165,7 @@ export default function SimulazionePage() {
   const [saved, setSaved] = useState(false);
   const [reviewIndices, setReviewIndices] = useState<number[]>([]);
   const [reviewCurrentIdx, setReviewCurrentIdx] = useState(0);
+  const [resumeData, setResumeData] = useState<SimInCorso | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Refs to avoid stale closures
@@ -146,7 +175,26 @@ export default function SimulazionePage() {
   quizListRef.current = quizList;
   const tempoInizioRef = useRef(tempoInizio);
   tempoInizioRef.current = tempoInizio;
+  const tempoRimanenteRef = useRef(tempoRimanente);
+  tempoRimanenteRef.current = tempoRimanente;
+  const phaseRef = useRef(phase);
+  phaseRef.current = phase;
+  const currentIndexRef = useRef(currentIndex);
+  currentIndexRef.current = currentIndex;
   const handleTerminaRef = useRef<() => void>(() => {});
+
+  // Salva lo stato della prova in corso su localStorage (per auto-resume)
+  const saveSnapshot = useCallback(() => {
+    if (phaseRef.current !== 'inProgress' || quizListRef.current.length === 0) return;
+    salvaSimLocale({
+      quizList: quizListRef.current,
+      answers: answersRef.current,
+      currentIndex: currentIndexRef.current,
+      tempoRimanente: tempoRimanenteRef.current,
+      tempoInizio: tempoInizioRef.current,
+      savedAt: Date.now(),
+    });
+  }, []);
 
   const { darkMode, leitnerStates, quizCompletati, quizSbagliati, registraRisposteSimulazione, incrementSimulazioni, salvaSimulazione } = useQuizStore();
 
@@ -154,7 +202,7 @@ export default function SimulazionePage() {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  // Timer
+  // Timer (salva il tempo residuo ogni 15s)
   useEffect(() => {
     if (phase === 'inProgress' && tempoRimanente > 0) {
       timerRef.current = setInterval(() => {
@@ -163,12 +211,35 @@ export default function SimulazionePage() {
             handleTerminaRef.current();
             return 0;
           }
-          return prev - 1;
+          const next = prev - 1;
+          if (next % 15 === 0) saveSnapshot();
+          return next;
         });
       }, 1000);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [phase]);
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Al mount: rileva una prova in sospeso da riprendere
+  useEffect(() => {
+    setResumeData(leggiSimLocale());
+  }, []);
+
+  // Auto-save ad ogni risposta / navigazione
+  useEffect(() => {
+    if (phase === 'inProgress') saveSnapshot();
+  }, [answers, currentIndex, phase, saveSnapshot]);
+
+  // Salva anche quando l'app va in background o si chiude
+  useEffect(() => {
+    const onHide = () => { if (document.visibilityState === 'hidden') saveSnapshot(); };
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onHide);
+    };
+  }, [saveSnapshot]);
 
   // Sync helper - durante l'esame salva SOLO il progresso (upsert safe)
   // Le stats vengono aggiornate UNA sola volta alla terminazione
@@ -220,20 +291,43 @@ export default function SimulazionePage() {
     setLoading(true);
     try {
       const quiz = await generaQuizSimulazione(leitnerStates, quizCompletati, quizSbagliati);
+      const initAnswers = quiz.map((_, i) => ({ risposta: null, visited: i === 0, flagged: false, synced: false }));
+      const now = Date.now();
       setQuizList(quiz);
-      setAnswers(quiz.map((_, i) => ({ risposta: null, visited: i === 0, flagged: false, synced: false })));
+      setAnswers(initAnswers);
       setCurrentIndex(0);
       setTempoRimanente(60 * 60);
-      setTempoInizio(Date.now());
+      setTempoInizio(now);
       setSaved(false);
       setShowTerminaConfirm(false);
+      setResumeData(null);
       setPhase('inProgress');
+      salvaSimLocale({ quizList: quiz, answers: initAnswers, currentIndex: 0, tempoRimanente: 60 * 60, tempoInizio: now, savedAt: now });
     } catch (error) {
       console.error('Errore generazione simulazione:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  // Riprende la simulazione in sospeso dal residuo salvato (timer incluso)
+  const handleResume = useCallback(() => {
+    if (!resumeData) return;
+    setQuizList(resumeData.quizList);
+    setAnswers(resumeData.answers);
+    setCurrentIndex(resumeData.currentIndex);
+    setTempoRimanente(resumeData.tempoRimanente);
+    setTempoInizio(Date.now());
+    setSaved(false);
+    setShowTerminaConfirm(false);
+    setResumeData(null);
+    setPhase('inProgress');
+  }, [resumeData]);
+
+  const handleDiscardResume = useCallback(() => {
+    pulisciSimLocale();
+    setResumeData(null);
+  }, []);
 
   const handleSelectAnswer = useCallback((id: string) => {
     setAnswers(prev => {
@@ -304,6 +398,8 @@ export default function SimulazionePage() {
 
   const handleTerminaExam = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
+    // La prova è finita: rimuovi il salvataggio di resume.
+    pulisciSimLocale();
     // Il salvataggio (storico simulazioni + ripasso Leitner + sync cloud)
     // avviene nell'effect della fase 'results'. Le statistiche di STUDIO
     // non vengono toccate: studio e simulazioni restano separati.
@@ -323,9 +419,6 @@ export default function SimulazionePage() {
   }, [risposte, quizList.length]);
 
   // Auto-save simulazione quando si entra in fase risultati
-  const tempoRimanenteRef = useRef(tempoRimanente);
-  tempoRimanenteRef.current = tempoRimanente;
-
   useEffect(() => {
     if (phase === 'results' && !saved && risposte.length > 0) {
       const tempoTotaleMs = (60 * 60 - tempoRimanenteRef.current) * 1000;
@@ -356,6 +449,27 @@ export default function SimulazionePage() {
         <Header />
         <main className="container px-4 py-6 max-w-2xl mx-auto">
           <Link href="/"><Button variant="ghost" size="sm" className="gap-2 mb-6"><ArrowLeft className="h-4 w-4" /> Torna alla home</Button></Link>
+
+          {resumeData && (
+            <Card className="mb-4 border-primary bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-6 w-6 text-primary shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium">Simulazione in sospeso</p>
+                    <p className="text-sm text-muted-foreground">
+                      {resumeData.answers.filter(a => a.risposta).length}/{resumeData.quizList.length} risposte · {formatTempoRimanente(resumeData.tempoRimanente)} rimasti
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <Button onClick={handleResume} className="flex-1 gap-1.5"><Play className="h-4 w-4" /> Riprendi</Button>
+                  <Button variant="outline" onClick={handleDiscardResume} className="flex-1">Scarta</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardContent className="p-6 space-y-6">
               <div className="text-center">
