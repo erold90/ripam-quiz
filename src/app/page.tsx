@@ -45,19 +45,20 @@ import {
   Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { statoQuiz, QuizCategory } from '@/lib/leitner';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Scale, Gavel, Monitor, Building, Globe, Laptop, Calculator, Flag, Users, Brain, MessageCircle,
   ShieldCheck, Landmark, ScrollText, BadgeCheck, Signature, Coins, Building2, Languages, Puzzle, Presentation,
 };
 
-// Categorie Leitner con colori
-const LEITNER_CATEGORIES = [
-  { label: 'Padroneggiato', boxes: [5, 6, 7], color: 'bg-green-500', textColor: 'text-green-600' },
-  { label: 'In apprendimento', boxes: [3, 4], color: 'bg-blue-500', textColor: 'text-blue-600' },
-  { label: 'Ripetile', boxes: [2], color: 'bg-yellow-500', textColor: 'text-yellow-600' },
-  { label: 'Non sai', boxes: [1], color: 'bg-red-500', textColor: 'text-red-600' },
-  { label: 'Nuove', boxes: [0], color: 'bg-gray-300 dark:bg-gray-600', textColor: 'text-gray-500' },
+// I 5 stati di studio con colori (allineati a statoQuiz)
+const LEITNER_CATEGORIES: Array<{ key: QuizCategory; label: string; color: string; textColor: string }> = [
+  { key: 'padroneggiata', label: 'Padroneggiato', color: 'bg-green-500', textColor: 'text-green-600' },
+  { key: 'apprendimento', label: 'In apprendimento', color: 'bg-blue-500', textColor: 'text-blue-600' },
+  { key: 'ripetile', label: 'Ripetile', color: 'bg-yellow-500', textColor: 'text-yellow-600' },
+  { key: 'nonSai', label: 'Non sai', color: 'bg-red-500', textColor: 'text-red-600' },
+  { key: 'nuova', label: 'Nuove', color: 'bg-gray-300 dark:bg-gray-600', textColor: 'text-gray-500' },
 ];
 
 function getGreeting(): string {
@@ -157,28 +158,21 @@ export default function Home() {
 
   // Calcolo categorie Leitner
   const leitnerCounts = useMemo(() => {
-    const counts = LEITNER_CATEGORIES.map(cat => ({
-      ...cat,
-      count: 0,
-    }));
-
-    const trackedQuizIds = new Set<string>();
-    for (const [quizId, state] of Object.entries(leitnerStates)) {
-      trackedQuizIds.add(quizId);
-      const catIndex = counts.findIndex(c => c.boxes.includes(state.box));
-      if (catIndex >= 0) counts[catIndex].count++;
+    const byState: Record<QuizCategory, number> = {
+      padroneggiata: 0, apprendimento: 0, ripetile: 0, nonSai: 0, nuova: 0,
+    };
+    let tracked = 0;
+    for (const state of Object.values(leitnerStates)) {
+      tracked++;
+      byState[statoQuiz(state, true)]++;
     }
+    byState.nuova = Math.max(0, totalQuizCount - tracked);
 
-    const nuoveIndex = counts.findIndex(c => c.boxes.includes(0));
-    if (nuoveIndex >= 0) {
-      counts[nuoveIndex].count = Math.max(0, totalQuizCount - trackedQuizIds.size);
-    }
-
-    return counts;
+    return LEITNER_CATEGORIES.map(cat => ({ ...cat, count: byState[cat.key] }));
   }, [leitnerStates, totalQuizCount]);
 
   const totalTracked = leitnerCounts.reduce((acc, c) => acc + c.count, 0);
-  const nuoveCount = leitnerCounts.find(c => c.boxes.includes(0))?.count || 0;
+  const nuoveCount = leitnerCounts.find(c => c.key === 'nuova')?.count || 0;
   const progressoApprendimento = totalTracked > 0
     ? Math.round(((totalTracked - nuoveCount) / totalTracked) * 100)
     : 0;
@@ -211,7 +205,8 @@ export default function Home() {
 
   // Tempo stimato di studio
   const tempoStimato = useMemo(() => {
-    const daRipassare = leitnerCounts.filter(c => !c.boxes.includes(0) && !c.boxes.includes(5) && !c.boxes.includes(6) && !c.boxes.includes(7))
+    const daRipassare = leitnerCounts
+      .filter(c => c.key === 'nonSai' || c.key === 'ripetile' || c.key === 'apprendimento')
       .reduce((acc, c) => acc + c.count, 0);
     const minuti = Math.round((daRipassare * 30) / 60);
     if (minuti < 60) return `${minuti} min`;

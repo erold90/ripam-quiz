@@ -125,10 +125,11 @@ export interface SimulazioneSummary {
 export interface QuizLeitnerState {
   quizId: string;
   materia: string;
-  box: number;                // 0-7 (0 = mai vista, 1 = non la sai, 7 = padroneggiata)
+  box: number;                // legacy (0-7), mantenuto per compatibilità
   totalAttempts: number;
   totalCorrect: number;
-  consecutiveCorrect: number;
+  consecutiveCorrect: number; // risposte GIUSTE di fila (2 = padroneggiata)
+  consecutiveWrong: number;   // risposte SBAGLIATE di fila (2 = ripetile, 3 = non sai)
   lastAttemptAt: number;      // timestamp
   nextReviewAt: number;       // timestamp
 }

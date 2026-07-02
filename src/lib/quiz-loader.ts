@@ -1,12 +1,16 @@
 import { QuizIndex, MateriaData, Quiz, QuizLeitnerState } from '@/types/quiz';
-import { categorizeQuiz, calculateTierWeight, weightedRandomSample, QuizCategory } from '@/lib/leitner';
+import { statoQuiz, QuizCategory } from '@/lib/leitner';
+
+// Quota di domande NUOVE in ogni sessione (studio + simulazione).
+// Il resto va al ripasso, per priorità: nonSai → ripetile → apprendimento.
+// Le padroneggiate sono sempre escluse (0%).
+export const PCT_NUOVE = 0.70;
 
 let quizIndex: QuizIndex | null = null;
 const quizCache: Record<string, MateriaData> = {};
 
 export async function getQuizIndex(): Promise<QuizIndex> {
   if (quizIndex) return quizIndex;
-
   const response = await fetch('/data/index.json');
   quizIndex = await response.json();
   return quizIndex!;
@@ -14,13 +18,9 @@ export async function getQuizIndex(): Promise<QuizIndex> {
 
 export async function getQuizByMateria(materiaId: string): Promise<MateriaData> {
   if (quizCache[materiaId]) return quizCache[materiaId];
-
   const response = await fetch(`/data/${materiaId}.json`);
   const data = await response.json();
-  // Normalizza: vecchio formato ha "id" invece di "materia"
-  if (!data.materia && data.id) {
-    data.materia = data.id;
-  }
+  if (!data.materia && data.id) data.materia = data.id;
   quizCache[materiaId] = data;
   return data;
 }
@@ -28,123 +28,104 @@ export async function getQuizByMateria(materiaId: string): Promise<MateriaData> 
 export async function getAllQuiz(): Promise<Record<string, Quiz[]>> {
   const index = await getQuizIndex();
   const allQuiz: Record<string, Quiz[]> = {};
-
   for (const materia of index.materie) {
     const data = await getQuizByMateria(materia.id);
     allQuiz[materia.id] = data.quiz;
   }
-
   return allQuiz;
 }
 
+// Mescola un array in place (Fisher-Yates)
+function shuffleArray<T>(array: T[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// Raggruppa un insieme di domande per stato (pool già mescolati).
+function raggruppaPerStato<T extends { id: string }>(
+  items: T[],
+  leitnerStates: Record<string, QuizLeitnerState>,
+  quizCompletati: Set<string>,
+): Record<QuizCategory, T[]> {
+  const pools: Record<QuizCategory, T[]> = {
+    nuova: [], nonSai: [], ripetile: [], apprendimento: [], padroneggiata: [],
+  };
+  for (const q of items) {
+    const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
+    pools[st].push(q);
+  }
+  for (const k of Object.keys(pools) as QuizCategory[]) shuffleArray(pools[k]);
+  return pools;
+}
+
+// Compone una sessione: PCT_NUOVE% nuove + resto ripasso per priorità.
+// Le padroneggiate sono escluse. Se un pool è scarso, si attinge dall'altro.
+function componiSessione<T extends { id: string }>(
+  pools: Record<QuizCategory, T[]>,
+  limit: number,
+): T[] {
+  const nuove = pools.nuova;
+  const ripasso = [...pools.nonSai, ...pools.ripetile, ...pools.apprendimento]; // priorità
+
+  const targetNuove = Math.round(limit * PCT_NUOVE);
+  const sessione: T[] = nuove.slice(0, Math.min(targetNuove, nuove.length));
+  sessione.push(...ripasso.slice(0, Math.min(limit - sessione.length, ripasso.length)));
+
+  // Riempi con l'eventuale surplus (poco materiale in una delle due parti)
+  if (sessione.length < limit) {
+    const used = new Set(sessione.map(q => q.id));
+    const rest = [...nuove, ...ripasso].filter(q => !used.has(q.id));
+    sessione.push(...rest.slice(0, limit - sessione.length));
+  }
+  return sessione;
+}
+
 /**
- * ALGORITMO PWAS (Priority-Weighted Adaptive Selection)
- *
- * Seleziona le domande per la simulazione con selezione a tier:
- *   1. UNSEEN → domande mai tentate (massima priorità)
- *   2. WRONG → domande sbagliate (da ripassare urgentemente)
- *   3. LEARNING → domande in fase di apprendimento (box 3-4)
- *   4. CORRECT → risposte giuste 1 volta (minima presenza)
- *   5. CONSOLIDATED → box 5-6 (solo se pool esaurito)
- *   6. MASTERED → box ≥6 + 2+ corrette consecutive → ESCLUSE
- *
- * Principi scientifici applicati:
- *   - Regola dell'85% (Wilson 2019): punta a ~85% tasso di successo
- *   - Spaced Repetition: priorità a domande overdue
- *   - Interleaving: mescolamento finale tra materie
- *   - Desirable Difficulties: mix calibrato di difficoltà
+ * Simulazione: per ogni materia il numero di domande è quello del bando;
+ * dentro ogni materia si applica la composizione 70/30 (padroneggiate escluse).
+ * Mescolamento finale tra materie (interleaving).
  */
 export async function generaQuizSimulazione(
   leitnerStates: Record<string, QuizLeitnerState>,
   quizCompletati: Set<string>,
-  quizSbagliati: Set<string>
+  _quizSbagliati: Set<string>,
 ): Promise<Array<Quiz & { materia: string }>> {
   const index = await getQuizIndex();
   const quizSimulazione: Array<Quiz & { materia: string }> = [];
-  const now = Date.now();
 
   for (const materia of index.materie) {
     const data = await getQuizByMateria(materia.id);
-    const nDomande = materia.domande_esame;
-
-    // Categorizza ogni domanda della materia
-    const tiers: Record<QuizCategory, Array<{ item: Quiz & { materia: string }; weight: number }>> = {
-      unseen: [],
-      wrong: [],
-      learning: [],
-      consolidated: [],
-      mastered: [], // Mai usato nella selezione
-    };
-
-    for (const q of data.quiz) {
-      const lState = leitnerStates[q.id] || null;
-      const isCompleted = quizCompletati.has(q.id);
-      const isWrong = quizSbagliati.has(q.id);
-
-      const category = categorizeQuiz(lState, isCompleted, isWrong);
-
-      // MASTERED → skip completamente
-      if (category === 'mastered') continue;
-
-      tiers[category].push({
-        item: { ...q, materia: materia.id },
-        weight: calculateTierWeight(lState, now, category),
-      });
-    }
-
-    // Selezione a tier: riempi in ordine di priorità
-    const selected: Array<Quiz & { materia: string }> = [];
-    const tierOrder: QuizCategory[] = ['unseen', 'wrong', 'learning', 'consolidated'];
-
-    for (const tierName of tierOrder) {
-      if (selected.length >= nDomande) break;
-
-      const tier = tiers[tierName];
-      if (tier.length === 0) continue;
-
-      const needed = nDomande - selected.length;
-
-      if (tier.length <= needed) {
-        // Prendi tutto dal tier
-        selected.push(...tier.map(t => t.item));
-      } else {
-        // Weighted random sample dal tier
-        const sampled = weightedRandomSample(tier, needed);
-        selected.push(...sampled);
-      }
-    }
-
-    quizSimulazione.push(...selected);
+    const items = data.quiz.map(q => ({ ...q, materia: materia.id }));
+    const pools = raggruppaPerStato(items, leitnerStates, quizCompletati);
+    quizSimulazione.push(...componiSessione(pools, materia.domande_esame));
   }
 
-  // Mescola l'ordine finale (interleaving tra materie)
   shuffleArray(quizSimulazione);
-
   return quizSimulazione;
 }
 
 /**
- * Conta i quiz per categoria (per la schermata pre-studio).
+ * Conta i quiz per macro-categoria per la schermata pre-studio.
+ * (unseen = nuove, wrong = nonSai+ripetile, review = apprendimento, mastered = padroneggiate)
  */
 export async function countQuizByCategory(
   materiaId: string,
   quizCompletati: Set<string>,
-  quizSbagliati: Set<string>,
-  leitnerStates: Record<string, QuizLeitnerState>
+  _quizSbagliati: Set<string>,
+  leitnerStates: Record<string, QuizLeitnerState>,
 ): Promise<{ total: number; unseen: number; wrong: number; review: number; mastered: number }> {
   const data = await getQuizByMateria(materiaId);
   const counts = { total: data.quiz.length, unseen: 0, wrong: 0, review: 0, mastered: 0 };
 
-  // Usa la STESSA categorizzazione della generazione → contatori coerenti col comportamento
   for (const q of data.quiz) {
-    const lState = leitnerStates[q.id] || null;
-    const cat = categorizeQuiz(lState, quizCompletati.has(q.id), quizSbagliati.has(q.id));
-    if (cat === 'unseen') counts.unseen++;
-    else if (cat === 'wrong') counts.wrong++;
-    else if (cat === 'mastered') counts.mastered++;
-    else counts.review++; // learning + consolidated
+    const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
+    if (st === 'nuova') counts.unseen++;
+    else if (st === 'nonSai' || st === 'ripetile') counts.wrong++;
+    else if (st === 'padroneggiata') counts.mastered++;
+    else counts.review++; // apprendimento
   }
-
   return counts;
 }
 
@@ -152,19 +133,19 @@ export interface CoverageMateria {
   id: string;
   nome: string;
   total: number;
-  seen: number;      // domande viste almeno una volta (non "unseen")
-  mastered: number;  // domande padroneggiate (fuori dal ripasso)
-  wrong: number;     // domande con ultima risposta errata
+  seen: number;      // domande viste almeno una volta
+  mastered: number;  // domande padroneggiate
+  wrong: number;     // domande "non sai" + "ripetile"
 }
 
 /**
- * Statistiche di COPERTURA della banca dati (metrica di prontezza per il concorso):
- * quante domande hai visto e quante padroneggi, globale e per materia.
+ * Copertura della banca dati (metrica di prontezza): quante domande viste
+ * e quante padroneggiate, globale e per materia.
  */
 export async function getCoverageStats(
   leitnerStates: Record<string, QuizLeitnerState>,
   quizCompletati: Set<string>,
-  quizSbagliati: Set<string>
+  _quizSbagliati: Set<string>,
 ): Promise<{ totBank: number; totSeen: number; totMastered: number; totWrong: number; perMateria: CoverageMateria[] }> {
   const index = await getQuizIndex();
   const perMateria: CoverageMateria[] = [];
@@ -174,10 +155,10 @@ export async function getCoverageStats(
     const data = await getQuizByMateria(m.id);
     let seen = 0, mastered = 0, wrong = 0;
     for (const q of data.quiz) {
-      const cat = categorizeQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id), quizSbagliati.has(q.id));
-      if (cat !== 'unseen') seen++;
-      if (cat === 'mastered') mastered++;
-      if (cat === 'wrong') wrong++;
+      const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
+      if (st !== 'nuova') seen++;
+      if (st === 'padroneggiata') mastered++;
+      if (st === 'nonSai' || st === 'ripetile') wrong++;
     }
     perMateria.push({ id: m.id, nome: m.nome, total: data.quiz.length, seen, mastered, wrong });
     totBank += data.quiz.length;
@@ -185,144 +166,83 @@ export async function getCoverageStats(
     totMastered += mastered;
     totWrong += wrong;
   }
-
   return { totBank, totSeen, totMastered, totWrong, perMateria };
 }
 
 /**
- * Genera quiz per studio di una materia con filtri e limite.
- * Filtri: all (ordinamento PWAS), unseen, wrong, review.
- * Limit: numero massimo di domande per la sessione.
+ * Studio di una materia con filtri e limite.
+ *  - all: composizione 70/30 (nuove + ripasso, padroneggiate escluse)
+ *  - unseen: solo nuove | wrong: nonSai+ripetile | review: in apprendimento
  */
 export async function generaQuizStudio(
   materiaId: string,
   leitnerStates: Record<string, QuizLeitnerState>,
   quizCompletati: Set<string>,
-  quizSbagliati: Set<string>,
+  _quizSbagliati: Set<string>,
   filter: 'all' | 'unseen' | 'wrong' | 'review' = 'all',
-  limit?: number
+  limit?: number,
 ): Promise<Quiz[]> {
   const data = await getQuizByMateria(materiaId);
-  let filtered: Quiz[];
 
+  if (filter === 'all') {
+    const pools = raggruppaPerStato(data.quiz, leitnerStates, quizCompletati);
+    return componiSessione(pools, limit ?? data.quiz.length);
+  }
+
+  let filtered: Quiz[];
   switch (filter) {
     case 'unseen':
-      filtered = data.quiz.filter(q => !quizCompletati.has(q.id));
-      shuffleArray(filtered);
+      filtered = data.quiz.filter(q => statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id)) === 'nuova');
       break;
-
     case 'wrong':
-      filtered = data.quiz.filter(q => quizSbagliati.has(q.id));
-      shuffleArray(filtered);
-      break;
-
-    case 'review':
       filtered = data.quiz.filter(q => {
-        const cat = categorizeQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id), quizSbagliati.has(q.id));
-        return cat === 'learning' || cat === 'consolidated';
+        const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
+        return st === 'nonSai' || st === 'ripetile';
       });
-      shuffleArray(filtered);
       break;
-
-    case 'all':
-    default: {
-      const tiers: Record<string, Quiz[]> = {
-        unseen: [], wrong: [], learning: [],
-        consolidated: [], mastered: [],
-      };
-
-      for (const q of data.quiz) {
-        const lState = leitnerStates[q.id] || null;
-        const isCompleted = quizCompletati.has(q.id);
-        const isWrong = quizSbagliati.has(q.id);
-        const category = categorizeQuiz(lState, isCompleted, isWrong);
-        tiers[category].push(q);
-      }
-
-      for (const tier of Object.values(tiers)) {
-        shuffleArray(tier);
-      }
-
-      // Priorità: nuove → errori da recuperare → in apprendimento → consolidate.
-      // Le padroneggiate restano in coda (fallback se il resto è esaurito).
-      filtered = [
-        ...tiers.unseen, ...tiers.wrong, ...tiers.learning,
-        ...tiers.consolidated, ...tiers.mastered,
-      ];
+    case 'review':
+    default:
+      filtered = data.quiz.filter(q => statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id)) === 'apprendimento');
       break;
-    }
   }
-
-  if (limit && limit < filtered.length) {
-    filtered = filtered.slice(0, limit);
-  }
-
+  shuffleArray(filtered);
+  if (limit && limit < filtered.length) filtered = filtered.slice(0, limit);
   return filtered;
 }
 
-// Utility per mescolare array
-function shuffleArray<T>(array: T[]): void {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
 /**
- * Calcola punteggio simulazione secondo le regole ufficiali del bando RIPAM.
- *
- * Conoscenze + Logica (32 domande):
- *   - Corretta: +0,75 | Errata: -0,25 | Non data: 0
- *
- * Situazionali (8 domande):
- *   - Più efficace: +0,75 | Neutra: +0,375 | Meno efficace: 0
- *   (NESSUNA penalità per risposta errata)
+ * Punteggio simulazione secondo le regole ufficiali RIPAM.
+ * Conoscenze+Logica: +0,75 / -0,25 / 0.  Situazionali: +0,75 / +0,375 / 0.
  */
 export function calcolaPunteggio(
-  risposte: Array<{ corretto: boolean | null; materia: string; efficacia?: 'alta' | 'neutra' | 'bassa' | null }>
+  risposte: Array<{ corretto: boolean | null; materia: string; efficacia?: 'alta' | 'neutra' | 'bassa' | null }>,
 ): number {
   let punteggio = 0;
-
   for (const risposta of risposte) {
     const isSituazionale = risposta.materia === 'situazionali';
-
     if (risposta.corretto === true) {
-      // Corretta / più efficace: +0.75
       punteggio += 0.75;
     } else if (risposta.corretto === false) {
       if (isSituazionale) {
-        // Situazionali: usa campo efficacia per punteggio graduato
-        if (risposta.efficacia === 'neutra') {
-          punteggio += 0.375;
-        }
-        // 'bassa' = 0 punti, nessuna penalità
+        if (risposta.efficacia === 'neutra') punteggio += 0.375;
+        // 'bassa' = 0, nessuna penalità
       } else {
-        // Conoscenze + Logica: risposta errata = -0.25
         punteggio -= 0.25;
       }
     }
-    // null = non risposto = 0 punti
   }
-
   return Math.max(0, punteggio);
 }
 
-// Formatta tempo
 export function formatTempo(ms: number): string {
   const secondi = Math.floor(ms / 1000);
   const minuti = Math.floor(secondi / 60);
   const ore = Math.floor(minuti / 60);
-
-  if (ore > 0) {
-    return `${ore}h ${minuti % 60}m`;
-  }
-  if (minuti > 0) {
-    return `${minuti}m ${secondi % 60}s`;
-  }
+  if (ore > 0) return `${ore}h ${minuti % 60}m`;
+  if (minuti > 0) return `${minuti}m ${secondi % 60}s`;
   return `${secondi}s`;
 }
 
-// Formatta tempo rimanente (countdown)
 export function formatTempoRimanente(secondi: number): string {
   const min = Math.floor(secondi / 60);
   const sec = secondi % 60;
