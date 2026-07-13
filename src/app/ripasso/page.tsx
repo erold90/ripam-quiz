@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/button';
 import { useQuizStore } from '@/store/quiz-store';
-import { getQuizIndex, countQuizByCategory } from '@/lib/quiz-loader';
+import { getQuizIndex, countRipasso } from '@/lib/quiz-loader';
 import { QuizIndex } from '@/types/quiz';
 import {
   GraduationCap, BookOpen, ArrowLeft, RefreshCw, CheckCircle2,
@@ -15,7 +15,6 @@ import {
   MessageCircle, ShieldCheck, Landmark, ScrollText, BadgeCheck, Signature, Coins,
   Building2, Languages, Puzzle, Presentation,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Scale, Gavel, Monitor, Building, Globe, Laptop, Calculator, Flag, Users, Brain, MessageCircle,
@@ -26,16 +25,16 @@ interface MateriaRipasso {
   id: string;
   nome: string;
   icona: string;
-  nonSaiRipetile: number; // "wrong" = da recuperare (urgenti)
-  apprendimento: number;  // "review" = incerte
+  sempre: number; // sempre sbagliate
+  mista: number;  // a volte sì, a volte no
   totale: number;
 }
 
 export default function RipassoPage() {
-  const [quizData, setQuizData] = useState<QuizIndex | null>(null);
+  const [, setQuizData] = useState<QuizIndex | null>(null);
   const [materie, setMaterie] = useState<MateriaRipasso[]>([]);
   const [loading, setLoading] = useState(true);
-  const { leitnerStates, quizCompletati, quizSbagliati, darkMode } = useQuizStore();
+  const { leitnerStates, darkMode } = useQuizStore();
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -47,17 +46,14 @@ export default function RipassoPage() {
       setQuizData(data);
       const rows: MateriaRipasso[] = [];
       for (const m of data.materie) {
-        const c = await countQuizByCategory(m.id, quizCompletati, quizSbagliati, leitnerStates);
-        rows.push({
-          id: m.id, nome: m.nome, icona: m.icona,
-          nonSaiRipetile: c.wrong, apprendimento: c.review, totale: c.wrong + c.review,
-        });
+        const r = await countRipasso(m.id, leitnerStates);
+        rows.push({ id: m.id, nome: m.nome, icona: m.icona, sempre: r.sempre, mista: r.mista, totale: r.sempre + r.mista });
       }
       setMaterie(rows);
       setLoading(false);
     }
     load();
-  }, [leitnerStates, quizCompletati, quizSbagliati]);
+  }, [leitnerStates]);
 
   if (loading) {
     return (
@@ -67,7 +63,7 @@ export default function RipassoPage() {
     );
   }
 
-  const daRipassare = materie.filter(m => m.totale > 0).sort((a, b) => b.totale - a.totale);
+  const daRipassare = materie.filter(m => m.totale > 0).sort((a, b) => b.sempre - a.sempre || b.totale - a.totale);
   const totaleGlobale = materie.reduce((a, m) => a + m.totale, 0);
 
   return (
@@ -79,16 +75,16 @@ export default function RipassoPage() {
             <Button variant="ghost" size="sm" className="gap-2 mb-4"><ArrowLeft className="h-4 w-4" /> Torna alla home</Button>
           </Link>
           <h1 className="text-2xl font-bold flex items-center gap-2"><RefreshCw className="h-6 w-6" /> Ripasso</h1>
-          <p className="text-muted-foreground">Consolida le domande incerte e quelle da recuperare, materia per materia</p>
+          <p className="text-muted-foreground">Solo le domande che hai sbagliato, materia per materia</p>
         </div>
 
         {totaleGlobale === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
               <CheckCircle2 className="h-16 w-16 mx-auto mb-4 text-green-500/60" />
-              <h2 className="text-lg font-medium mb-2">Niente da ripassare!</h2>
+              <h2 className="text-lg font-medium mb-2">Nessun errore da ripassare!</h2>
               <p className="text-muted-foreground mb-4">
-                Fai qualche quiz o una simulazione: le domande sbagliate o incerte compariranno qui per essere consolidate.
+                Le domande che sbagli in studio o in simulazione compariranno qui, così le potrai consolidare.
               </p>
               <div className="flex gap-2 justify-center">
                 <Link href="/quiz"><Button variant="outline">Studia</Button></Link>
@@ -111,15 +107,11 @@ export default function RipassoPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium truncate">{m.nome}</h3>
                           <div className="flex items-center gap-3 mt-1 text-xs">
-                            {m.nonSaiRipetile > 0 && (
-                              <span className="text-red-500">{m.nonSaiRipetile} da recuperare</span>
-                            )}
-                            {m.apprendimento > 0 && (
-                              <span className="text-blue-500">{m.apprendimento} incerte</span>
-                            )}
+                            {m.sempre > 0 && <span className="text-red-500">{m.sempre} sempre sbagliate</span>}
+                            {m.mista > 0 && <span className="text-yellow-600">{m.mista} a volte</span>}
                           </div>
                         </div>
-                        <Badge className={cn("text-sm", m.nonSaiRipetile > 0 ? "" : "bg-blue-500")}>{m.totale}</Badge>
+                        <Badge className="text-sm">{m.totale}</Badge>
                       </div>
                     </CardContent>
                   </Card>

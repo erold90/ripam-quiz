@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { QuizCard } from '@/components/quiz/QuizCard';
 import { useQuizStore } from '@/store/quiz-store';
-import { getQuizIndex, generaQuizStudio, countQuizByCategory } from '@/lib/quiz-loader';
+import { getQuizIndex, generaQuizStudio, countQuizByCategory, countRipasso } from '@/lib/quiz-loader';
 import { Quiz, Materia } from '@/types/quiz';
 import {
   ArrowLeft,
@@ -69,6 +69,7 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
   const [filter, setFilter] = useState<StudioFilter>(isRipasso ? 'ripasso' : 'all');
   const [sessionSize, setSessionSize] = useState<number | null>(30);
   const [counts, setCounts] = useState<QuizCounts | null>(null);
+  const [ripassoSummary, setRipassoSummary] = useState<{ sempre: number; mista: number } | null>(null);
   const [materiaInfo, setMateriaInfo] = useState<Materia | null>(null);
   const [loading, setLoading] = useState(true);
   const [startLoading, setStartLoading] = useState(false);
@@ -111,6 +112,7 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
 
         const quizCounts = await countQuizByCategory(materiaId, quizCompletati, quizSbagliati, leitnerStates);
         setCounts(quizCounts);
+        if (isRipasso) setRipassoSummary(await countRipasso(materiaId, leitnerStates));
       } catch (error) {
         console.error('Errore caricamento materia:', error);
       } finally {
@@ -120,8 +122,8 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
     loadData();
   }, [materiaId]);
 
-  // Available count for current filter (ripasso = da ripassare = sbagliate + apprendimento)
-  const daRipassareCount = counts ? counts.wrong + counts.review : 0;
+  // Available count per filtro (ripasso = domande sbagliate almeno una volta)
+  const daRipassareCount = ripassoSummary ? ripassoSummary.sempre + ripassoSummary.mista : 0;
   const availableCount = isRipasso
     ? daRipassareCount
     : (counts ? counts[FILTERS.find(f => f.id === filter)!.countKey] : 0);
@@ -211,7 +213,8 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
     const store = useQuizStore.getState();
     countQuizByCategory(materiaId, store.quizCompletati, store.quizSbagliati, store.leitnerStates)
       .then(setCounts);
-  }, [materiaId]);
+    if (isRipasso) countRipasso(materiaId, store.leitnerStates).then(setRipassoSummary);
+  }, [materiaId, isRipasso]);
 
   // Loading
   if (loading) {
@@ -258,6 +261,20 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
                   {isRipasso ? `${daRipassareCount} domande da ripassare` : `${counts?.total || 0} quiz disponibili`}
                 </p>
               </div>
+
+              {/* Sommario ripasso: sempre sbagliate vs miste */}
+              {isRipasso && ripassoSummary && (
+                <div className="grid grid-cols-2 gap-2 mb-6">
+                  <div className="text-center p-3 rounded-lg bg-red-50 dark:bg-red-950">
+                    <p className="text-2xl font-bold text-red-600">{ripassoSummary.sempre}</p>
+                    <p className="text-[11px] text-muted-foreground">Sempre sbagliate</p>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-yellow-50 dark:bg-yellow-950">
+                    <p className="text-2xl font-bold text-yellow-600">{ripassoSummary.mista}</p>
+                    <p className="text-[11px] text-muted-foreground">A volte sì, a volte no</p>
+                  </div>
+                </div>
+              )}
 
               {/* Counts grid */}
               {!isRipasso && counts && (

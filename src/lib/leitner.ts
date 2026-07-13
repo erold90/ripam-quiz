@@ -33,6 +33,24 @@ export function isPadroneggiata(lState: QuizLeitnerState | null): boolean {
   return !!lState && (lState.consecutiveCorrect || 0) >= 2;
 }
 
+// ===== RIPASSO: basato sullo STORICO degli errori (non sullo stato "incerto") =====
+export type CategoriaRipasso = 'sempre' | 'mista';
+
+/**
+ * Una domanda entra nel Ripasso SOLO se è stata sbagliata almeno una volta
+ * e non è ancora padroneggiata (2 giuste di fila).
+ *  - 'sempre': mai azzeccata (corrette = 0)
+ *  - 'mista':  a volte giusta, a volte sbagliata (almeno 1 giusta e 1 errore)
+ *  - null:     mai fatta, sempre giusta, o già padroneggiata → NON nel ripasso
+ */
+export function categoriaRipasso(lState: QuizLeitnerState | null): CategoriaRipasso | null {
+  if (!lState || lState.totalAttempts === 0) return null;      // mai fatta
+  if ((lState.consecutiveCorrect || 0) >= 2) return null;      // padroneggiata → risolta
+  const errori = lState.totalAttempts - lState.totalCorrect;
+  if (errori <= 0) return null;                                // mai sbagliata → non è ripasso
+  return lState.totalCorrect === 0 ? 'sempre' : 'mista';
+}
+
 /**
  * Aggiorna lo stato di una domanda dopo una risposta.
  * Traccia sia le giuste consecutive sia le sbagliate consecutive.

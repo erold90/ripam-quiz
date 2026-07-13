@@ -1,5 +1,5 @@
 import { QuizIndex, MateriaData, Quiz, QuizLeitnerState } from '@/types/quiz';
-import { statoQuiz, QuizCategory } from '@/lib/leitner';
+import { statoQuiz, QuizCategory, categoriaRipasso } from '@/lib/leitner';
 
 // Quota di domande NUOVE in ogni sessione (studio + simulazione).
 // Il resto va al ripasso, per priorità: nonSai → ripetile → apprendimento.
@@ -141,6 +141,21 @@ export async function countQuizByCategory(
   return counts;
 }
 
+// Conteggio per il Ripasso: domande sempre sbagliate e miste, per materia.
+export async function countRipasso(
+  materiaId: string,
+  leitnerStates: Record<string, QuizLeitnerState>,
+): Promise<{ sempre: number; mista: number }> {
+  const data = await getQuizByMateria(materiaId);
+  let sempre = 0, mista = 0;
+  for (const q of data.quiz) {
+    const c = categoriaRipasso(leitnerStates[q.id] || null);
+    if (c === 'sempre') sempre++;
+    else if (c === 'mista') mista++;
+  }
+  return { sempre, mista };
+}
+
 export interface CoverageMateria {
   id: string;
   nome: string;
@@ -201,17 +216,16 @@ export async function generaQuizStudio(
     return componiSessione(pools, limit ?? data.quiz.length);
   }
 
-  // Ripasso: TUTTE le domande da consolidare, per urgenza (nonSai → ripetile → apprendimento)
+  // Ripasso: SOLO domande sbagliate almeno una volta. Priorità: sempre-sbagliate → miste
   if (filter === 'ripasso') {
-    const nonSai: Quiz[] = [], ripetile: Quiz[] = [], appr: Quiz[] = [];
+    const sempre: Quiz[] = [], mista: Quiz[] = [];
     for (const q of data.quiz) {
-      const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
-      if (st === 'nonSai') nonSai.push(q);
-      else if (st === 'ripetile') ripetile.push(q);
-      else if (st === 'apprendimento') appr.push(q);
+      const c = categoriaRipasso(leitnerStates[q.id] || null);
+      if (c === 'sempre') sempre.push(q);
+      else if (c === 'mista') mista.push(q);
     }
-    shuffleArray(nonSai); shuffleArray(ripetile); shuffleArray(appr);
-    let out = [...nonSai, ...ripetile, ...appr];
+    shuffleArray(sempre); shuffleArray(mista);
+    let out = [...sempre, ...mista];
     if (limit && limit < out.length) out = out.slice(0, limit);
     return out;
   }
