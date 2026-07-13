@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Header } from '@/components/layout/Header';
 import { QuizCard } from '@/components/quiz/QuizCard';
 import { useQuizStore } from '@/store/quiz-store';
-import { getQuizIndex, generaQuizStudio, countQuizByCategory, countRipasso } from '@/lib/quiz-loader';
+import { getQuizIndex, generaQuizStudio, countQuizByCategory, countRipasso, generaRipasso, getBestieNere } from '@/lib/quiz-loader';
 import { Quiz, Materia } from '@/types/quiz';
 import {
   ArrowLeft,
@@ -80,6 +80,14 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
   const [sessionStats, setSessionStats] = useState({ corrette: 0, totale: 0 });
   const tempoInizioRef = useRef(Date.now());
 
+  // Ripasso: selezione gruppi + modalità + drilling
+  const [ripassoGruppi, setRipassoGruppi] = useState({ sempre: true, mista: true });
+  const [ripassoModo, setRipassoModo] = useState<'martella' | 'sequenza'>('martella');
+  const [bestieNere, setBestieNere] = useState<Array<{ id: string; domanda: string; errori: number; cat: 'sempre' | 'mista' }>>([]);
+  const [drillQueue, setDrillQueue] = useState<Array<{ quiz: Quiz; streak: number }>>([]);
+  const [imparate, setImparate] = useState(0);
+  const lastCorrettaRef = useRef(false);
+
   const {
     rispostaSelezionata,
     mostraSoluzione,
@@ -112,7 +120,10 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
 
         const quizCounts = await countQuizByCategory(materiaId, quizCompletati, quizSbagliati, leitnerStates);
         setCounts(quizCounts);
-        if (isRipasso) setRipassoSummary(await countRipasso(materiaId, leitnerStates));
+        if (isRipasso) {
+          setRipassoSummary(await countRipasso(materiaId, leitnerStates));
+          setBestieNere(await getBestieNere(materiaId, leitnerStates));
+        }
       } catch (error) {
         console.error('Errore caricamento materia:', error);
       } finally {
@@ -123,7 +134,9 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
   }, [materiaId]);
 
   // Available count per filtro (ripasso = domande sbagliate almeno una volta)
-  const daRipassareCount = ripassoSummary ? ripassoSummary.sempre + ripassoSummary.mista : 0;
+  const daRipassareCount = ripassoSummary
+    ? (ripassoGruppi.sempre ? ripassoSummary.sempre : 0) + (ripassoGruppi.mista ? ripassoSummary.mista : 0)
+    : 0;
   const availableCount = isRipasso
     ? daRipassareCount
     : (counts ? counts[FILTERS.find(f => f.id === filter)!.countKey] : 0);
@@ -136,10 +149,16 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
     setStartLoading(true);
     try {
       const limit = sessionSize === null ? undefined : sessionSize;
-      const quiz = await generaQuizStudio(materiaId, leitnerStates, quizCompletati, quizSbagliati, filter, limit);
+      const quiz = isRipasso
+        ? await generaRipasso(materiaId, leitnerStates, ripassoGruppi, limit)
+        : await generaQuizStudio(materiaId, leitnerStates, quizCompletati, quizSbagliati, filter, limit);
       setQuizList(quiz);
       setCurrentIndex(0);
       setSessionStats({ corrette: 0, totale: 0 });
+      if (isRipasso && ripassoModo === 'martella') {
+        setDrillQueue(quiz.map(q => ({ quiz: q, streak: 0 })));
+        setImparate(0);
+      }
       tempoInizioRef.current = Date.now();
       prossimoQuiz();
       setPhase('studying');
@@ -148,9 +167,10 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
     } finally {
       setStartLoading(false);
     }
-  }, [materiaId, leitnerStates, quizCompletati, quizSbagliati, filter, sessionSize, prossimoQuiz]);
+  }, [materiaId, leitnerStates, quizCompletati, quizSbagliati, filter, sessionSize, prossimoQuiz, isRipasso, ripassoGruppi, ripassoModo]);
 
-  const currentQuiz = quizList[currentIndex];
+  const useDrill = isRipasso && ripassoModo === 'martella';
+  const currentQuiz = useDrill ? drillQueue[0]?.quiz : quizList[currentIndex];
 
   // Handle answer confirmation
   const handleConferma = useCallback(() => {
@@ -158,6 +178,7 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
 
     const rispostaCorretta = currentQuiz.risposte.find(r => r.corretta);
     const isCorretta = rispostaCorretta?.id === rispostaSelezionata;
+    lastCorrettaRef.current = isCorretta;
     const tempoMs = Date.now() - tempoInizioRef.current;
 
     setSessionStats(prev => ({
@@ -193,14 +214,35 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
 
   // Next question
   const handleProssimo = useCallback(() => {
-    if (currentIndex < quizList.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+    if (useDrill) {
+      const corretta = lastCorrettaRef.current;
+      setDrillQueue(prev => {
+        if (prev.length === 0) return prev;
+        const [head, ...rest] = prev;
+        const newStreak = corretta ? head.streak + 1 : 0;
+        // 2 giuste di fila nella sessione → imparata, esce dalla coda
+        if (corretta && newStreak >= 2) {
+          setImparate(n => n + 1);
+          if (rest.length === 0) setPhase('complete');
+          return rest;
+        }
+        // altrimenti rimettila in coda: sbagliata torna presto, giusta-1 va più indietro
+        const item = { quiz: head.quiz, streak: newStreak };
+        const insertAt = corretta ? rest.length : Math.min(rest.length, 2);
+        return [...rest.slice(0, insertAt), item, ...rest.slice(insertAt)];
+      });
       tempoInizioRef.current = Date.now();
       prossimoQuiz();
     } else {
-      setPhase('complete');
+      if (currentIndex < quizList.length - 1) {
+        setCurrentIndex(prev => prev + 1);
+        tempoInizioRef.current = Date.now();
+        prossimoQuiz();
+      } else {
+        setPhase('complete');
+      }
     }
-  }, [currentIndex, quizList.length, prossimoQuiz]);
+  }, [useDrill, currentIndex, quizList.length, prossimoQuiz]);
 
   // End session early
   const handleTermina = useCallback(() => {
@@ -213,7 +255,12 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
     const store = useQuizStore.getState();
     countQuizByCategory(materiaId, store.quizCompletati, store.quizSbagliati, store.leitnerStates)
       .then(setCounts);
-    if (isRipasso) countRipasso(materiaId, store.leitnerStates).then(setRipassoSummary);
+    if (isRipasso) {
+      countRipasso(materiaId, store.leitnerStates).then(setRipassoSummary);
+      getBestieNere(materiaId, store.leitnerStates).then(setBestieNere);
+    }
+    setDrillQueue([]);
+    setImparate(0);
   }, [materiaId, isRipasso]);
 
   // Loading
@@ -262,16 +309,52 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
                 </p>
               </div>
 
-              {/* Sommario ripasso: sempre sbagliate vs miste */}
+              {/* Ripasso: selezione gruppi (chip) + modalità */}
               {isRipasso && ripassoSummary && (
-                <div className="grid grid-cols-2 gap-2 mb-6">
-                  <div className="text-center p-3 rounded-lg bg-red-50 dark:bg-red-950">
-                    <p className="text-2xl font-bold text-red-600">{ripassoSummary.sempre}</p>
-                    <p className="text-[11px] text-muted-foreground">Sempre sbagliate</p>
+                <div className="mb-6 space-y-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Cosa ripassare <span className="text-xs text-muted-foreground font-normal">(tocca per includere/escludere)</span></h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setRipassoGruppi(g => ({ ...g, sempre: !g.sempre }))}
+                        className={cn("p-3 rounded-lg border-2 text-center transition-all",
+                          ripassoGruppi.sempre ? "border-red-500 bg-red-50 dark:bg-red-950" : "border-border opacity-45")}
+                      >
+                        <p className="text-2xl font-bold text-red-600">{ripassoSummary.sempre}</p>
+                        <p className="text-xs font-medium">Non le sai</p>
+                        <p className="text-[10px] text-muted-foreground">mai azzeccate</p>
+                      </button>
+                      <button
+                        onClick={() => setRipassoGruppi(g => ({ ...g, mista: !g.mista }))}
+                        className={cn("p-3 rounded-lg border-2 text-center transition-all",
+                          ripassoGruppi.mista ? "border-yellow-500 bg-yellow-50 dark:bg-yellow-950" : "border-border opacity-45")}
+                      >
+                        <p className="text-2xl font-bold text-yellow-600">{ripassoSummary.mista}</p>
+                        <p className="text-xs font-medium">Instabili</p>
+                        <p className="text-[10px] text-muted-foreground">a volte sì, a volte no</p>
+                      </button>
+                    </div>
                   </div>
-                  <div className="text-center p-3 rounded-lg bg-yellow-50 dark:bg-yellow-950">
-                    <p className="text-2xl font-bold text-yellow-600">{ripassoSummary.mista}</p>
-                    <p className="text-[11px] text-muted-foreground">A volte sì, a volte no</p>
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Modalità</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setRipassoModo('martella')}
+                        className={cn("p-2.5 rounded-lg border-2 text-center transition-all",
+                          ripassoModo === 'martella' ? "border-primary bg-primary/5" : "border-border")}
+                      >
+                        <p className="text-sm font-medium">🔨 Martella</p>
+                        <p className="text-[10px] text-muted-foreground">finché non la sai (2 di fila)</p>
+                      </button>
+                      <button
+                        onClick={() => setRipassoModo('sequenza')}
+                        className={cn("p-2.5 rounded-lg border-2 text-center transition-all",
+                          ripassoModo === 'sequenza' ? "border-primary bg-primary/5" : "border-border")}
+                      >
+                        <p className="text-sm font-medium">▶ In sequenza</p>
+                        <p className="text-[10px] text-muted-foreground">una volta ciascuna</p>
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -384,6 +467,22 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
                   </>
                 )}
               </Button>
+
+              {/* Schema "bestie nere": domande più sbagliate */}
+              {isRipasso && bestieNere.length > 0 && (
+                <div className="mt-6 pt-4 border-t">
+                  <h3 className="text-sm font-medium mb-2.5">🎯 Le tue &quot;bestie nere&quot;</h3>
+                  <div className="space-y-1.5">
+                    {bestieNere.map((b, i) => (
+                      <div key={b.id} className="flex items-center gap-2 text-xs">
+                        <span className="text-muted-foreground w-4 shrink-0">{i + 1}.</span>
+                        <span className="flex-1 truncate">{b.domanda}</span>
+                        <Badge variant="destructive" className="text-[10px] shrink-0">✗ {b.errori}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </main>
@@ -403,18 +502,27 @@ export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }
               <div>
                 <h1 className="text-lg font-bold">{materiaInfo.nome}</h1>
                 <p className="text-xs text-muted-foreground">
-                  {filter === 'all' ? 'Tutto' : filter === 'unseen' ? 'Nuove' : filter === 'wrong' ? 'Sbagliate' : 'Ripasso'}
+                  {isRipasso ? (useDrill ? '🔨 Martella' : 'Ripasso') : filter === 'all' ? 'Tutto' : filter === 'unseen' ? 'Nuove' : filter === 'wrong' ? 'Sbagliate' : 'Ripasso'}
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="outline">{currentIndex + 1}/{quizList.length}</Badge>
+                {useDrill ? (
+                  <>
+                    <Badge variant="outline">{drillQueue.length} rimaste</Badge>
+                    {imparate > 0 && <Badge className="bg-green-600 hover:bg-green-600">{imparate} ✓</Badge>}
+                  </>
+                ) : (
+                  <Badge variant="outline">{currentIndex + 1}/{quizList.length}</Badge>
+                )}
                 <Button variant="ghost" size="sm" onClick={handleTermina} className="gap-1.5">
                   <Square className="h-3.5 w-3.5" />
                   Termina
                 </Button>
               </div>
             </div>
-            <Progress value={((currentIndex + (mostraSoluzione ? 1 : 0)) / quizList.length) * 100} className="h-2" />
+            <Progress value={useDrill
+              ? (imparate / Math.max(1, imparate + drillQueue.length)) * 100
+              : ((currentIndex + (mostraSoluzione ? 1 : 0)) / quizList.length) * 100} className="h-2" />
           </div>
 
           {/* Quiz Card */}

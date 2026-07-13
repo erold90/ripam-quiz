@@ -107,8 +107,8 @@ export default function RipassoPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium truncate">{m.nome}</h3>
                           <div className="flex items-center gap-3 mt-1 text-xs">
-                            {m.sempre > 0 && <span className="text-red-500">{m.sempre} sempre sbagliate</span>}
-                            {m.mista > 0 && <span className="text-yellow-600">{m.mista} a volte</span>}
+                            {m.sempre > 0 && <span className="text-red-500">{m.sempre} non le sai</span>}
+                            {m.mista > 0 && <span className="text-yellow-600">{m.mista} instabili</span>}
                           </div>
                         </div>
                         <Badge className="text-sm">{m.totale}</Badge>

@@ -1,5 +1,5 @@
 import { QuizIndex, MateriaData, Quiz, QuizLeitnerState } from '@/types/quiz';
-import { statoQuiz, QuizCategory, categoriaRipasso } from '@/lib/leitner';
+import { statoQuiz, QuizCategory, categoriaRipasso, CategoriaRipasso } from '@/lib/leitner';
 
 // Quota di domande NUOVE in ogni sessione (studio + simulazione).
 // Il resto va al ripasso, per priorità: nonSai → ripetile → apprendimento.
@@ -154,6 +154,52 @@ export async function countRipasso(
     else if (c === 'mista') mista++;
   }
   return { sempre, mista };
+}
+
+// Genera una sessione di ripasso filtrata per gruppo ('Non le sai' / 'Instabili')
+// e ORDINATA per gravità: prima le "sempre sbagliate", poi per numero di errori.
+export async function generaRipasso(
+  materiaId: string,
+  leitnerStates: Record<string, QuizLeitnerState>,
+  gruppi: { sempre: boolean; mista: boolean },
+  limit?: number,
+): Promise<Quiz[]> {
+  const data = await getQuizByMateria(materiaId);
+  const items: Array<{ q: Quiz; cat: CategoriaRipasso; errori: number }> = [];
+  for (const q of data.quiz) {
+    const l = leitnerStates[q.id] || null;
+    const cat = categoriaRipasso(l);
+    if (!cat) continue;
+    if (cat === 'sempre' && !gruppi.sempre) continue;
+    if (cat === 'mista' && !gruppi.mista) continue;
+    const errori = l ? l.totalAttempts - l.totalCorrect : 0;
+    items.push({ q, cat, errori });
+  }
+  items.sort((a, b) => {
+    if (a.cat !== b.cat) return a.cat === 'sempre' ? -1 : 1; // sempre prima
+    return b.errori - a.errori;                              // più sbagliate prima
+  });
+  let out = items.map(i => i.q);
+  if (limit && limit < out.length) out = out.slice(0, limit);
+  return out;
+}
+
+// "Bestie nere": le domande più sbagliate della materia (per lo schema riepilogativo).
+export async function getBestieNere(
+  materiaId: string,
+  leitnerStates: Record<string, QuizLeitnerState>,
+  topN = 8,
+): Promise<Array<{ id: string; domanda: string; errori: number; cat: CategoriaRipasso }>> {
+  const data = await getQuizByMateria(materiaId);
+  const items: Array<{ id: string; domanda: string; errori: number; cat: CategoriaRipasso }> = [];
+  for (const q of data.quiz) {
+    const l = leitnerStates[q.id] || null;
+    const cat = categoriaRipasso(l);
+    if (!cat || !l) continue;
+    items.push({ id: q.id, domanda: q.domanda, errori: l.totalAttempts - l.totalCorrect, cat });
+  }
+  items.sort((a, b) => b.errori - a.errori);
+  return items.slice(0, topN);
 }
 
 export interface CoverageMateria {
