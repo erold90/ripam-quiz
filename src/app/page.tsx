@@ -43,6 +43,7 @@ import {
   Presentation,
   Trash2,
   Loader2,
+  RefreshCw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { statoQuiz, QuizCategory } from '@/lib/leitner';
@@ -317,8 +318,8 @@ export default function Home() {
           </Card>
         </section>
 
-        {/* CTA: Studio libero e Simulazione */}
-        <section className="grid grid-cols-2 gap-3 mb-6">
+        {/* CTA: Studio, Simulazione, Ripasso */}
+        <section className="grid grid-cols-2 gap-3 mb-3">
           <Link href="/quiz">
             <Button variant="outline" className="w-full h-14 gap-2 text-base">
               <BookOpen className="h-5 w-5" />
@@ -329,6 +330,14 @@ export default function Home() {
             <Button className="w-full h-14 gap-2 text-base">
               <Play className="h-5 w-5" />
               Simulazione
+            </Button>
+          </Link>
+        </section>
+        <section className="mb-6">
+          <Link href="/ripasso">
+            <Button variant="secondary" className="w-full h-12 gap-2 text-base">
+              <RefreshCw className="h-5 w-5" />
+              Ripassa gli errori
             </Button>
           </Link>
         </section>

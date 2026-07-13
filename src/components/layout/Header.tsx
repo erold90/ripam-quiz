@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Moon, Sun, Home, BarChart3, BookOpen, FileText, History, GraduationCap } from 'lucide-react';
+import { Moon, Sun, Home, BarChart3, BookOpen, FileText, History, GraduationCap, RefreshCw } from 'lucide-react';
 import { useQuizStore } from '@/store/quiz-store';
 
 export function Header() {
@@ -27,6 +27,12 @@ export function Header() {
             <Button variant="ghost" size="sm" className="gap-2">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Studio</span>
+            </Button>
+          </Link>
+          <Link href="/ripasso">
+            <Button variant="ghost" size="sm" className="gap-2">
+              <RefreshCw className="h-4 w-4" />
+              <span className="hidden sm:inline">Ripasso</span>
             </Button>
           </Link>
           <Link href="/dispense">

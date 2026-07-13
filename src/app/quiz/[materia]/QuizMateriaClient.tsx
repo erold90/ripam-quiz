@@ -26,7 +26,7 @@ import {
 import { syncQuizAnswer } from '@/lib/cloud-sync';
 import { cn } from '@/lib/utils';
 
-type StudioFilter = 'all' | 'unseen' | 'wrong' | 'review';
+type StudioFilter = 'all' | 'unseen' | 'wrong' | 'review' | 'ripasso';
 
 interface QuizCounts {
   total: number;
@@ -54,17 +54,19 @@ const SESSION_SIZES = [30, 50, 100] as const;
 
 interface QuizMateriaClientProps {
   paramsPromise: Promise<{ materia: string }>;
+  modalita?: 'studio' | 'ripasso';
 }
 
-export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientProps) {
+export default function QuizMateriaClient({ paramsPromise, modalita = 'studio' }: QuizMateriaClientProps) {
   const params = use(paramsPromise);
   const materiaId = params.materia;
+  const isRipasso = modalita === 'ripasso';
 
   // Phase
   const [phase, setPhase] = useState<'setup' | 'studying' | 'complete'>('setup');
 
   // Setup state
-  const [filter, setFilter] = useState<StudioFilter>('all');
+  const [filter, setFilter] = useState<StudioFilter>(isRipasso ? 'ripasso' : 'all');
   const [sessionSize, setSessionSize] = useState<number | null>(30);
   const [counts, setCounts] = useState<QuizCounts | null>(null);
   const [materiaInfo, setMateriaInfo] = useState<Materia | null>(null);
@@ -118,8 +120,11 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
     loadData();
   }, [materiaId]);
 
-  // Available count for current filter
-  const availableCount = counts ? counts[FILTERS.find(f => f.id === filter)!.countKey] : 0;
+  // Available count for current filter (ripasso = da ripassare = sbagliate + apprendimento)
+  const daRipassareCount = counts ? counts.wrong + counts.review : 0;
+  const availableCount = isRipasso
+    ? daRipassareCount
+    : (counts ? counts[FILTERS.find(f => f.id === filter)!.countKey] : 0);
   const effectiveSize = sessionSize === null
     ? availableCount
     : Math.min(sessionSize, availableCount);
@@ -237,10 +242,10 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
       <div className="min-h-screen bg-background">
         <Header />
         <main className="container px-4 py-6 max-w-2xl mx-auto">
-          <Link href="/quiz">
+          <Link href={isRipasso ? '/ripasso' : '/quiz'}>
             <Button variant="ghost" size="sm" className="gap-2 mb-4">
               <ArrowLeft className="h-4 w-4" />
-              Tutte le materie
+              {isRipasso ? 'Materie da ripassare' : 'Tutte le materie'}
             </Button>
           </Link>
 
@@ -248,12 +253,14 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
             <CardContent className="p-6">
               {/* Header materia */}
               <div className="text-center mb-6">
-                <h1 className="text-xl font-bold mb-1">{materiaInfo.nome}</h1>
-                <p className="text-sm text-muted-foreground">{counts?.total || 0} quiz disponibili</p>
+                <h1 className="text-xl font-bold mb-1">{isRipasso ? `Ripasso · ${materiaInfo.nome}` : materiaInfo.nome}</h1>
+                <p className="text-sm text-muted-foreground">
+                  {isRipasso ? `${daRipassareCount} domande da ripassare` : `${counts?.total || 0} quiz disponibili`}
+                </p>
               </div>
 
               {/* Counts grid */}
-              {counts && (
+              {!isRipasso && counts && (
                 <div className="grid grid-cols-4 gap-2 mb-6">
                   <div className="text-center p-3 rounded-lg bg-blue-50 dark:bg-blue-950">
                     <p className="text-xl font-bold text-blue-600">{counts.unseen}</p>
@@ -274,7 +281,8 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
                 </div>
               )}
 
-              {/* Filter selection */}
+              {/* Filter selection (solo studio) */}
+              {!isRipasso && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium mb-3">Cosa vuoi studiare?</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -308,6 +316,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
                   })}
                 </div>
               </div>
+              )}
 
               {/* Session size */}
               <div className="mb-6">
@@ -354,7 +363,7 @@ export default function QuizMateriaClient({ paramsPromise }: QuizMateriaClientPr
                 ) : (
                   <>
                     <Play className="h-5 w-5" />
-                    Inizia Studio ({effectiveSize} domande)
+                    {isRipasso ? `Inizia Ripasso (${effectiveSize} domande)` : `Inizia Studio (${effectiveSize} domande)`}
                   </>
                 )}
               </Button>

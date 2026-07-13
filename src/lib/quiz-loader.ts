@@ -83,8 +83,9 @@ function componiSessione<T extends { id: string }>(
 }
 
 /**
- * Simulazione: per ogni materia il numero di domande è quello del bando;
- * dentro ogni materia si applica la composizione 70/30 (padroneggiate escluse).
+ * Simulazione: per ogni materia il numero di domande è quello del bando.
+ * Usa SOLO domande MAI viste (test onesto su materiale fresco). Quando le nuove
+ * di una materia si esauriscono, completa con le già viste MENO RECENTI.
  * Mescolamento finale tra materie (interleaving).
  */
 export async function generaQuizSimulazione(
@@ -98,8 +99,19 @@ export async function generaQuizSimulazione(
   for (const materia of index.materie) {
     const data = await getQuizByMateria(materia.id);
     const items = data.quiz.map(q => ({ ...q, materia: materia.id }));
+    const need = materia.domande_esame;
     const pools = raggruppaPerStato(items, leitnerStates, quizCompletati);
-    quizSimulazione.push(...componiSessione(pools, materia.domande_esame));
+
+    // Priorità: domande MAI viste
+    const selected = pools.nuova.slice(0, need);
+
+    // Fallback (solo se le nuove sono finite): già viste, meno recenti prima
+    if (selected.length < need) {
+      const viste = [...pools.apprendimento, ...pools.ripetile, ...pools.nonSai, ...pools.padroneggiata]
+        .sort((a, b) => (leitnerStates[a.id]?.lastAttemptAt || 0) - (leitnerStates[b.id]?.lastAttemptAt || 0));
+      selected.push(...viste.slice(0, need - selected.length));
+    }
+    quizSimulazione.push(...selected);
   }
 
   shuffleArray(quizSimulazione);
@@ -179,7 +191,7 @@ export async function generaQuizStudio(
   leitnerStates: Record<string, QuizLeitnerState>,
   quizCompletati: Set<string>,
   _quizSbagliati: Set<string>,
-  filter: 'all' | 'unseen' | 'wrong' | 'review' = 'all',
+  filter: 'all' | 'unseen' | 'wrong' | 'review' | 'ripasso' = 'all',
   limit?: number,
 ): Promise<Quiz[]> {
   const data = await getQuizByMateria(materiaId);
@@ -187,6 +199,21 @@ export async function generaQuizStudio(
   if (filter === 'all') {
     const pools = raggruppaPerStato(data.quiz, leitnerStates, quizCompletati);
     return componiSessione(pools, limit ?? data.quiz.length);
+  }
+
+  // Ripasso: TUTTE le domande da consolidare, per urgenza (nonSai → ripetile → apprendimento)
+  if (filter === 'ripasso') {
+    const nonSai: Quiz[] = [], ripetile: Quiz[] = [], appr: Quiz[] = [];
+    for (const q of data.quiz) {
+      const st = statoQuiz(leitnerStates[q.id] || null, quizCompletati.has(q.id));
+      if (st === 'nonSai') nonSai.push(q);
+      else if (st === 'ripetile') ripetile.push(q);
+      else if (st === 'apprendimento') appr.push(q);
+    }
+    shuffleArray(nonSai); shuffleArray(ripetile); shuffleArray(appr);
+    let out = [...nonSai, ...ripetile, ...appr];
+    if (limit && limit < out.length) out = out.slice(0, limit);
+    return out;
   }
 
   let filtered: Quiz[];
