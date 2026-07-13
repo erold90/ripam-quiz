@@ -349,14 +349,21 @@ export const useQuizStore = create<QuizStore>()(
           simulazioniCount: number;
           simulazioniStorico: SimulazioneSummary[];
         }>;
+        const quizCompletati = new Set(p.quizCompletati ?? []);
+        // Riconciliazione: scarta gli stati Leitner senza quiz completato (dati "fantasma")
+        const leitnerRaw = p.leitnerStates ?? current.leitnerStates;
+        const leitnerStates: Record<string, QuizLeitnerState> = {};
+        for (const [id, l] of Object.entries(leitnerRaw)) {
+          if (quizCompletati.has(id)) leitnerStates[id] = l;
+        }
         return {
           ...current,
-          leitnerStates: p.leitnerStates ?? current.leitnerStates,
+          leitnerStates,
           darkMode: p.darkMode ?? current.darkMode,
           statsPerMateria: p.statsPerMateria ?? current.statsPerMateria,
           simulazioniCount: p.simulazioniCount ?? current.simulazioniCount,
           simulazioniStorico: p.simulazioniStorico ?? current.simulazioniStorico,
-          quizCompletati: new Set(p.quizCompletati ?? []),
+          quizCompletati,
           quizSbagliati: new Set(p.quizSbagliati ?? []),
         };
       },

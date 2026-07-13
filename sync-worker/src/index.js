@@ -51,9 +51,16 @@ function mergeState(a, b) {
     if (!stats[m] || (v.totale || 0) >= (stats[m].totale || 0)) stats[m] = v;
   }
 
+  // Riconciliazione: uno stato Leitner è valido solo se la domanda ha una risposta (progress).
+  // Rimuove gli stati "fantasma" creati in blocco da import/bug passati.
+  const leitnerPulito = {};
+  for (const [id, l] of Object.entries(leitner)) {
+    if (progress[id]) leitnerPulito[id] = l;
+  }
+
   return {
     progress,
-    leitner,
+    leitner: leitnerPulito,
     stats,
     simCount: Math.max(a.simCount || 0, b.simCount || 0),
     updatedAt: Math.max(a.updatedAt || 0, b.updatedAt || 0, Date.now()),

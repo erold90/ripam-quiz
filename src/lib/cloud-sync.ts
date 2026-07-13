@@ -76,10 +76,17 @@ function applyMerged(merged: CloudSnapshot) {
   for (const x of merged.simStorico || []) if (!storicoMap.has(x.id)) storicoMap.set(x.id, x);
   const simulazioniStorico = Array.from(storicoMap.values()).sort((a, b) => b.data - a.data);
 
+  // Riconciliazione: tieni solo gli stati Leitner con un quiz realmente completato.
+  // Elimina gli stati "fantasma" (creati in blocco da import/bug passati).
+  const leitnerRiconciliato: Record<string, QuizLeitnerState> = {};
+  for (const [id, l] of Object.entries(leitnerStates)) {
+    if (quizCompletati.has(id)) leitnerRiconciliato[id] = l;
+  }
+
   useQuizStore.setState({
     quizCompletati,
     quizSbagliati,
-    leitnerStates,
+    leitnerStates: leitnerRiconciliato,
     statsPerMateria,
     simulazioniCount: Math.max(s.simulazioniCount, merged.simCount || 0, simulazioniStorico.length),
     simulazioniStorico,
